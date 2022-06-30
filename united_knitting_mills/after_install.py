@@ -5,6 +5,7 @@ from united_knitting_mills.ukm.custom_fields.payroll.salary_structure import cre
 from united_knitting_mills.ukm.custom_fields.hr.company import create_company_fields
 from united_knitting_mills.ukm.custom_fields.hr.shift_type import create_shift_type_fields
 from united_knitting_mills.ukm.custom_fields.payroll.payroll_settings import create_payroll_settings_fields
+from united_knitting_mills.ukm.custom_fields.assets.location import create_location_fields
 
 def create_custom_fields():
     create_company_fields()
@@ -14,3 +15,4 @@ def create_custom_fields():
     create_salary_slip_fields()
     create_salary_structure_fields()
     create_shift_type_fields()
+    create_location_fields()
