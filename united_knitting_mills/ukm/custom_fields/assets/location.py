@@ -1,6 +1,6 @@
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
-def create_company_fields():
+def create_location_fields():
     custom_fields = {
 		"Location": [
 			dict(fieldname='abbr', label='Abbreviation',
