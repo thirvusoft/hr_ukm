@@ -48,7 +48,7 @@ def salary_slip_based_on_shift(doc,event):
 
         doc.total_shift_worked=shift_count
         doc.set('earnings', [])
-        doc.append("earnings", {"salary_component": emp_shift_component, "amount": 10 *emp_shift_amount})
+        doc.append("earnings", {"salary_component": emp_shift_component, "amount": shift_count *final_emp_shift_amount})
         gross_pay=0
         for data in doc.earnings:
             gross_pay+=data.amount
