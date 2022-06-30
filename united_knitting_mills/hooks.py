@@ -57,7 +57,7 @@ app_license = "MIT"
 # ------------
 
 # before_install = "united_knitting_mills.install.before_install"
-# after_install = "united_knitting_mills.install.after_install"
+after_install = "united_knitting_mills.after_install.create_custom_fields"
 
 # Uninstallation
 # ------------
