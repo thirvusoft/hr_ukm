@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include united_knitting_mills *.css
+recursive-include united_knitting_mills *.csv
+recursive-include united_knitting_mills *.html
+recursive-include united_knitting_mills *.ico
+recursive-include united_knitting_mills *.js
+recursive-include united_knitting_mills *.json
+recursive-include united_knitting_mills *.md
+recursive-include united_knitting_mills *.png
+recursive-include united_knitting_mills *.py
+recursive-include united_knitting_mills *.svg
+recursive-include united_knitting_mills *.txt
+recursive-exclude united_knitting_mills *.pyc
