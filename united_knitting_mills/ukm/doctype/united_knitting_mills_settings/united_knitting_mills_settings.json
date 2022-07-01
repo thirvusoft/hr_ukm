@@ -1,0 +1,42 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-07-01 16:25:39.620772",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ts_create"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "description": "To create the permission for HR",
+   "fieldname": "ts_create",
+   "fieldtype": "Button",
+   "label": "Create"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-07-01 16:28:13.911118",
+ "modified_by": "Administrator",
+ "module": "UKM",
+ "name": "United Knitting Mills Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
