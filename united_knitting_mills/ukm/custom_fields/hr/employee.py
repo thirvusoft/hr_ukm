@@ -12,6 +12,8 @@ def create_employee_fields_and_property_setter():
                 fieldtype='Check', insert_after='date_of_joining', hidden=1),
             dict(fieldname='enable_pf', label='Enable PF',
                 fieldtype='Check', insert_after='enable_esi', hidden=1),
+            dict(fieldname='hr_permission', label='HR Permission',
+                fieldtype='Check', insert_after='location', hidden=1),    
         ]
     }
 
