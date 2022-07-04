@@ -5,7 +5,7 @@ def create_employee_fields_and_property_setter():
     custom_fields = {
         "Employee": [
             dict(fieldname='location', label='Location',
-                fieldtype='Link',options='Location', insert_after='last_name', read_only=0),
+                fieldtype='Link',options='Location', insert_after='last_name', read_only=0,reqd=1),
             dict(fieldname='abbr', label='Abbreviation',
                 fieldtype='Data', insert_after='location', hidden=1,fetch_from='location.abbr'),
             dict(fieldname='enable_esi', label='Enable ESI',
