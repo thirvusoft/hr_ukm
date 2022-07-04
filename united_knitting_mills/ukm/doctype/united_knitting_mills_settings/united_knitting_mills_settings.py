@@ -24,8 +24,6 @@ def creating_hr_permission():
 							if ts_user_name["name"] != ts_hr_emp:
 								ts_emp=frappe.get_doc("Employee",ts_user_name["name"])
 								if ts_emp.hr_permission != 1:
-									ts_emp.hr_permission=1
-									ts_emp.save()
 									new_user_permission=frappe.get_doc({
 										"doctype": "User Permission",
 										"user":ts_user_id,
@@ -34,6 +32,8 @@ def creating_hr_permission():
 										"apply_to_all_doctypes":1
 									})
 									new_user_permission.save()
+									ts_emp.hr_permission=1
+									ts_emp.save()
 					else:
 						frappe.throw("For HR Manager : "+ts_hr_emp+" Location not set...")
 			else:
