@@ -14,7 +14,7 @@ def salary_slip_based_on_shift(doc,event):
                                          LIMIT 1
          """.format(doc.employee,doc.end_date),as_list=1)
     if emp_struct==1:
-        if(emp_shift_amount):
+        if emp_shift_amount:
             final_emp_shift_amount = emp_shift_amount[0][0] #To fetch latest base amount
         else:
             final_emp_shift_amount=0
@@ -71,14 +71,14 @@ def salary_slip_based_on_shift(doc,event):
 def create_journal_entry(doc,action):
     component_list=[]
     amount=[]
-    if(doc.earnings):
+    if doc.earnings:
         for data in doc.earnings:
             account = frappe.get_doc('Salary Component',data.salary_component)
             for account in account.accounts:
                 component_list.append(account.account)
             amount.append(data.amount)
 
-    if(doc.deductions):
+    if doc.deductions:
         for data in doc.deductions:
             account = frappe.get_doc('Salary Component',data.salary_component)
             for account in account.accounts:
