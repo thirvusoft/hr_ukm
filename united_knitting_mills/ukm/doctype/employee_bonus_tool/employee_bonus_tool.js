@@ -8,7 +8,7 @@ frappe.ui.form.on("Employee Bonus Tool",{
 		frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location','name'], function(data) {
 			var location=data.location
 			if(location){
-				cur_frm.set_value('')		
+				cur_frm.set_value('id',data.name)		
 				frappe.call({
 					method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
 					args:{bonus1,location},

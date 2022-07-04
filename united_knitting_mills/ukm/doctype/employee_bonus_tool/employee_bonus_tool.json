@@ -10,6 +10,7 @@
   "designation",
   "employee_bonus_details",
   "total_bonus_amount",
+  "id",
   "amended_from"
  ],
  "fields": [
@@ -47,12 +48,19 @@
    "fieldname": "total_bonus_amount",
    "fieldtype": "Currency",
    "label": "Total Bonus Amount"
+  },
+  {
+   "fieldname": "id",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "ID",
+   "options": "Employee"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-06-09 14:52:16.547118",
+ "modified": "2022-07-04 18:15:19.665912",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Tool",
