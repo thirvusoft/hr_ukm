@@ -5,10 +5,10 @@ from frappe.model.document import Document
 class EmployeeBonusTool(Document):
 	pass
 @frappe.whitelist()
-def employee_finder(bonus1):
+def employee_finder(bonus1,location):
 	employee_names=[]
-	a=frappe.db.get_all("Employee",filters={"designation":bonus1},fields=["name", "employee_name"])
-	for name in a:
+	emp_list=frappe.db.get_all("Employee",filters={"designation":bonus1,'location':location},fields=["name", "employee_name"])
+	for name in emp_list:
 		employee_names.append(name)
 	return employee_names
 

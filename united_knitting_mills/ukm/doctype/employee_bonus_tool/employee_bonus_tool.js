@@ -5,24 +5,23 @@ frappe.ui.form.on("Employee Bonus Tool",{
 	designation:function(frm,cdt,cdn){
 		var bonus=locals[cdt][cdn]
 		var bonus1=bonus.designation
-		frappe.call({
-			method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
-			args:{bonus1},
-			callback(r){
-				frm.clear_table("employee_bonus_details");
-				for(var i=0;i<r.message.length;i++){
-					var child = cur_frm.add_child("employee_bonus_details");
-					frappe.model.set_value(child.doctype, child.name, "employee", r.message[i]["name"])
-					frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[i]["employee_name"])
-					frappe.model.set_value(child.doctype, child.name, "designation", bonus1)
-					if (frm.doc.designation == "Labour Worker"){
-						frappe.model.set_value(child.doctype, child.name, "payment_method",'Deduct from Salary')
+		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, 'location', function(data) {
+			var location=data.location
+			frappe.call({
+				method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
+				args:{bonus1,location},
+				callback(r){
+					frm.clear_table("employee_bonus_details");
+					for(var i=0;i<r.message.length;i++){
+						var child = cur_frm.add_child("employee_bonus_details");
+						frappe.model.set_value(child.doctype, child.name, "employee", r.message[i]["name"])
+						frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[i]["employee_name"])
+						frappe.model.set_value(child.doctype, child.name, "designation", bonus1)
 					}
+					cur_frm.refresh_field("employee_bonus_details")
 				}
-				cur_frm.refresh_field("employee_bonus_details")
-			}
-		})
-
+			})
+		});
 	},
 	on_submit:function(frm,cdt,cdn){
 		var bonus=locals[cdt][cdn]

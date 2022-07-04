@@ -6,10 +6,10 @@ from frappe.custom.doctype.property_setter.property_setter import make_property_
 class EmployeeAdvanceTool(Document):
 	pass
 @frappe.whitelist()
-def employee_finder(advance1):
+def employee_finder(advance1,location):
 	employee_names=[]
-	a=frappe.db.get_all("Employee",filters={"designation":advance1},fields=["name", "employee_name"])
-	for name in a:
+	emp_list=frappe.db.get_all("Employee",filters={"designation":advance1,'location':location},fields=["name", "employee_name"])
+	for name in emp_list:
 		employee_names.append(name)
 	return employee_names
 @frappe.whitelist()
