@@ -12,7 +12,7 @@ def attendance_property_setter():
         'property':"options", 
         "property_type":"Select", 
         'field_name':"status", 
-        "value":" \nPresent\nAbsent\nOn Leave\nHalf Day\nWork From Home\nQuater Day\nThree Quarter Day\nOne Quarter Day\nOne Half Day"     
+        "value":" \nPresent\nAbsent\nOn Leave\nHalf Day\nWork From Home\nQuarter Day\nThree Quarter Day\nOne Quarter Day\nOne Half Day"     
     })       
     attendance.insert() 
     attendance.save(ignore_permissions=True) 
