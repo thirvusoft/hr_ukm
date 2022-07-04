@@ -5,8 +5,8 @@ frappe.ui.form.on("Employee Bonus Tool",{
 	designation:function(frm,cdt,cdn){
 		var bonus=locals[cdt][cdn]
 		var bonus1=bonus.designation
-		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, 'location', function(r) {
-			var location=r.location
+		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, 'location', function(data) {
+			var location=data.location
 			frappe.call({
 				method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
 				args:{bonus1,location},
