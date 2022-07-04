@@ -3,8 +3,9 @@ frappe.ui.form.on("Employee Advance Tool",{
 	designation:function(frm,cdt,cdn){
 		var advance=locals[cdt][cdn]
 		var advance1=advance.designation
-		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, 'location', function(data) {
+		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, ['location','name'], function(data) {
 			var location=data.location
+			cur_frm.set_value('id',data.name)
 			frappe.call({
 				method:"united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.employee_finder",
 				args:{advance1,location},
