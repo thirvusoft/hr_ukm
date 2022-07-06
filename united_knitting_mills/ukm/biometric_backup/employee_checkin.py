@@ -94,7 +94,7 @@ def add_log_based_on_employee_field(
 		)
 	
 	#TS Code Start
-	att_doc = frappe.get_last_doc("Employee Checkin", {"employee":employee.name})
+	att_doc = frappe.get_last_doc("Employee Checkin", {"employee": employee.name})
 
 	# Given timestamp in string
 	date_format_str = '%Y-%m-%d %H:%M:%S'
@@ -108,23 +108,24 @@ def add_log_based_on_employee_field(
 	# Add 2 minutes to datetime object
 	final_time = given_time + timedelta(minutes=buffer_time)
 
-	# Convert datetime object to string in specific format 
+	# Convert datetime object to string in specific format
 	final_time_str = final_time.strftime('%Y-%m-%d %H:%M:%S')
-	if final_time_str<timestamp:
+	if final_time_str < timestamp:
 		doc = frappe.new_doc("Employee Checkin")
 		doc.employee = employee.name
 		doc.employee_name = employee.employee_name
 		doc.time = timestamp
 		doc.device_id = device_id
-		if(att_doc.log_type=="IN"):
+		if(att_doc.log_type == "IN"):
 			doc.log_type = "OUT"
 		else:
-			doc.log_type="IN"
+			doc.log_type = "IN"
 		if cint(skip_auto_attendance) == 1:
 			doc.skip_auto_attendance = "1"
 		doc.insert()
 		return doc
-    #TS Code End
+	#TS Code End
+
 
 def mark_attendance_and_link_log(
 	logs,
