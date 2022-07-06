@@ -6,7 +6,9 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "ts_create"
+  "ts_create",
+  "biometric_settings_section",
+  "buffer_time"
  ],
  "fields": [
   {
@@ -15,12 +17,23 @@
    "fieldname": "ts_create",
    "fieldtype": "Button",
    "label": "Create"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "biometric_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Biometric Settings"
+  },
+  {
+   "fieldname": "buffer_time",
+   "fieldtype": "Int",
+   "label": "Buffer Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-07-01 16:28:13.911118",
+ "modified": "2022-07-06 15:48:43.064475",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
