@@ -95,7 +95,7 @@ def add_log_based_on_employee_field(
 		
 	#TS Code Start
 	try:
-		att_doc = frappe.get_last_doc("Attendance", {"employee":employee.name})
+		att_doc = frappe.get_last_doc("Employee Checkin", {"employee": employee.name})
 
 		# Given timestamp in string
 		date_format_str = '%Y-%m-%d %H:%M:%S'
