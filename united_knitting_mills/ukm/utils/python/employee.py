@@ -29,3 +29,11 @@ def creating_hr_permission(doc):
 			frappe.throw("For HR Manager's there is no Employee ID or Location")
 	else:
 		frappe.throw("HR Manager role not assigned for any User")
+
+def sequence_user_id(doc,event):
+	try:
+		if doc.__islocal == 1 :
+			last_doc = frappe.get_last_doc("Employee", {"location": doc.location})
+			doc.attendance_device_id = int(last_doc.attendance_device_id) + 1
+	except:
+		pass
