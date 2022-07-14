@@ -99,6 +99,9 @@ doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.salary_slip_based_on_shift",
 		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry"
+	},
+	'Employee':{
+		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
 	}
 }
 # doc_events = {
