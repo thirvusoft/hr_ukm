@@ -6,12 +6,6 @@ from frappe.custom.doctype.property_setter.property_setter import make_property_
 def employee_bonus_tool_custom_fields():
           custom_fields = {
           "Employee Bonus Tool":[
-                    # dict(
-                    #           fieldname='CB',
-                    #           fieldtype='Column Break', 
-                    #           insert_after='designation',
-                              
-                    # ),
                     dict(
                               fieldname='from_date', 
                               label='From Date',
