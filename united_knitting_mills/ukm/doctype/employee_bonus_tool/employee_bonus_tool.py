@@ -10,6 +10,8 @@ def employee_finder(bonus1,location,from_date,to_date):
 	amount=[]
 
 	emp_list=frappe.db.get_all("Employee",filters={"designation":bonus1,'location':location},fields=["name", "employee_name"])
+	bonus_percent= frappe.db.get_single_value("United Knitting Mills Settings" , "bonus_percentage")
+	
 	
 	for name in emp_list:
 		
@@ -26,10 +28,14 @@ def employee_finder(bonus1,location,from_date,to_date):
 				ORDER BY ssa.from_date DESC LIMIT 1 """.format(name['name'],to_date),as_list=1)
 	
 		if emp_base_amount:
-			calc = (float(attendance_status) * float(emp_base_amount[0][0])) * float(8.33 / 100)
+			calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
 
 		amount.append(calc)
 		employee_names.append(name)
+		print(bonus_percent)
+		print(attendance_status)
+		print(emp_base_amount)
+		print( bonus_percent)
 	return employee_names,amount
 
 @frappe.whitelist()
