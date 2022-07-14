@@ -27,4 +27,3 @@ def create_custom_fields():
     bonus_percentage_fields()
     workflow_document_creation()
     assignment_workflow_document_creation()
-

@@ -8,7 +8,6 @@ class EmployeeBonusTool(Document):
 def employee_finder(bonus1,location,from_date,to_date):
 	employee_names=[]
 	amount=[]
-
 	emp_list=frappe.db.get_all("Employee",filters={"designation":bonus1,'location':location},fields=["name", "employee_name"])
 	bonus_percent= frappe.db.get_single_value("United Knitting Mills Settings" , "bonus_percentage")
 	for name in emp_list:
@@ -28,8 +27,9 @@ def employee_finder(bonus1,location,from_date,to_date):
 		if emp_base_amount:
 			calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
 
-		amount.append(calc)
+			amount.append(calc)
 		employee_names.append(name)
+		
 	return employee_names,amount
 
 @frappe.whitelist()
