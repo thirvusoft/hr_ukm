@@ -24,4 +24,3 @@ def create_custom_fields():
     create_location_fields()
     employee_bonus_tool_custom_fields()
     bonus_percentage_fields()
-
