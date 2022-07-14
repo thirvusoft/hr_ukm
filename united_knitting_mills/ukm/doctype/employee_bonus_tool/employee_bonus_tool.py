@@ -32,10 +32,6 @@ def employee_finder(bonus1,location,from_date,to_date):
 
 		amount.append(calc)
 		employee_names.append(name)
-		print(bonus_percent)
-		print(attendance_status)
-		print(emp_base_amount)
-		print( bonus_percent)
 	return employee_names,amount
 
 @frappe.whitelist()
