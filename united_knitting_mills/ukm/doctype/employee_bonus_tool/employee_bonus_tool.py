@@ -11,8 +11,6 @@ def employee_finder(bonus1,location,from_date,to_date):
 
 	emp_list=frappe.db.get_all("Employee",filters={"designation":bonus1,'location':location},fields=["name", "employee_name"])
 	bonus_percent= frappe.db.get_single_value("United Knitting Mills Settings" , "bonus_percentage")
-	
-	
 	for name in emp_list:
 		
 		attendance_status = frappe.db.sql("""
