@@ -26,8 +26,10 @@ def employee_finder(bonus1,location,from_date,to_date):
 	
 		if emp_base_amount:
 			calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
+
 			amount.append(calc)
-		employee_names.append(name)	
+		employee_names.append(name)
+		
 	return employee_names,amount
 
 @frappe.whitelist()

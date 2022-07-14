@@ -125,6 +125,8 @@ def add_log_based_on_employee_field(
 				doc.skip_auto_attendance = "1"
 			doc.insert()
 			return doc
+		else:
+			return att_doc
 	except:
 		doc = frappe.new_doc("Employee Checkin")
 		doc.employee = employee.name
