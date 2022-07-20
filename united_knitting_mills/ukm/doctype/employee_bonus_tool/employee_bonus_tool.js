@@ -10,17 +10,20 @@ frappe.ui.form.on("Employee Bonus Tool",{
 		frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location','name'], function(data) {
 			var location=data.location
 			if(location){
+				
 				if(!from_date || !to_date){
 					frappe.throw("Please Select From Date And To Date")
 				}
 				cur_frm.set_value('id',data.name)	
 
 				frappe.call({
+				
 					method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
 					args:{bonus1,location,from_date,to_date},
 					callback(r){
 
-						
+						frm.trigger("from_date")
+				        frm.trigger("to_date")
 						frm.clear_table("employee_bonus_details");
 						for(var i=0;i<r.message[0].length;i++){
 							var child = cur_frm.add_child("employee_bonus_details");
