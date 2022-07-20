@@ -39,7 +39,7 @@ def sequence_user_id(doc,event):
 	except:
 		pass
 
-def naming_series():
+def naming_series(doc=None,action=None):
 	naming_series_emp=frappe.get_single("United Knitting Mills Settings").ts_naming_series
 	name=""
 	for series in naming_series_emp:
