@@ -102,7 +102,8 @@ doc_events = {
 		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry"
 	},
 	'Employee':{
-		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
+		"before_naming":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
+		"autoname":"united_knitting_mills.ukm.utils.python.employee.autoname"
 	},
 	'United Knitting Mills Settings':{
 		"on_update":"united_knitting_mills.ukm.utils.python.employee.naming_series"

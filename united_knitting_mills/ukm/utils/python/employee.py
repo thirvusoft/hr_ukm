@@ -64,5 +64,5 @@ def naming_series(doc=None,action=None):
     }
 	create_custom_fields(custom_fields)
 
-
-
+def autoname(self, event):
+	self.name = self.naming_series+" "+str( self.attendance_device_id)
