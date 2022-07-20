@@ -103,8 +103,14 @@ doc_events = {
 	},
 	'Employee':{
 		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
+	},
+	'United Knitting Mills Settings':{
+		"on_update":"united_knitting_mills.ukm.utils.python.employee.naming_series"
 	}
 }
+after_migrate=[
+	"united_knitting_mills.ukm.utils.python.employee.naming_series"
+]
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",

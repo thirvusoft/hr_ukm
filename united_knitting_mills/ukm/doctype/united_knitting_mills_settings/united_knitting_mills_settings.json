@@ -7,6 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "ts_create",
+  "section_break_2",
+  "ts_naming_series",
   "biometric_settings_section",
   "buffer_time"
  ],
@@ -28,12 +30,22 @@
    "fieldname": "buffer_time",
    "fieldtype": "Int",
    "label": "Buffer Time"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ts_naming_series",
+   "fieldtype": "Table MultiSelect",
+   "label": "Naming Series",
+   "options": "Employee Series"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-07-06 15:48:43.064475",
+ "modified": "2022-07-20 09:10:10.699379",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

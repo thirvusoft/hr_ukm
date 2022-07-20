@@ -1,4 +1,5 @@
 import frappe
+from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 @frappe.whitelist()
 def creating_hr_permission(doc):
 	ts_emp_doc=frappe.get_doc("Employee",doc)
@@ -37,3 +38,31 @@ def sequence_user_id(doc,event):
 			doc.attendance_device_id = int(last_doc.attendance_device_id) + 1
 	except:
 		pass
+
+def naming_series():
+	naming_series_emp=frappe.get_single("United Knitting Mills Settings").ts_naming_series
+	name=""
+	for series in naming_series_emp:
+		name+="\n"+series.naming_series
+
+	property_setter=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"options",
+		"property_type":"Data",
+        'field_name':"naming_series",
+        "value":name
+    })
+	property_setter.save()
+
+	custom_fields = {
+		"Location": [
+			dict(fieldname='select_naming_series', label='Select Naming Series',
+				fieldtype='Select', insert_after='location_name',options=name),
+		]
+    }
+	create_custom_fields(custom_fields)
+
+
+
