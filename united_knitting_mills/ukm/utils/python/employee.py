@@ -39,30 +39,24 @@ def sequence_user_id(doc,event):
 	except:
 		pass
 
-def naming_series(doc=None,action=None):
-	naming_series_emp=frappe.get_single("United Knitting Mills Settings").ts_naming_series
-	name=""
-	for series in naming_series_emp:
-		name+="\n"+series.naming_series
 
-	property_setter=frappe.get_doc({
+def employee_custom_field():
+	custom_fields = {
+	"Employee": [
+		dict(fieldname='employee_naming_series', label='Employee Naming Series',
+			fieldtype='Data', insert_after='location',fetch_from="location.naming_series"),
+		
+	],
+    }
+	employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",
         'doc_type': "Employee",
         'property':"options",
-		"property_type":"Data",
+        'property_type':"Data",
         'field_name':"naming_series",
-        "value":name
+        "value":"employee_naming_series.-###"
     })
-	property_setter.save()
-
-	custom_fields = {
-		"Location": [
-			dict(fieldname='select_naming_series', label='Select Naming Series',
-				fieldtype='Select', insert_after='location_name',options=name),
-		]
-    }
+	employee.save(ignore_permissions=True)
 	create_custom_fields(custom_fields)
 
-def autoname(self, event):
-	self.name = self.naming_series+" "+str( self.attendance_device_id)
