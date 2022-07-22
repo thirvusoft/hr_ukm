@@ -104,11 +104,10 @@ doc_events = {
 		
 	},
 	'Employee':{
-		"before_naming":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
+		"after_insert":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
 	
 	},
 	"Location":{
-		"before_naming":"united_knitting_mills.ukm.utils.python.location.sequence_user_id",
 		"validate":"united_knitting_mills.ukm.utils.python.location.autoname"
 	}
 }

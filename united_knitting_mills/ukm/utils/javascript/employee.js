@@ -1,6 +1,5 @@
 frappe.ui.form.on('Employee',{
     refresh:function(frm){
-        cur_frm.add_fetch('location', 'select_naming_series', 'naming_series');
         if(!frm.is_dirty()){
             frm.add_custom_button(('Salary Structure Assignment'), function() {
 
