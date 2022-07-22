@@ -28,4 +28,5 @@ frappe.ui.form.on('Employee',{
             frm.set_value("hr_permission",0)
         }
 }
+
 })
