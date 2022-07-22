@@ -23,6 +23,6 @@ def sequence_user_id(doc,event):
         except:
             pass
 def autoname(self, event):
-	self.naming_series= self.location_name+ " " +str(self.current_series)
+	self.naming_series= "UKM"+ " " +str(self.current_series)
 
     

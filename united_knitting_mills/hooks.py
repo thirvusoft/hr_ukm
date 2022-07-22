@@ -108,7 +108,9 @@ doc_events = {
 	
 	},
 	"Location":{
-		"validate":"united_knitting_mills.ukm.utils.python.location.autoname"
+		"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
+					"united_knitting_mills.ukm.utils.python.location.autoname"]
+	
 	}
 }
 
