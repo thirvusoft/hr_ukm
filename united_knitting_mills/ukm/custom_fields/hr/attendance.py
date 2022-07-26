@@ -2,7 +2,7 @@ import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 def attendance_customisation():
     attendance_property_setter()
-    create_custom_fields()
+    create_attendance_custom_fields()
    
 def attendance_property_setter():
     attendance=frappe.get_doc({
@@ -16,5 +16,23 @@ def attendance_property_setter():
     })       
     attendance.insert() 
     attendance.save(ignore_permissions=True) 
-def create_custom_fields():
-    pass
+def create_attendance_custom_fields():
+    custom_fields = {
+		"Attendance": [
+			dict(fieldname='shift_details', label='Shift Details',
+				fieldtype='Section Break',insert_after='early_exit'),
+			dict(fieldname='thirvu_shift_details', label='',
+				fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='shift_details'),
+            dict(fieldname='total_shift_count', label='Total Shift Count',
+				fieldtype='Float',insert_after='section_break23'),
+            dict(fieldname='section_break23', label='',
+				fieldtype='Section Break',insert_after='thirvu_shift_details'),
+            dict(fieldname='thirvu_reason', label='Reason',
+				fieldtype='Data',depends_on='eval:doc.late_entry',mandatory_depends_on='eval:doc.late_entry',insert_after='late_entry'),
+            dict(fieldname='column_break23', label='',
+				fieldtype='Column Break',insert_after='total_shift_count'),
+            dict(fieldname='total_shift_amount', label='Total Shift Amount',
+				fieldtype='Currency',insert_after='column_break23'),
+            ]
+    }
+    create_custom_fields(custom_fields)
