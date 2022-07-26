@@ -11,8 +11,10 @@ from united_knitting_mills.ukm.custom_fields.hr.employee_bonus_tool import emplo
 from united_knitting_mills.ukm.custom_fields.hr.united_knitting_mills_settings import bonus_percentage_fields
 from united_knitting_mills.ukm.utils.python.workflow import workflow_document_creation
 from united_knitting_mills.ukm.utils.python.salary_assignment_workflow import assignment_workflow_document_creation
+from united_knitting_mills.ukm.custom_fields.hr.department import department_customisation
 from united_knitting_mills.ukm.utils.python.employee import employee_custom_field
 from united_knitting_mills.ukm.utils.python.location import location
+
 
 def create_custom_fields():
     create_company_fields()
@@ -23,6 +25,7 @@ def create_custom_fields():
     create_salary_structure_fields()
     create_shift_type_fields()
     attendance_customisation()
+    department_customisation()
     create_location_fields()
     employee_bonus_tool_custom_fields()
     bonus_percentage_fields()
