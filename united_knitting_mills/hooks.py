@@ -104,13 +104,16 @@ doc_events = {
 		
 	},
 	'Employee':{
+		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
+	},
+	'Attendance':{
+		"validate":"united_knitting_mills.ukm.utils.python.attendance.shift_count",
+		"on_change":"united_knitting_mills.ukm.utils.python.attendance.shift_hours",
 		"after_insert":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
-	
 	},
 	"Location":{
 		"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
 					"united_knitting_mills.ukm.utils.python.location.autoname"]
-	
 	}
 }
 
