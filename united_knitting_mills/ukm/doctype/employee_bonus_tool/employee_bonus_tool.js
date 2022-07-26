@@ -4,21 +4,30 @@
 frappe.ui.form.on("Employee Bonus Tool",{
 	designation:function(frm,cdt,cdn){
 		var bonus=locals[cdt][cdn]
+		var from_date=frm.doc.from_date
+		var to_date = frm.doc.to_date
 		var bonus1=bonus.designation
 		frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location','name'], function(data) {
 			var location=data.location
 			if(location){
-				cur_frm.set_value('id',data.name)		
+				
+				if(!from_date || !to_date){
+					frappe.throw("Please Select From Date And To Date")
+				}
+				cur_frm.set_value('id',data.name)	
+
 				frappe.call({
+				
 					method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
-					args:{bonus1,location},
+					args:{bonus1,location,from_date,to_date},
 					callback(r){
 						frm.clear_table("employee_bonus_details");
-						for(var i=0;i<r.message.length;i++){
+						for(var i=0;i<r.message[0].length;i++){
 							var child = cur_frm.add_child("employee_bonus_details");
-							frappe.model.set_value(child.doctype, child.name, "employee", r.message[i]["name"])
-							frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[i]["employee_name"])
+							frappe.model.set_value(child.doctype, child.name, "employee", r.message[0][i]["name"])
+							frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[0][i]["employee_name"])
 							frappe.model.set_value(child.doctype, child.name, "designation", bonus1)
+							frappe.model.set_value(child.doctype, child.name, "current_bonus", r.message[1][i])
 						}
 						cur_frm.refresh_field("employee_bonus_details")
 					}
