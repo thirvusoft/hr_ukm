@@ -1,4 +1,5 @@
 import frappe
+from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 @frappe.whitelist()
 def creating_hr_permission(doc):
 	ts_emp_doc=frappe.get_doc("Employee",doc)
@@ -31,9 +32,29 @@ def creating_hr_permission(doc):
 		frappe.throw("HR Manager role not assigned for any User")
 
 def sequence_user_id(doc,event):
-	try:
-		if doc.__islocal == 1 :
-			last_doc = frappe.get_last_doc("Employee", {"location": doc.location})
-			doc.attendance_device_id = int(last_doc.attendance_device_id) + 1
-	except:
-		pass
+	frappe.db.set_value("Employee",doc.name,"attendance_device_id",doc.name)
+	
+
+
+def employee_custom_field():
+	custom_fields = {
+	"Employee": [
+		dict(fieldname='employee_naming_series', label='Employee Naming Series',
+			fieldtype='Data', insert_after='location',fetch_from="location.naming_series"),
+		
+	],
+    }
+	employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"options",
+        'property_type':"Data",
+        'field_name':"naming_series",
+        "value":"employee_naming_series.-"
+    })
+	employee.save(ignore_permissions=True)
+	create_custom_fields(custom_fields)
+
+
+
