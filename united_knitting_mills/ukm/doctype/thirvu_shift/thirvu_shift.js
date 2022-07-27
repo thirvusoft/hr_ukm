@@ -11,7 +11,9 @@ frappe.ui.form.on('Thirvu Shift', {
 							method: "united_knitting_mills.ukm.doctype.thirvu_shift.thirvu_shift.create_employee_attendance",
 							args: {
 								employee: data[i]['name'],
-								doc:frm.doc.name
+								doc:frm.doc.name,
+								late_entry:frm.doc.entry_period,
+								early_exit:frm.doc.exit_period
 							},
 							callback: function(r) {
 							}
