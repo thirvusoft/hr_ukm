@@ -6,52 +6,20 @@ from frappe import _
 
 @frappe.whitelist()
 def salary_slip_based_on_shift(doc,event):
+
     emp_struct=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_slip_based_on_shift")
     emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
-    emp_shift_amount=frappe.db.sql("""select base FROM `tabSalary Structure Assignment` as ssa
-                                         WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
-                                         ORDER BY ssa.from_date DESC 
-                                         LIMIT 1
-         """.format(doc.employee,doc.end_date),as_list=1)
+
+    emp_shift_amount = frappe.db.sql("""
+			select sum(total_shift_amount),sum(total_shift_count)
+			from `tabAttendance`
+			where employee=%s and attendance_date>=%s and attendance_date<=%s
+		""", (doc.employee, doc.start_date, doc.end_date), as_list = 1)
+        
     if emp_struct==1:
-        if emp_shift_amount:
-            final_emp_shift_amount = emp_shift_amount[0][0] #To fetch latest base amount
-        else:
-            final_emp_shift_amount=0
-        shift = frappe.get_all(
-            "Attendance",
-            fields=["employee",'status'],
-            filters=[
-                ["attendance_date", ">=", doc.start_date],
-                ["attendance_date", "<=", doc.end_date],
-                ["employee", "=", doc.employee],
-                ["docstatus", "!=", 2],
-            ],
-        )
-
-        shift_count=0
-        for data in shift:
-            if(data['status']=='Half Day'):
-                shift_count+=.5
-
-            if(data['status']=='One Half Day'):
-                shift_count+=1.5  
-
-            elif(data['status']=='Present'):
-                shift_count+=1
-
-            elif(data['status']=='Quarter Day'):
-                shift_count+=.25
-
-            elif(data['status']=='One Quarter Day'):
-                shift_count+=1.25
-
-            elif(data['status']=='Three Quarter Day'):
-                shift_count+=.75
-
-        doc.total_shift_worked=shift_count
+        doc.total_shift_worked = emp_shift_amount[0][1]
         doc.set('earnings', [])
-        doc.append("earnings", {"salary_component": emp_shift_component, "amount": shift_count*final_emp_shift_amount})
+        doc.append("earnings", {"salary_component": emp_shift_component, "amount":emp_shift_amount[0][0] })
         gross_pay=0
         for data in doc.earnings:
             gross_pay+=data.amount
