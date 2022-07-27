@@ -109,6 +109,7 @@ doc_events = {
 	'Attendance':{
 		"validate":["united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
 		            "united_knitting_mills.ukm.utils.python.attendance.total_shift_amount",],
+
 		"after_insert":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
 	},
 	"Location":{
