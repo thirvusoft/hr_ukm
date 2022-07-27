@@ -33,4 +33,18 @@ def shift_hours(doc,event):
         ee
 
 
+def total_shift_amount(doc,event):
+    employee_name = doc.employee
+    doc.total_shift_amount = 0 
+    shift_count = doc.thirvu_shift_details
+    emp_base_amount=frappe.db.sql("""select ssa.base
+				FROM `tabSalary Structure Assignment` as ssa
+				WHERE ssa.employee = '{0}' ORDER BY ssa.creation DESC LIMIT 1
+                """.format(employee_name),as_list=1)[0][0]
+    for row in shift_count:
+        count=row.shift_count
+        shift_amount = count*emp_base_amount
+        row.shift_salary = shift_amount
+        doc.total_shift_amount += row.shift_salary
+
     

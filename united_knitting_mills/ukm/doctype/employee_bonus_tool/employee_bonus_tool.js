@@ -3,6 +3,7 @@
 	
 frappe.ui.form.on("Employee Bonus Tool",{
 	designation:function(frm,cdt,cdn){
+		
 		var bonus=locals[cdt][cdn]
 		var from_date=frm.doc.from_date
 		var to_date = frm.doc.to_date
