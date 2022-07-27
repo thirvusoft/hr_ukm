@@ -38,7 +38,4 @@ def total_shift_amount(doc,event):
         row.shift_salary = shift_amount
         doc.total_shift_amount += row.shift_salary
 
-            
-
-        
     
