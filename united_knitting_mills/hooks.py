@@ -31,7 +31,8 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
-		 "Journal Entry":"ukm/utils/javascript/journal_entry.js"}
+		 "Journal Entry":"ukm/utils/javascript/journal_entry.js",
+		 "Location":"ukm/utils/javascript/location.js"}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
@@ -99,12 +100,23 @@ after_install = "united_knitting_mills.after_install.create_custom_fields"
 doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.salary_slip_based_on_shift",
-		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry"
+		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
+		
 	},
 	'Employee':{
 		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
+	},
+	'Attendance':{
+		"validate":["united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
+		            "united_knitting_mills.ukm.utils.python.attendance.total_shift_amount",],
+		"after_insert":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
+	},
+	"Location":{
+		"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
+					"united_knitting_mills.ukm.utils.python.location.autoname"]
 	}
 }
+
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",

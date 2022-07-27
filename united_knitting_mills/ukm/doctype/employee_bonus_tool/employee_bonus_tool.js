@@ -22,9 +22,6 @@ frappe.ui.form.on("Employee Bonus Tool",{
 					method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
 					args:{bonus1,location,from_date,to_date},
 					callback(r){
-
-						frm.trigger("from_date")
-				        frm.trigger("to_date")
 						frm.clear_table("employee_bonus_details");
 						for(var i=0;i<r.message[0].length;i++){
 							var child = cur_frm.add_child("employee_bonus_details");
