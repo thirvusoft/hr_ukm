@@ -14,21 +14,23 @@ class ThirvuShift(Document):
 
 @frappe.whitelist()
 def create_employee_attendance(employee,doc,late_entry,early_exit):
-		employee_checkin = frappe.db.get_list('Employee Checkin',fields=["time",'log_type'],filters={"employee": employee},order_by="time")
+		employee_checkin = frappe.db.get_list('Employee Checkin',fields=["time",'log_type','name'],filters={"employee": employee,'attendance':('is', 'not set')},order_by="time")
 		shift_list = frappe.get_doc('Thirvu Shift',{'name':doc})
 		row = frappe._dict()
+		checkin = frappe._dict()
 		for data in employee_checkin:
-			print(data)
 			validate_time = shift_list.thirvu_shift_details[0].start_time - datetime.timedelta(hours = 1)
-			# print(data.time.time()<validate_time.time())
 			if data.time.date() in row:
 				add_values_to_key(row,data.time.date(),[data])
+				add_values_to_key(checkin,data.time.date(),[data['name']])
 
 			else:
 				if to_timedelta(str(data.time.time())) < validate_time:
 					add_values_to_key(row,data.time.date() - datetime.timedelta(days = 1),[data])
+					add_values_to_key(checkin,data.time.date() - datetime.timedelta(days = 1),[data['name']])
 				else:
 					row.update({data.time.date():[data]})
+					checkin.update({data.time.date():[data['name']]})
 
 		for value in row:
 			start_time = 0
@@ -126,6 +128,11 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 				'total_shift_count':total_shift_count
 			})
 			attendance_doc.insert()
+			
+			frappe.db.sql("""update `tabEmployee Checkin`
+				set attendance = %s
+				where name in %s""", (attendance_doc.name , checkin[value]))
+		
 			if not attendance_doc.employee_shift_details:
 				attendance_doc.submit()
 
