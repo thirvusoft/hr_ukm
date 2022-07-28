@@ -76,11 +76,12 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 						if to_timedelta(str(end_time)) >= before_end_time and to_timedelta(str(end_time)) <= after_end_time:
 							single_row.update({'end_time':end_time})
 							end = 0
+							print(single_row)
 							
 						else:
 							approval_end_time = end_time
 
-	
+						print(single_row)
 						if(len(single_row.keys()) == 2):
 							shift_hours =  shift_end_time - shift_start_time
 							single_row.update({'shift_hours':  shift_hours / datetime.timedelta(hours=1),'shift_count':data.shift_count,'shift_status':data.shift_status})
@@ -90,7 +91,7 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 							break
 
 						try:
-							if single_row['start_time'] and not single_row['end_time']:
+							if single_row['start_time']:
 								approval_row = frappe._dict()
 								approval_row.update({'check_in_time':single_row['start_time'],'check_out_time':approval_end_time})
 								approval_details.append(approval_row)
@@ -100,7 +101,7 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 						except:
 							pass
 						try:
-							if not single_row['start_time'] and single_row['end_time']:
+							if single_row['end_time']:
 								approval_row = frappe._dict()
 								approval_row.update({'check_in_time':approval_start_time,'check_out_time':single_row['end_time'],})
 								approval_details.append(approval_row)
@@ -127,6 +128,7 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 				'employee_shift_details':approval_details,
 				'total_shift_count':total_shift_count
 			})
+			
 			attendance_doc.insert()
 			
 			frappe.db.sql("""update `tabEmployee Checkin`
