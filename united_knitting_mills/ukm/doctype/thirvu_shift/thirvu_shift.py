@@ -76,12 +76,10 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 						if to_timedelta(str(end_time)) >= before_end_time and to_timedelta(str(end_time)) <= after_end_time:
 							single_row.update({'end_time':end_time})
 							end = 0
-							print(single_row)
 							
 						else:
 							approval_end_time = end_time
 
-						print(single_row)
 						if(len(single_row.keys()) == 2):
 							shift_hours =  shift_end_time - shift_start_time
 							single_row.update({'shift_hours':  shift_hours / datetime.timedelta(hours=1),'shift_count':data.shift_count,'shift_status':data.shift_status})
