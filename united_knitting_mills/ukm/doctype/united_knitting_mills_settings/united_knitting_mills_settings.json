@@ -8,7 +8,9 @@
  "field_order": [
   "ts_create",
   "biometric_settings_section",
-  "buffer_time"
+  "buffer_time",
+  "column_break_4",
+  "check_in_date"
  ],
  "fields": [
   {
@@ -28,12 +30,21 @@
    "fieldname": "buffer_time",
    "fieldtype": "Int",
    "label": "Buffer Time"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "check_in_date",
+   "fieldtype": "Date",
+   "label": "Check-In Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-07-26 19:22:14.930326",
+ "modified": "2022-07-29 13:04:04.785020",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

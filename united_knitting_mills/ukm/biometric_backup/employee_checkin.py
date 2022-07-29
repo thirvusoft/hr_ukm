@@ -58,10 +58,10 @@ class EmployeeCheckin(Document):
 
 @frappe.whitelist()
 def add_log_based_on_employee_field(
-	employee_field_value,
-	timestamp,
-	device_id=None,
-	log_type=None,
+	employee_field_value='1010',
+	timestamp='2022-06-29 20:33:51',
+	device_id='TS',
+	log_type='IN',
 	skip_auto_attendance=0,
 	employee_fieldname="attendance_device_id",
 ):
@@ -92,14 +92,18 @@ def add_log_based_on_employee_field(
 				employee_fieldname, employee_field_value
 			)
 		)
-		
+	# Given timestamp in string
+	date_format_str = '%Y-%m-%d %H:%M:%S'
+
+	# create datetime object from timestamp string
+	validate_timestamp = datetime.strptime(str(timestamp), date_format_str)
+
+	check_date = frappe.db.get_single_value("United Knitting Mills Settings", "check_in_date")
+
 	#TS Code Start
 	try:
 		att_doc = frappe.get_last_doc("Employee Checkin", {"employee": employee.name})
 
-		# Given timestamp in string
-		date_format_str = '%Y-%m-%d %H:%M:%S'
-		
 		# create datetime object from timestamp string
 		given_time = datetime.strptime(str(att_doc.time), date_format_str)
 
@@ -111,7 +115,8 @@ def add_log_based_on_employee_field(
 
 		# Convert datetime object to string in specific format 
 		final_time_str = final_time.strftime('%Y-%m-%d %H:%M:%S')
-		if final_time_str<timestamp:
+
+		if final_time_str < timestamp and check_date <= validate_timestamp.date():
 			doc = frappe.new_doc("Employee Checkin")
 			doc.employee = employee.name
 			doc.employee_name = employee.employee_name
@@ -128,16 +133,19 @@ def add_log_based_on_employee_field(
 		else:
 			return att_doc
 	except:
-		doc = frappe.new_doc("Employee Checkin")
-		doc.employee = employee.name
-		doc.employee_name = employee.employee_name
-		doc.time = timestamp
-		doc.device_id = device_id
-		doc.log_type = 'IN'
-		if cint(skip_auto_attendance) == 1:
-			doc.skip_auto_attendance = "1"
-		doc.insert()
-		return doc
+		if check_date <= validate_timestamp.date():
+			doc = frappe.new_doc("Employee Checkin")
+			doc.employee = employee.name
+			doc.employee_name = employee.employee_name
+			doc.time = timestamp
+			doc.device_id = device_id
+			doc.log_type = 'IN'
+			if cint(skip_auto_attendance) == 1:
+				doc.skip_auto_attendance = "1"
+			doc.insert()
+		else:
+			return frappe.get_last_doc("Employee Checkin")
+
 
     #TS Code End
 
