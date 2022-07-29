@@ -92,11 +92,15 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 							if single_row['start_time']:
 								validate_hr = data.shift_hours/2
 								shift_hours = (shift_end_time - shift_start_time) / datetime.timedelta(hours=1)
-								if shift_hours > validate_hr:
+								if shift_hours > validate_hr and shift_hours < data.shift_hours:
 									single_row.update({'end_time':approval_end_time,'shift_hours':shift_hours,'shift_count':data.shift_count / 2,'shift_status':data.shift_status})
+									attendance_doc.early_exit = 1
+								elif shift_hours > validate_hr and shift_hours > data.shift_hours :
+									single_row.update({'end_time':approval_end_time,'shift_hours':shift_hours,'shift_count':data.shift_count ,'shift_status':data.shift_status})
+									attendance_doc.early_exit = 0
 								else:
 									single_row.update({'end_time':approval_end_time,'shift_hours':shift_hours,'shift_count':0.0 ,'shift_status':data.shift_status})
-								attendance_doc.early_exit = 1
+									attendance_doc.early_exit = 1
 								details.append(single_row)
 								start = 0
 								end = 0
@@ -107,11 +111,17 @@ def create_employee_attendance(employee,doc,late_entry,early_exit):
 							if single_row['end_time']:
 								validate_hr = data.shift_hours/2
 								shift_hours = (shift_end_time - shift_start_time) / datetime.timedelta(hours=1)
-								if shift_hours > validate_hr:
+								
+								if shift_hours > validate_hr and shift_hours < data.shift_hours:
 									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count':data.shift_count / 2,'shift_status':data.shift_status})
+									attendance_doc.late_entry = 1
+								elif shift_hours > validate_hr and shift_hours > data.shift_hours :
+									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count':data.shift_count,'shift_status':data.shift_status})
+									attendance_doc.late_entry = 0
 								else:
-									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count': 0.0 ,'shift_status':data.shift_status})
-								attendance_doc.late_entry = 1
+									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count':0.0,'shift_status':data.shift_status})
+									attendance_doc.late_entry = 1
+								
 								details.append(single_row)
 								start = 0
 								end = 0
