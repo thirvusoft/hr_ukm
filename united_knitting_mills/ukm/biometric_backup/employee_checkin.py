@@ -60,8 +60,8 @@ class EmployeeCheckin(Document):
 def add_log_based_on_employee_field(
 	employee_field_value,
 	timestamp,
-	device_id,
-	log_type,
+	device_id=None,
+	log_type=None,
 	skip_auto_attendance=0,
 	employee_fieldname="attendance_device_id",
 ):
