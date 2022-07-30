@@ -58,10 +58,10 @@ class EmployeeCheckin(Document):
 
 @frappe.whitelist()
 def add_log_based_on_employee_field(
-	employee_field_value='1010',
-	timestamp='2022-06-29 20:33:51',
-	device_id='TS',
-	log_type='IN',
+	employee_field_value,
+	timestamp,
+	device_id,
+	log_type,
 	skip_auto_attendance=0,
 	employee_fieldname="attendance_device_id",
 ):
