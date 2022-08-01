@@ -5,21 +5,16 @@ frappe.ui.form.on('Thirvu Shift', {
 	refresh: function(frm) {
 		if(!frm.doc.__islocal){
 			frm.add_custom_button(__('Mark Employee Attendance'), function () {
-				frappe.db.get_list('Employee', {filters: {department: frm.doc.department}}).then(data => {
-					for (var i = 0;i<data.length;i++){
-						frappe.call({
-							method: "united_knitting_mills.ukm.doctype.thirvu_shift.thirvu_shift.create_employee_attendance",
-							args: {
-								employee: data[i]['name'],
-								doc:frm.doc.name,
-								late_entry:frm.doc.entry_period,
-								early_exit:frm.doc.exit_period
-							},
-							callback: function(r) {
-							}
-						});
-					}
-				});}, __('Actions'));
+				frappe.call({
+					method: "united_knitting_mills.ukm.doctype.thirvu_shift.thirvu_shift.create_employee_attendance",
+					args: {
+						departments:frm.doc.department,
+						doc:frm.doc.name,
+						late_entry:frm.doc.entry_period,
+						early_exit:frm.doc.exit_period
+					},
+				});
+			}, __('Actions'));
 		}
 	},
 	setup:function(frm){

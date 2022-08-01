@@ -10,161 +10,178 @@ import datetime
 
 
 class ThirvuShift(Document):
-	pass
+	pass 
 
 @frappe.whitelist()
-def create_employee_attendance(employee,doc,late_entry,early_exit):
+def create_employee_attendance(departments,doc,late_entry,early_exit):
+	# To get employee only foe the particular department
+	total_employees=frappe.db.get_list('Employee', {"department":departments})
+	for employee_details in total_employees:
+		employee=employee_details["name"]
+		# To Get Employee CheckIn Details
 		employee_checkin = frappe.db.get_list('Employee Checkin',fields=["time",'log_type','name'],filters={"employee": employee,'attendance':('is', 'not set')},order_by="time")
+		# To Get Shift Details
 		shift_list = frappe.get_doc('Thirvu Shift',{'name':doc})
-		row = frappe._dict()
-		checkin = frappe._dict()
-		for data in employee_checkin:
+		#  To Separate The Checkin Date-wise and Getting That Checkin Name
+		if shift_list.thirvu_shift_details:
 			validate_time = shift_list.thirvu_shift_details[0].start_time - datetime.timedelta(hours = 1)
-			if data.time.date() in row:
-				add_values_to_key(row,data.time.date(),[data])
-				add_values_to_key(checkin,data.time.date(),[data['name']])
-
-			else:
-				if to_timedelta(str(data.time.time())) < validate_time:
-					add_values_to_key(row,data.time.date() - datetime.timedelta(days = 1),[data])
-					add_values_to_key(checkin,data.time.date() - datetime.timedelta(days = 1),[data['name']])
+			date_wise_checkin = frappe._dict()
+			checkin_name = frappe._dict()
+			for data in employee_checkin:
+				if data.time.date() in date_wise_checkin:
+					adding_checkin_datewise(date_wise_checkin,data.time.date(),[data])
+					adding_checkin_datewise(checkin_name,data.time.date(),[data['name']])
 				else:
-					row.update({data.time.date():[data]})
-					checkin.update({data.time.date():[data['name']]})
+					if to_timedelta(str(data.time.time())) < validate_time:
+						adding_checkin_datewise(date_wise_checkin,data.time.date() - datetime.timedelta(days = 1),[data])
+						adding_checkin_datewise(checkin_name,data.time.date() - datetime.timedelta(days = 1),[data['name']])
+					else:
+						date_wise_checkin.update({data.time.date():[data]})
+						checkin_name.update({data.time.date():[data['name']]})
 
-		for value in row:
-			start_time = 0
-			end_time = 0
-			start = 0
-			end = 0
-			details = []
-			approval_details=[]
-			attendance_doc = frappe.new_doc('Attendance')
-			total_shift_hour = 0
-			total_shift_count =0
-			attendance_doc.employee = employee
-			attendance_doc.attendance_date = value
-		
-			single_row = frappe._dict()
-			for data in row[value]:
-				if data['log_type']=='IN':
-					start_time = data['time'].time()
-					shift_start_time = data['time']
-					start = 1
+			# Looping all the checkin details date-wise
+			for date in date_wise_checkin:
+				in_time = 0
+				out_time = 0
+				checkin_type_in = 0
+				checkin_type_out = 0
+				correct_shift_details = []
+				approval_details=[]
+				new_attendance_doc = frappe.new_doc('Attendance')
+				total_shift_hour = 0
+				total_shift_count =0
+				new_attendance_doc.employee = employee
+				new_attendance_doc.attendance_date = date
+			
+				# finalattendance = frappe._dict()
 
-				if data['log_type'] == 'OUT':
-					end_time = data['time'].time()
-					shift_end_time = data['time']
-					end = 1
+				# To Separate the In and Out Time
+				for checking_details in date_wise_checkin[date]:
+					# For In-Time
+					if checking_details['log_type']=='IN':
+						in_time = checking_details['time'].time()
+						in_time_date = checking_details['time']
+						checkin_type_in = 1
+					# For Out-Time
+					if checking_details['log_type'] == 'OUT':
+						out_time = checking_details['time'].time()
+						out_time_date = checking_details['time']
+						checkin_type_out = 1
 
-
-				if start and end:
-					single_row = frappe._dict()
-					for data in shift_list.thirvu_shift_details:
-						before_start_time = data.start_time - datetime.timedelta(hours = 1)
-						after_start_time = data.start_time + datetime.timedelta(minutes = json.loads(late_entry))
-						before_end_time = data.end_time - datetime.timedelta(minutes = json.loads(early_exit))
-						after_end_time = data.end_time + datetime.timedelta(minutes = 15)
-
-						if  to_timedelta(str(start_time)) >= before_start_time and to_timedelta(str(start_time)) <= after_start_time:
-							single_row.update({'start_time':start_time})
-							start = 0
-							
-						else:
-							approval_start_time = start_time
-						
-						if to_timedelta(str(end_time)) >= before_end_time and to_timedelta(str(end_time)) <= after_end_time:
-							single_row.update({'end_time':end_time})
-							end = 0
-							
-						else:
-							approval_end_time = end_time
-
-						if(len(single_row.keys()) == 2):
-							shift_hours =  shift_end_time - shift_start_time
-							single_row.update({'shift_hours':  shift_hours / datetime.timedelta(hours=1),'shift_count':data.shift_count,'shift_status':data.shift_status})
-							details.append(single_row)
-							total_shift_hour += single_row['shift_hours']
-							total_shift_count += data.shift_count
-							break
-
-						try:
-							if single_row['start_time']:
-								validate_hr = data.shift_hours/2
-								shift_hours = (shift_end_time - shift_start_time) / datetime.timedelta(hours=1)
-								if shift_hours > validate_hr and shift_hours < data.shift_hours:
-									single_row.update({'end_time':approval_end_time,'shift_hours':shift_hours,'shift_count':data.shift_count / 2,'shift_status':data.shift_status})
-									attendance_doc.early_exit = 1
-								elif shift_hours > validate_hr and shift_hours > data.shift_hours :
-									single_row.update({'end_time':approval_end_time,'shift_hours':shift_hours,'shift_count':data.shift_count ,'shift_status':data.shift_status})
-									attendance_doc.early_exit = 0
-								else:
-									single_row.update({'end_time':approval_end_time,'shift_hours':shift_hours,'shift_count':0.0 ,'shift_status':data.shift_status})
-									attendance_doc.early_exit = 1
-								details.append(single_row)
-								start = 0
-								end = 0
-								break
-						except:
-							pass
-						try:
-							if single_row['end_time']:
-								validate_hr = data.shift_hours/2
-								shift_hours = (shift_end_time - shift_start_time) / datetime.timedelta(hours=1)
+					# Caculating Attendance 
+					if checkin_type_in and checkin_type_out:
+						shift_wise_details = frappe._dict()
+						# Calculating Shift
+						for shift_details in shift_list.thirvu_shift_details:
+							# Checking Buffer Time
+							buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
+							buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
+							buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
+							buffer_after_end_time = shift_details.end_time + datetime.timedelta(minutes = 15)
+							# Buffer calculation for starting time
+							if  to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:
+								shift_wise_details.update({'start_time':in_time})
+								checkin_type_in = 0
 								
-								if shift_hours > validate_hr and shift_hours < data.shift_hours:
-									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count':data.shift_count / 2,'shift_status':data.shift_status})
-									attendance_doc.late_entry = 1
-								elif shift_hours > validate_hr and shift_hours > data.shift_hours :
-									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count':data.shift_count,'shift_status':data.shift_status})
-									attendance_doc.late_entry = 0
-								else:
-									single_row.update({'start_time':approval_start_time,'shift_hours':shift_hours,'shift_count':0.0,'shift_status':data.shift_status})
-									attendance_doc.late_entry = 1
+							else:
+								approval_start_time = in_time
+							# Buffer calculation for ending time
+							if to_timedelta(str(out_time)) >= buffer_before_end_time and to_timedelta(str(out_time)) <= buffer_after_end_time:
+								shift_wise_details.update({'end_time':out_time})
+								checkin_type_out = 0
 								
-								details.append(single_row)
-								start = 0
-								end = 0
+							else:
+								approval_end_time = out_time
+
+							if(len(shift_wise_details.keys()) == 2):
+								worked_shift_hours =  out_time_date - in_time_date
+								shift_wise_details.update({'shift_hours':  worked_shift_hours / datetime.timedelta(hours=1),'shift_count':shift_details.shift_count,'shift_status':shift_details.shift_status})
+								correct_shift_details.append(shift_wise_details)
+								total_shift_hour += shift_wise_details['shift_hours']
+								total_shift_count += shift_details.shift_count
 								break
-						except:
-							pass
+							try:
+								if shift_wise_details['start_time']:
 
-						
-			if start and end:
-				approval_row = frappe._dict()
-				approval_row.update({'check_out_time':end_time,'check_in_time':start_time})
-				approval_details.append(approval_row)
+									assigned_shift_hours = shift_details.shift_hours/2
+									worked_shift_hours = (out_time_date - in_time_date) / datetime.timedelta(hours=1)
+									if worked_shift_hours >= assigned_shift_hours and worked_shift_hours < shift_details.shift_hours:
+										shift_wise_details.update({'end_time':approval_end_time,'shift_hours':worked_shift_hours,'shift_count':shift_details.shift_count / 2,'shift_status':shift_details.shift_status})
+										new_attendance_doc.early_exit = 1
+										correct_shift_details.append(shift_wise_details)
+									elif worked_shift_hours > assigned_shift_hours and worked_shift_hours > shift_details.shift_hours :
+										approval_timing = frappe._dict()
+										approval_timing.update({'check_out_time':approval_end_time,'check_in_time':shift_wise_details['start_time']})
+										approval_details.append(approval_timing)
+									else:
+										shift_wise_details.update({'end_time':approval_end_time,'shift_hours':worked_shift_hours,'shift_count':0.0 ,'shift_status':shift_details.shift_status})
+										new_attendance_doc.early_exit = 1
+										correct_shift_details.append(shift_wise_details)
+									checkin_type_in = 0
+									checkin_type_out = 0
+									break
+							except:
+								pass
+							try:
+								if shift_wise_details['end_time']:
+									assigned_shift_hours = shift_details.shift_hours/2
+									worked_shift_hours = (out_time_date - in_time_date) / datetime.timedelta(hours=1)
+									
+									if worked_shift_hours > assigned_shift_hours and worked_shift_hours < shift_details.shift_hours:
+										shift_wise_details.update({'start_time':approval_start_time,'shift_hours':worked_shift_hours,'shift_count':shift_details.shift_count / 2,'shift_status':shift_details.shift_status})
+										new_attendance_doc.late_entry = 1
+										correct_shift_details.append(shift_wise_details)
+									elif worked_shift_hours > assigned_shift_hours and worked_shift_hours > shift_details.shift_hours :
+										approval_timing = frappe._dict()
+										approval_timing.update({'check_out_time':shift_wise_details['end_time'],'check_in_time':approval_start_time})
+										approval_details.append(approval_timing)
+									else:
+										shift_wise_details.update({'start_time':approval_start_time,'shift_hours':worked_shift_hours,'shift_count':0.0,'shift_status':shift_details.shift_status})
+										new_attendance_doc.late_entry = 1
+										correct_shift_details.append(shift_wise_details)
+									checkin_type_in = 0
+									checkin_type_out = 0
+									break
+							except:
+								pass
 
-			elif start:
-				approval_row = frappe._dict()
-				approval_row.update({'check_in_time':start_time,'check_out_time':''})
-				approval_details.append(approval_row)
-			
-			elif end:
-				approval_row = frappe._dict()
-				approval_row.update({'check_out_time':end_time,'check_in_time':''})
-				approval_details.append(approval_row)
+							
+				if checkin_type_in and checkin_type_out:
+					approval_timing = frappe._dict()
+					approval_timing.update({'check_out_time':out_time,'check_in_time':in_time})
+					approval_details.append(approval_timing)
 
+				elif checkin_type_in:
+					approval_timing = frappe._dict()
+					approval_timing.update({'check_in_time':in_time,'check_out_time':''})
+					approval_details.append(approval_timing)
+				
+				elif checkin_type_out:
+					approval_timing = frappe._dict()
+					approval_timing.update({'check_out_time':out_time,'check_in_time':''})
+					approval_details.append(approval_timing)
 
-			attendance_doc.update({
-				'thirvu_shift_details':details,
-				'total_shift_hr':total_shift_hour,
-				'employee_shift_details':approval_details,
-				'total_shift_count':total_shift_count
-			})
-			
-			attendance_doc.insert()
-			
-			frappe.db.sql("""update `tabEmployee Checkin`
-				set attendance = %s
-				where name in %s""", (attendance_doc.name , checkin[value]))
-		
-			if not attendance_doc.employee_shift_details:
-				attendance_doc.submit()
+				# To create attendance document
+				new_attendance_doc.update({
+					'thirvu_shift_details':correct_shift_details,
+					'total_shift_hr':total_shift_hour,
+					'employee_shift_details':approval_details,
+					'total_shift_count':total_shift_count
+				})
+				new_attendance_doc.insert()
+				
+				# To update attendance name in employee checkin
+				frappe.db.sql("""update `tabEmployee Checkin`
+					set attendance = %s
+					where name in %s""", (new_attendance_doc.name , checkin_name[date]))
+
+				# If all shift details are correct it will submit automatically
+				if not new_attendance_doc.employee_shift_details:
+					new_attendance_doc.submit()
 
 					
-def add_values_to_key(temp_dict, key, list_of_values):
-    if key not in temp_dict:
-        temp_dict[key] = list()
-    temp_dict[key].extend(list_of_values)
-    return temp_dict
+def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
+    if checkin_date_key not in checkin_date:
+        checkin_date[checkin_date_key] = list()
+    checkin_date[checkin_date_key].extend(checkin_details)
+    # return temp_dict
