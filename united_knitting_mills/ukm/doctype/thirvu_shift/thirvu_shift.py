@@ -102,7 +102,6 @@ def create_employee_attendance(departments,doc,late_entry,early_exit):
 								break
 							try:
 								if shift_wise_details['start_time']:
-
 									assigned_shift_hours = shift_details.shift_hours/2
 									worked_shift_hours = (out_time_date - in_time_date) / datetime.timedelta(hours=1)
 									if worked_shift_hours >= assigned_shift_hours and worked_shift_hours < shift_details.shift_hours:
@@ -144,14 +143,16 @@ def create_employee_attendance(departments,doc,late_entry,early_exit):
 									break
 							except:
 								pass
+							# If both checkin time and checkout time are wrong
+							if checkin_type_in and checkin_type_out:
+								approval_timing = frappe._dict()
+								approval_timing.update({'check_out_time':out_time,'check_in_time':in_time})
+								approval_details.append(approval_timing)
+								checkin_type_in = 0
+								checkin_type_out = 0
+								break
 
-							
-				if checkin_type_in and checkin_type_out:
-					approval_timing = frappe._dict()
-					approval_timing.update({'check_out_time':out_time,'check_in_time':in_time})
-					approval_details.append(approval_timing)
-
-				elif checkin_type_in:
+				if checkin_type_in:
 					approval_timing = frappe._dict()
 					approval_timing.update({'check_in_time':in_time,'check_out_time':''})
 					approval_details.append(approval_timing)
