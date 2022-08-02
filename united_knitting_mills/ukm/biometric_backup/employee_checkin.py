@@ -97,12 +97,14 @@ def add_log_based_on_employee_field(
 
 	# create datetime object from timestamp string
 	validate_timestamp = datetime.strptime(str(timestamp), date_format_str)
-
+	# Customized By Thirvusoft
+	# Start
 	check_date = frappe.db.get_single_value("United Knitting Mills Settings", "check_in_date")
-
-	#TS Code Start
+	resetting_checkin_time = frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time")
+	resetting_checkin_time=datetime.strptime(str(resetting_checkin_time),'%H:%M:%S')
+	resetting_datetime = datetime.combine(validate_timestamp.date(), resetting_checkin_time.time())
 	try:
-		att_doc = frappe.get_last_doc("Employee Checkin", {"employee": employee.name})
+		att_doc = frappe.get_last_doc("Employee Checkin", filters = [["employee","=", employee.name],["time", ">", resetting_datetime]])
 
 		# create datetime object from timestamp string
 		given_time = datetime.strptime(str(att_doc.time), date_format_str)
@@ -143,11 +145,11 @@ def add_log_based_on_employee_field(
 			if cint(skip_auto_attendance) == 1:
 				doc.skip_auto_attendance = "1"
 			doc.insert()
+			return doc
 		else:
 			return frappe.get_last_doc("Employee Checkin")
 
-
-    #TS Code End
+    # End
 
 def mark_attendance_and_link_log(
 	logs,

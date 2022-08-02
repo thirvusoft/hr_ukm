@@ -9,6 +9,7 @@
   "ts_create",
   "biometric_settings_section",
   "buffer_time",
+  "checkin_type_resetting_time",
   "column_break_4",
   "check_in_date"
  ],
@@ -39,12 +40,19 @@
    "fieldname": "check_in_date",
    "fieldtype": "Date",
    "label": "Check-In Date"
+  },
+  {
+   "fieldname": "checkin_type_resetting_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Resetting Time For Checkin Type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-07-29 13:04:04.785020",
+ "modified": "2022-08-02 13:02:24.458089",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
