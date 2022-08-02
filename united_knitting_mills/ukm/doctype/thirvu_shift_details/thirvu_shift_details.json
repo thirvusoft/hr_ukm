@@ -24,32 +24,36 @@
    "fieldname": "start_time",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "Start Time"
+   "label": "Start Time",
+   "reqd": 1
   },
   {
    "fieldname": "end_time",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "End Time"
+   "label": "End Time",
+   "reqd": 1
   },
   {
    "fieldname": "shift_status",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Shift Status",
-   "options": "Thirvu Shift Status"
+   "options": "Thirvu Shift Status",
+   "reqd": 1
   },
   {
    "fieldname": "shift_hours",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Shift Hours (Excluding Break Hours)"
+   "label": "Shift Hours (Excluding Break Hours)",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-07-26 12:27:09.082895",
+ "modified": "2022-08-01 13:06:49.771026",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Thirvu Shift Details",
