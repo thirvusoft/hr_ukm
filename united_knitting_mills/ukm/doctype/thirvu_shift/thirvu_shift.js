@@ -13,6 +13,8 @@ frappe.ui.form.on('Thirvu Shift', {
 						late_entry:frm.doc.entry_period,
 						early_exit:frm.doc.exit_period
 					},
+					freeze:true,
+					freeze_message: __("Creating Attendance..."),
 				});
 			}, __('Actions'));
 		}
