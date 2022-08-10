@@ -41,15 +41,5 @@ frappe.ui.form.on('Journal Entry',{
 			}
 
         })
-
-
-        // // frappe.session.user
-        // frm.set_query('account', 'accounts',function(doc) {
-        //     return {
-        //         filters: {
-        //             location
-        //         }
-        //     };
-        // });
     }
 })
