@@ -23,3 +23,23 @@ frappe.ui.form.on('Journal Entry Account',{
         }
         }
 })
+
+frappe.ui.form.on('Journal Entry',{
+    setup:function(frm,cdt,cdn){
+        frappe.call({
+            method:"united_knitting_mills.ukm.utils.python.journal_entry.get_user_location",
+			args: {"user": frappe.session.user},
+			callback:function(r){
+                if (r.message.length){
+                    frm.set_query('account', 'accounts',function(doc) {
+                        return {
+                            filters: {'location':['in',r.message]
+                            }
+                        };
+                    });
+                }
+			}
+
+        })
+    }
+})
