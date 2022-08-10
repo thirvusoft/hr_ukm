@@ -6,8 +6,6 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 def location():
     custom_fields = {
 		"Location": [
-			dict(fieldname='abbr', label='Abbr',
-				fieldtype='Data', insert_after='location_name',default="UKM",reqd=1),
             dict(fieldname='current_series', label='Current Series',
 				fieldtype='Int', insert_after='cb_details',default=1,hidden=1),
             dict(fieldname='naming_series', label='Employee Naming Series',
