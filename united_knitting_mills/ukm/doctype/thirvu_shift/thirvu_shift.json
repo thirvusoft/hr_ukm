@@ -44,11 +44,13 @@
    "reqd": 1
   },
   {
+   "default": "0",
    "fieldname": "entry_period",
    "fieldtype": "Data",
    "label": "Entry Period (in minutes)"
   },
   {
+   "default": "0",
    "fieldname": "exit_period",
    "fieldtype": "Data",
    "label": "Exit Period (in minutes)"
@@ -76,7 +78,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-07-26 11:41:35.526810",
+ "modified": "2022-08-09 15:18:07.249753",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Thirvu Shift",
