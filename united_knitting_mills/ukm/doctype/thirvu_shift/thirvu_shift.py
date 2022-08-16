@@ -75,36 +75,32 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 						in_time_date = date_wise_checkin[date][0]['time']
 
 
+					if date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['log_type'] == 'OUT':
+						out_time = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time'].time()
+						out_time_date = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time']
+
 					for shift_details in shift_list.thirvu_shift_details:
 
 						# Checking Buffer Time
 						buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
-						buffer_after_start_time = shift_list.thirvu_shift_details[0].start_time + datetime.timedelta(minutes = json.loads(late_entry))
+						buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
+						buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
+						if shift_details.idx < len(shift_list.thirvu_shift_details):
+							buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx].end_time
+						else:
+							buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx - 1].end_time
 
 						# Buffer calculation for starting time
 						if  to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:
 							shift_wise_details.update({'start_time':in_time})
 							start_idx = shift_details.idx
-							break
 						else:
 							approval_start_time = in_time
 
-
-					if date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['log_type'] == 'OUT':
-						out_time = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time'].time()
-						out_time_date = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time']
-
-
-					for shift_details in shift_list.thirvu_shift_details[::-1]:
-						
-						# Checking Buffer Time
-						buffer_after_end_time = shift_details.end_time
-						
 						# Buffer calculation for end time
-						if to_timedelta(str(out_time)) > buffer_after_end_time:
+						if to_timedelta(str(out_time)) >= buffer_before_end_time and to_timedelta(str(out_time)) < buffer_after_end_time:
 							shift_wise_details.update({'end_time':out_time})
 							end_idx = shift_details.idx
-							break
 						else:
 							approval_end_time = out_time 
 
@@ -112,7 +108,7 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 						if start_idx and end_idx:
 							shift_count = 0
 							for shift_row in shift_list.thirvu_shift_details:
-								if shift_row.idx > start_idx - 1 and shift_row.idx < end_idx - 1:
+								if shift_row.idx >= start_idx and shift_row.idx <= end_idx:
 									shift_count += shift_row.shift_count
 							shift_wise_details.update({'shift_count':shift_count})
 							correct_shift_details.append(shift_wise_details)
