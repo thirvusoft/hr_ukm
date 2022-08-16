@@ -14,6 +14,7 @@ from united_knitting_mills.ukm.utils.python.salary_assignment_workflow import as
 from united_knitting_mills.ukm.custom_fields.hr.department import department_customisation
 from united_knitting_mills.ukm.utils.python.employee import employee_custom_field
 from united_knitting_mills.ukm.utils.python.location import location
+from united_knitting_mills.ukm.custom_fields.hr.designation import designation_customisation
 
 
 def create_custom_fields():
@@ -33,3 +34,4 @@ def create_custom_fields():
     assignment_workflow_document_creation()
     employee_custom_field()
     location()
+    designation_customisation()
