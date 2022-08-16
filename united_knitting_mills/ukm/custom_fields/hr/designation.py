@@ -7,7 +7,7 @@ def create_designation_custom_fields():
     custom_fields = {
 		"Designation": [
 			dict(fieldname='thirvu_shift', label='Thirvu Shift',
-				fieldtype='Link',options='Thirvu Shift',insert_after='description')
+				fieldtype='Link',options='Thirvu Shift',insert_after='designation_name',reqd =1)
             ]
     }
     create_custom_fields(custom_fields)
