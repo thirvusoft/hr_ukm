@@ -33,8 +33,10 @@ def creating_hr_permission(doc):
 
 def sequence_user_id(doc,event):
 	frappe.db.set_value("Employee",doc.name,"attendance_device_id",doc.name)
-	
-
+	if doc.approval_by_owner == 1 and doc.status == 'Inactive':
+			doc.status = 'Active'
+	else:
+		doc.status = 'Inactive'
 
 def employee_custom_field():
 	custom_fields = {

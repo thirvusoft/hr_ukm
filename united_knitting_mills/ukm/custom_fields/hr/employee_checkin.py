@@ -10,9 +10,9 @@ def checkin_property_setter():
 
 def create_checkin_custom_fields():
     custom_fields = {
-		"Attendance": [
+		"Employee Checkin": [
 			dict(fieldname='designation', label='Designation',
-				fieldtype='Link',options='Designation',insert_after='employee_name',read_only=1),
+				fieldtype='Link',options='Designation',insert_after='employee_name',read_only=1,fetch_from='employee.designation'),
             ]
     }
     create_custom_fields(custom_fields)
