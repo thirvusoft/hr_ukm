@@ -91,14 +91,14 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 							buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx - 1].end_time
 
 						# Buffer calculation for starting time
-						if  to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:
+						if  in_time and to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:
 							shift_wise_details.update({'start_time':in_time})
 							start_idx = shift_details.idx
 						else:
 							approval_start_time = in_time
 
 						# Buffer calculation for end time
-						if to_timedelta(str(out_time)) >= buffer_before_end_time and to_timedelta(str(out_time)) < buffer_after_end_time:
+						if out_time and to_timedelta(str(out_time)) >= buffer_before_end_time and to_timedelta(str(out_time)) < buffer_after_end_time:
 							shift_wise_details.update({'end_time':out_time})
 							end_idx = shift_details.idx
 						else:
@@ -115,16 +115,13 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 
 					except:
 						try:
-							if shift_wise_details['start_time']:
+							if shift_wise_details['start_time'] and approval_end_time:
 								approval_timing = frappe._dict()
 								approval_timing.update({'check_out_time':approval_end_time,'check_in_time':shift_wise_details['start_time']})
 								approval_details.append(approval_timing)
 
 						except:
-							if shift_wise_details['end_time']:
-								approval_timing = frappe._dict()
-								approval_timing.update({'check_out_time':shift_wise_details['end_time'],'check_in_time':approval_start_time})
-								approval_details.append(approval_timing)
+							pass
 						
 					new_attendance_doc.update({
 						'thirvu_shift_details':correct_shift_details,
