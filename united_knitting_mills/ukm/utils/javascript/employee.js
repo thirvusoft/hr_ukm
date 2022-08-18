@@ -27,6 +27,13 @@ frappe.ui.form.on('Employee',{
         if(frm.is_new()){
             frm.set_value("hr_permission",0)
         }
+        if (in_list(frappe.user_roles, "Owner")) {
+            frm.set_df_property("approval_by_owner", "hidden",0);
+        }
+        else{
+            frm.set_df_property("approval_by_owner", "hidden",1);
+
+        }
 }
 
 })
