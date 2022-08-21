@@ -13,7 +13,9 @@ def create_employee_fields_and_property_setter():
             dict(fieldname='enable_pf', label='Enable PF',
                 fieldtype='Check', insert_after='enable_esi', hidden=1),
             dict(fieldname='hr_permission', label='HR Permission',
-                fieldtype='Check', insert_after='location', hidden=1),    
+                fieldtype='Check', insert_after='location', hidden=1), 
+            dict(fieldname='approval_by_owner', label='Approved By Owner',
+                fieldtype='Check', insert_after='company'),   
         ]
     }
 

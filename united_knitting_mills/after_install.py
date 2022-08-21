@@ -15,6 +15,7 @@ from united_knitting_mills.ukm.custom_fields.hr.department import department_cus
 from united_knitting_mills.ukm.utils.python.employee import employee_custom_field
 from united_knitting_mills.ukm.utils.python.location import location
 from united_knitting_mills.ukm.custom_fields.hr.designation import designation_customisation
+from united_knitting_mills.ukm.custom_fields.hr.employee_checkin import checkin_customisation
 
 
 def create_custom_fields():
@@ -35,3 +36,4 @@ def create_custom_fields():
     employee_custom_field()
     location()
     designation_customisation()
+    checkin_customisation()
