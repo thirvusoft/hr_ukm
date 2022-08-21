@@ -103,14 +103,22 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 							end_idx = shift_details.idx
 						else:
 							approval_end_time = out_time 
-
+							
+					# Calculation of shift salary and shift count
 					try:
 						if start_idx and end_idx:
 							shift_count = 0
+							shift_salary = 0
 							for shift_row in shift_list.thirvu_shift_details:
 								if shift_row.idx >= start_idx and shift_row.idx <= end_idx:
 									shift_count += shift_row.shift_count
-							shift_wise_details.update({'shift_count':shift_count})
+									if frappe.db.get_value('Thirvu Shift Status',shift_row.shift_status,'double_salary'):
+										shift_salary += emp_base_amount * ( shift_row.shift_count * 2 )
+
+									else:
+										shift_salary += emp_base_amount * ( shift_row.shift_count )
+
+							shift_wise_details.update({'shift_count':shift_count,'shift_salary':shift_salary})
 							correct_shift_details.append(shift_wise_details)
 
 					except:

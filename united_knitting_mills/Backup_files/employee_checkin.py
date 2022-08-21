@@ -92,14 +92,20 @@ def add_log_based_on_employee_field(
 				employee_fieldname, employee_field_value
 			)
 		)
-		
-	#TS Code Start
-	try:
-		att_doc = frappe.get_last_doc("Employee Checkin", {"employee": employee.name})
+	# Given timestamp in string
+	date_format_str = '%Y-%m-%d %H:%M:%S'
 
-		# Given timestamp in string
-		date_format_str = '%Y-%m-%d %H:%M:%S'
-		
+	# create datetime object from timestamp string
+	validate_timestamp = datetime.strptime(str(timestamp), date_format_str)
+	# Customized By Thirvusoft
+	# Start
+	check_date = frappe.db.get_single_value("United Knitting Mills Settings", "check_in_date")
+	resetting_checkin_time = frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time")
+	resetting_checkin_time=datetime.strptime(str(resetting_checkin_time),'%H:%M:%S')
+	resetting_datetime = datetime.combine(validate_timestamp.date() if(validate_timestamp.time() > resetting_checkin_time.time()) else (validate_timestamp.date() + timedelta(days = -1)), resetting_checkin_time.time())
+	try:
+		att_doc = frappe.get_last_doc("Employee Checkin",{"employee" : str(employee.name),"time": [">", str(resetting_datetime)]})
+
 		# create datetime object from timestamp string
 		given_time = datetime.strptime(str(att_doc.time), date_format_str)
 
@@ -111,11 +117,8 @@ def add_log_based_on_employee_field(
 
 		# Convert datetime object to string in specific format 
 		final_time_str = final_time.strftime('%Y-%m-%d %H:%M:%S')
-		# frappe.log_error(
-		# 			title=_("Error ERP"),
-		# 			message=final_time_str + timestamp,
-		# 		)
-		if final_time_str<timestamp:
+
+		if final_time_str < timestamp and check_date <= validate_timestamp.date():
 			doc = frappe.new_doc("Employee Checkin")
 			doc.employee = employee.name
 			doc.employee_name = employee.employee_name
@@ -127,23 +130,29 @@ def add_log_based_on_employee_field(
 				doc.log_type="IN"
 			if cint(skip_auto_attendance) == 1:
 				doc.skip_auto_attendance = "1"
+			doc.check='Success'
 			doc.insert()
 			return doc
 		else:
 			return att_doc
-	except:
-		doc = frappe.new_doc("Employee Checkin")
-		doc.employee = employee.name
-		doc.employee_name = employee.employee_name
-		doc.time = timestamp
-		doc.device_id = device_id
-		doc.log_type = 'IN'
-		if cint(skip_auto_attendance) == 1:
-			doc.skip_auto_attendance = "1"
-		doc.insert()
-		return doc
+	except Exception as e:
+		frappe.log_error(title="Employee Checkin", message=frappe.get_traceback())
+		if check_date <= validate_timestamp.date():
+			doc = frappe.new_doc("Employee Checkin")
+			doc.employee = employee.name
+			doc.employee_name = employee.employee_name
+			doc.time = timestamp
+			doc.device_id = device_id
+			doc.log_type = 'IN'
+			doc.check = str(e) + " " + str(type(e)) + employee.name + str(resetting_datetime)
+			if cint(skip_auto_attendance) == 1:
+				doc.skip_auto_attendance = "1"
+			doc.insert()
+			return doc
+		else:
+			return frappe.get_last_doc("Employee Checkin")
 
-    #TS Code End
+    # End
 
 def mark_attendance_and_link_log(
 	logs,
@@ -309,3 +318,5 @@ def skip_attendance_in_checkins(log_names):
 		.set("skip_auto_attendance", 1)
 		.where(EmployeeCheckin.name.isin(log_names))
 	).run()
+
+# search-ms:displayname=Search%20Results%20in%20Local%20Disk%20(C%3A)&crumb=location:C%3A%5C\biometric-attendance-sync-tool
