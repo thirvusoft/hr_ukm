@@ -28,7 +28,7 @@ def create_attendance_custom_fields():
             dict(fieldname='total_shift_count', label='Total Shift Count',
 				fieldtype='Float',insert_after='column_break24'),
             
-            dict(fieldname='total_shift_hr', label='Total Shift Hour',
+            dict(fieldname='total_shift_hr', label='Total Shift Hour ( in Minutes )',
 				fieldtype='Float',insert_after='section_break23'),
            
             dict(fieldname='employee_shift_details', label='Shift Approval List',

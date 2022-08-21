@@ -67,7 +67,7 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 				# finalattendance = frappe._dict()
 				
 				# To check missing log
-				if len(date_wise_checkin[date])%2 ==0:
+				if len(date_wise_checkin[date])%2 ==0 and len(date_wise_checkin[date]) :
 					shift_wise_details = frappe._dict()
 					# To Separate the In and Out Time
 					if date_wise_checkin[date][0]['log_type']=='IN':
@@ -129,7 +129,10 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 								approval_details.append(approval_timing)
 
 						except:
-							pass
+							if shift_wise_details['end_time'] and approval_start_time:
+								approval_timing = frappe._dict()
+								approval_timing.update({'check_out_time':shift_wise_details['end_time'],'check_in_time':approval_start_time})
+								approval_details.append(approval_timing)
 						
 					new_attendance_doc.update({
 						'thirvu_shift_details':correct_shift_details,
@@ -154,7 +157,7 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 					where name in %s""", (new_attendance_doc.name , checkin_name[date]))
 
 				# If all shift details are correct it will submit automatically
-				if not new_attendance_doc.employee_shift_details:
+				if not new_attendance_doc.employee_shift_details and new_attendance_doc.thirvu_shift_details:
 					new_attendance_doc.submit()
 
 def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
