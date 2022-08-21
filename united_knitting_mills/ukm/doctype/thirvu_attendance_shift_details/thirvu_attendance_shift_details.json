@@ -33,10 +33,10 @@
    "label": "Shift Hours"
   },
   {
+   "default": "0",
    "fieldname": "shift_salary",
    "fieldtype": "Currency",
-   "label": "Shift Salary",
-   "read_only": 1
+   "label": "Shift Salary"
   },
   {
    "fieldname": "shift_status",
@@ -46,6 +46,7 @@
    "options": "Thirvu Shift Status"
   },
   {
+   "default": "0",
    "fieldname": "shift_count",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -55,7 +56,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-07-26 23:24:13.567716",
+ "modified": "2022-08-21 19:00:32.519964",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Thirvu Attendance Shift Details",
