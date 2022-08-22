@@ -1,0 +1,43 @@
+{
+ "category": "Modules",
+ "charts": [],
+ "creation": "2022-08-02 13:20:30.436814",
+ "developer_mode_only": 0,
+ "disable_user_customization": 1,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends_another_page": 0,
+ "hide_custom": 1,
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "UKM Settings",
+ "links": [],
+ "modified": "2022-08-02 13:27:24.027860",
+ "modified_by": "parameshwari@gmail.com",
+ "module": "UKM",
+ "name": "UKM Settings",
+ "owner": "parameshwari@gmail.com",
+ "pin_to_bottom": 0,
+ "pin_to_top": 1,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "United Knitting Mills Settings",
+   "link_to": "United Knitting Mills Settings",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "HR Settings",
+   "link_to": "HR Settings",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Payroll Settings",
+   "link_to": "Payroll Settings",
+   "type": "DocType"
+  }
+ ]
+}
