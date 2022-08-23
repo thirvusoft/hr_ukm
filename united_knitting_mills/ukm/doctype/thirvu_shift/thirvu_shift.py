@@ -87,8 +87,8 @@ def create_employee_attendance(departments,doc,location,late_entry,early_exit):
 						buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
 						if shift_details.idx < len(shift_list.thirvu_shift_details):
 							buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx].end_time
-						else:
-							buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx - 1].end_time
+						else:	
+							buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx - 1].end_time + datetime.timedelta(hours = 1)
 
 						# Buffer calculation for starting time
 						if  in_time and to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:

@@ -1,5 +1,6 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.utils.data import get_link_to_form
 @frappe.whitelist()
 def creating_hr_permission(doc):
 	ts_emp_doc=frappe.get_doc("Employee",doc)
@@ -58,5 +59,9 @@ def employee_custom_field():
 	employee.save(ignore_permissions=True)
 	create_custom_fields(custom_fields)
 
-
-
+def get_employee_shift(employee):
+	designation = frappe.db.get_value("Employee", employee, 'designation')
+	shift = frappe.db.get_value('Designation', designation, 'thirvu_shift')
+	if shift: return shift
+	designation_url = get_link_to_form('Designation', designation)
+	frappe.throw(f'Please Assign Shift for {frappe.bold(designation_url)}.')
