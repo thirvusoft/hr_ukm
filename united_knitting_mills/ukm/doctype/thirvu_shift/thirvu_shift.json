@@ -16,7 +16,9 @@
   "grace_period_for_entry_and_exit_section",
   "entry_period",
   "column_break_11",
-  "exit_period"
+  "exit_period",
+  "break_time_section",
+  "break_time"
  ],
  "fields": [
   {
@@ -74,11 +76,22 @@
    "label": "Department",
    "options": "Department",
    "reqd": 1
+  },
+  {
+   "fieldname": "break_time_section",
+   "fieldtype": "Section Break",
+   "label": "Break Time"
+  },
+  {
+   "fieldname": "break_time",
+   "fieldtype": "Table",
+   "label": "Break Time",
+   "options": "Thirvu Shift Break Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-08-09 15:18:07.249753",
+ "modified": "2022-08-23 10:54:56.118899",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Thirvu Shift",
