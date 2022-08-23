@@ -13,6 +13,7 @@
   "department",
   "shift_details",
   "thirvu_shift_details",
+  "is_break_times_are_included_with_shift_times",
   "grace_period_for_entry_and_exit_section",
   "entry_period",
   "column_break_11",
@@ -87,11 +88,18 @@
    "fieldtype": "Table",
    "label": "Break Time",
    "options": "Thirvu Shift Break Time"
+  },
+  {
+   "default": "0",
+   "description": "Check this If break times mentioned in the below <b> Break Time  Table </b>are not considered with the above shift times",
+   "fieldname": "is_break_times_are_included_with_shift_times",
+   "fieldtype": "Check",
+   "label": "is break times are included with shift times?"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-08-23 11:02:42.915631",
+ "modified": "2022-08-23 15:50:26.202395",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Thirvu Shift",
