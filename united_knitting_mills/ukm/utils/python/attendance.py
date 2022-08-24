@@ -18,11 +18,13 @@ def shift_hours(doc,event):
                shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format(data.end_time, data.start_time),as_list = 1)[0][0]
                shift_hours =  shift_hr / datetime.timedelta(hours=1)
                if shift_hours > 0:
-                  data.shift_hours = shift_hours
+                  if(not data.get('shif_hours')):
+                     data.shift_hours = shift_hours
                   doc.total_shift_hr += shift_hr / datetime.timedelta(minutes=1)
                else:
                   diff_time = (to_timedelta(str(data.end_time)) - to_timedelta(str(data.start_time)))
-                  data.shift_hours = diff_time/ datetime.timedelta(hours=1)
+                  if(not data.get('shif_hours')):
+                     data.shift_hours = diff_time/ datetime.timedelta(hours=1)
                   doc.total_shift_hr +=  diff_time / datetime.timedelta(minutes=1)
                doc.total_shift_count += data.shift_count
                doc.total_shift_amount += data.shift_salary

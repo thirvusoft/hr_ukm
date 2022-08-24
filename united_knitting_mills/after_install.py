@@ -19,6 +19,7 @@ from united_knitting_mills.ukm.custom_fields.hr.employee_checkin import checkin_
 
 
 def create_custom_fields():
+    attendance_customisation()
     create_company_fields()
     create_employee_fields_and_property_setter()
     create_payroll_entry_fields()
@@ -26,7 +27,6 @@ def create_custom_fields():
     create_salary_slip_fields()
     create_salary_structure_fields()
     create_shift_type_fields()
-    attendance_customisation()
     department_customisation()
     create_location_fields()
     employee_bonus_tool_custom_fields()

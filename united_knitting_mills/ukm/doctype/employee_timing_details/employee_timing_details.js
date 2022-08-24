@@ -5,18 +5,31 @@ frappe.ui.form.on('Employee Timing Details', {
 	refresh: function(frm) {
 		if(!frm.doc.__islocal){
 			frm.add_custom_button(__('Mark Employee Attendance'), function () {
-				frappe.call({
-					method: "united_knitting_mills.ukm.doctype.employee_timing_details.employee_timing_details.create_employee_attendance",
+				if(frm.doc.labour){
+				frm.call({
+					method: "create_labour_attendance",
 					args: {
 						departments:frm.doc.department,
 						doc:frm.doc.name,
 						location:frm.doc.unit,
 						late_entry:frm.doc.entry_period,
 						early_exit:frm.doc.exit_period
-					},
+						},
 					freeze:true,
 					freeze_message: __("Creating Attendance..."),
-				});
+					});
+					}
+					else if(frm.doc.staff){
+						frm.call({
+							method: 'create_staff_attendance',
+							args:{
+								docname: frm.doc.name
+							},
+							callback(r){
+								console.log('Success')
+							}
+						})
+					}
 			}, __('Actions'));
 		}
 		// Check and Uncheck for labour and staff fields

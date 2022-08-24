@@ -44,16 +44,19 @@ class EmployeeTimingDetails(Document):
 		if(break_time >= working_minutes):
 			frappe.throw('No of Working Hours Per day should be greater than Total Break Hours')
 
-@frappe.whitelist()
-def create_employee_attendance(departments,doc,location,late_entry,early_exit):
+def get_employees_for_shift(doc, location):
 	# To get designation List
 	designation = frappe.db.get_list('Designation',{'thirvu_shift':doc},pluck='name')
 
 	# To get employee only foe the particular department
-	total_employees=frappe.db.get_list('Employee', {"designation":['in', designation],'location':location,'status':'Active'})
+	total_employees=frappe.db.get_all('Employee', filters={"designation":['in', designation],'location':location,'status':'Active'}, pluck='name')
+	return total_employees
 
-	for employee_details in total_employees:
-		employee=employee_details["name"]
+
+@frappe.whitelist()
+def create_labour_attendance(departments,doc,location,late_entry,early_exit):
+	total_employees = get_employees_for_shift(doc, location)
+	for employee in total_employees:
 		# To Get Employee CheckIn Details
 		employee_checkin = frappe.db.get_list('Employee Checkin',fields=["time",'log_type','name'],filters={"employee": employee,'attendance':('is', 'not set')},order_by="time")
 		# To Get Shift Details
@@ -197,3 +200,121 @@ def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
         checkin_date[checkin_date_key] = list()
     checkin_date[checkin_date_key].extend(checkin_details)
     # return temp_dict
+
+def get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin):
+	"""Generate a dictionary with date wise checkins of employee"""
+	for checkin in emp_checkins:
+		if(checkin['time'].date() not in date_wise_checkin):
+			date_wise_checkin[checkin['time'].date()] = []
+	for checkin in emp_checkins:
+		date_wise_checkin[checkin['time'].date()].append(checkin)
+
+def create_datewise_attendance_for_staff(submit_doc, employee, attendance, date, checkins):
+	"""Fill Attendance doc with start time, end time and other employee details"""
+	attendance.employee = employee
+	attendance.attendance_date = date
+	attendance.department = frappe.db.get_value('Employee', employee, 'department')
+	thirvu_shift_details = [{}]
+	if(checkins[0]['log_type'] == 'IN'):
+		thirvu_shift_details[0].update({
+			'start_time': checkins[0]['time'].time()
+		})
+	else:
+		submit_doc=False
+	if(checkins[-1]['log_type'] == 'OUT'):
+		thirvu_shift_details[0].update({
+			'end_time': checkins[-1]['time'].time()
+		})
+	else:
+		submit_doc=False
+	frappe.errprint(thirvu_shift_details)
+	attendance.update({
+		'thirvu_shift_details' : thirvu_shift_details
+	})
+
+def check_break_time_checkins_for_staff(att_name, doc, submit_doc, times):
+	comment = False
+	for time in times:
+		for brk_time in doc.break_time:
+			frappe.errprint(dt.strptime(str(brk_time.start_time), '%H:%M:%S').time())
+			if(time[0] >= dt.strptime(str(brk_time.start_time), '%H:%M:%S').time() and not time[1] <= dt.strptime(str( brk_time.end_time.time()), '%H:%M:%S').time()):
+				submit_doc = False
+				comment = True
+	if(comment):
+		cmt = frappe.new_doc('Comment')
+		cmt.comment_type = 'Comment'
+		cmt.reference_doctype = 'Attendance'
+		cmt.reference_name = att_name
+		cmt.comment = "Over Consumed Break Time"
+		cmt.insert()
+
+
+def validate_total_working_hours(doc, submit_doc, hours_to_work, checkins, attendance):
+	if(len(checkins)%2 == 1):
+		submit_doc=False
+		return 
+	if(not attendance.thirvu_shift_details[0].get('start_time') or not attendance.thirvu_shift_details[0].get('end_time')):
+		submit_doc = False
+		return
+	else:
+		times = [[]]
+		worked_time=0
+		for chkn in checkins:
+			frappe.errprint(chkn.time)
+			if(len(times[-1]) != 2):
+				times[-1].append(chkn['time'].time())
+			else:
+				times.append([chkn['time'].time()])
+		attendance.flags.ignore_validate = True
+		attendance.insert()
+		## Error in Break Time Comparision
+		# check_break_time_checkins_for_staff(attendance.name, doc, submit_doc, times)
+		for time in times:
+			frappe.errprint(time)
+			if(len(time) == 2):
+				worked_time += time_diff_in_hours(str(time[1]), str(time[0]))
+		
+		working_hours = dt.strptime(str(hours_to_work), '%H:%M:%S').time()
+		working_hours_list = str(working_hours).split(':')
+		working_hours_delta = timedelta(hours=int(working_hours_list[0]), minutes=int(working_hours_list[1]), seconds=int(working_hours_list[2]))
+		working_hours = working_hours_delta.total_seconds() / (60*60)
+		attendance.thirvu_shift_details[0].update({
+			'shift_count':1,
+			'shift_hours':worked_time
+		})
+		attendance.total_shift_hr = worked_time*60
+		if(worked_time <working_hours):
+			submit_doc = False
+			attendance.insufficient_hours = 1
+		frappe.errprint(working_hours)
+		frappe.errprint('working_hours')
+		frappe.errprint(worked_time)
+		frappe.errprint(submit_doc)
+
+
+@frappe.whitelist()
+def create_staff_attendance(docname):
+	"""Staff Attendance"""
+	doc = frappe.get_doc("Employee Timing Details", docname)
+	employee_list = get_employees_for_shift(docname, doc.unit)
+	frappe.errprint(employee_list)
+	
+	for employee in employee_list:
+		submit_doc = True
+		date_wise_checkin = frappe._dict()
+		emp_checkins = frappe.db.get_all("Employee Checkin", 
+			filters={"employee": employee,'attendance':('is', 'not set')}, 
+			order_by="time",
+			fields=['time', 'log_type', 'name']
+			)
+		frappe.errprint(emp_checkins)
+		#Get checkin for this employee
+		get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin)
+		frappe.errprint(date_wise_checkin)
+		for data in date_wise_checkin:
+			if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day): submit_doc = False
+			attendance = frappe.new_doc('Attendance')
+			create_datewise_attendance_for_staff(submit_doc, employee, attendance, data, date_wise_checkin[data])
+			validate_total_working_hours(doc, submit_doc, doc.no_working_hours_per_day, date_wise_checkin[data], attendance)
+			attendance.flags.ignore_validate = True
+			attendance.save()

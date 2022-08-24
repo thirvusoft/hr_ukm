@@ -20,7 +20,7 @@ def create_attendance_custom_fields():
     custom_fields = {
 		"Attendance": [
 			dict(fieldname='shift_details', label='',
-				fieldtype='Section Break',insert_after='early_exit'),
+				fieldtype='Section Break',insert_after='insufficient_hours'),
 
 			dict(fieldname='thirvu_shift_details', label='Employee Shift',
 				fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details'),
@@ -48,6 +48,9 @@ def create_attendance_custom_fields():
             
             dict(fieldname='total_shift_amount', label='Total Shift Amount',
 				fieldtype='Currency',insert_after='column_break23'),
+
+            dict(fieldname='insufficient_hours', label='Insufficient Working Hours',
+				fieldtype='Check',insert_after='early_exit', depends_on = "eval:doc.insufficient_hours"),
             ]
     }
     create_custom_fields(custom_fields)
