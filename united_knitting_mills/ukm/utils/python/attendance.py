@@ -33,7 +33,7 @@ def unlink_logs(doc,event):
 
 def get_total_break_time(employee):
    shift = get_employee_shift(employee)
-   thirvu_shift = frappe.get_doc('Thirvu Shift', shift)
+   thirvu_shift = frappe.get_doc('Employee Timing Details', shift)
    if(not thirvu_shift.is_break_times_are_included_with_shift_times): return 0
    break_time = thirvu_shift.break_time
    FMT = '%H:%M:%S'
