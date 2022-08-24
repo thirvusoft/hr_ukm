@@ -19,6 +19,13 @@ frappe.ui.form.on('Thirvu Shift', {
 				});
 			}, __('Actions'));
 		}
+		// Check and Uncheck for labour and staff fields
+		cur_frm.fields_dict.staff.$input.on('click', ()=>{
+			uncheck(frm, 'labour')
+		})
+		cur_frm.fields_dict.labour.$input.on('click', ()=>{
+			uncheck(frm, 'staff')
+		})
 	},
 	setup:function(frm){
 		frm.set_query('shift_status', 'thirvu_shift_details', function() {
@@ -30,3 +37,8 @@ frappe.ui.form.on('Thirvu Shift', {
 		});
 	}
 });
+
+function uncheck(frm, field){
+	frm.set_value(field, 0)
+	frm.refresh_field(field)
+}

@@ -5,12 +5,44 @@ import frappe
 import json
 import itertools
 from frappe.model.document import Document
-from frappe.utils import cint, get_datetime, getdate, to_timedelta
+from frappe.utils import cint, get_datetime, getdate, to_timedelta, time_diff_in_hours
 import datetime
 from frappe import _
+from datetime import datetime as dt, timedelta
 
 class ThirvuShift(Document):
-	pass 
+	def validate(self):
+		self.validate_staff_or_labour()
+		self.validate_break_time()
+		if(self.staff):
+			self.validate_total_checkin()
+			self.validate_working_hours()
+
+	def validate_staff_or_labour(self):
+		if(not self.staff and not self.labour):
+			frappe.throw("Please Select <b>Staff</b> or <b>Labour</b>")
+
+	def validate_total_checkin(self):
+		if(self.total_no_of_checkins_per_day % 2 ==1):
+			frappe.throw("Total No of Checkins must be in Even Number.")
+
+	def validate_break_time(self):
+		diff_hrs = 0
+		for row in self.break_time:
+			if(row.start_time >= row.end_time):
+				frappe.throw(f'Row #{row.idx}: Start Time cannot be greater than End Time')
+			diff_hrs += time_diff_in_hours(row.end_time, row.start_time)
+		self.total_break_time_mins = diff_hrs*60
+		return diff_hrs
+
+	def validate_working_hours(self):
+		break_time = self.validate_break_time() * 60
+		working_hours = dt.strptime(self.no_working_hours_per_day, '%H:%M:%S').time()
+		working_hours_list = str(working_hours).split(':')
+		working_hours_delta = timedelta(hours=int(working_hours_list[0]), minutes=int(working_hours_list[1]), seconds=int(working_hours_list[2]))
+		working_minutes = working_hours_delta.total_seconds() / 60
+		if(break_time >= working_minutes):
+			frappe.throw('No of Working Hours Per day should be greater than Total Break Hours')
 
 @frappe.whitelist()
 def create_employee_attendance(departments,doc,location,late_entry,early_exit):
