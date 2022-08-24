@@ -6,7 +6,7 @@ frappe.ui.form.on('Employee Timing Details', {
 		if(!frm.doc.__islocal){
 			frm.add_custom_button(__('Mark Employee Attendance'), function () {
 				frappe.call({
-					method: "united_knitting_mills.ukm.doctype.thirvu_shift.thirvu_shift.create_employee_attendance",
+					method: "united_knitting_mills.ukm.doctype.employee_timing_details.employee_timing_details.create_employee_attendance",
 					args: {
 						departments:frm.doc.department,
 						doc:frm.doc.name,
