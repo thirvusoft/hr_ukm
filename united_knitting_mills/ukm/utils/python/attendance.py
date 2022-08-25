@@ -4,12 +4,15 @@ from datetime import datetime as dt
 from frappe.utils import cint, get_datetime, getdate, to_timedelta
 from erpnext.hr.doctype.attendance.attendance import Attendance
 from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
+
 def validate_shift_details(doc, event):
    shift_hours(doc, event)
  
   
 def shift_hours(doc,event):
-   if event == 'after_insert' or (event == 'validate' and not doc.is_new()):
+   shift = get_employee_shift(doc.employee)
+   labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
+   if labour and (event == 'after_insert' or (event == 'validate' and not doc.is_new())):
        doc.total_shift_hr = 0
        doc.total_shift_count = 0
        doc.total_shift_amount = 0

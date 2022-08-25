@@ -47,6 +47,7 @@ def employee_custom_field():
 		
 	],
     }
+	create_custom_fields(custom_fields)
 	employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",
@@ -54,12 +55,13 @@ def employee_custom_field():
         'property':"options",
         'property_type':"Data",
         'field_name':"naming_series",
-        "value":"employee_naming_series.-"
+        "value":"employee_naming_series.-\nUKM-II\nUKM-I"
     })
 	employee.save(ignore_permissions=True)
-	create_custom_fields(custom_fields)
+	
 
-def get_employee_shift(employee):
+def get_employee_shift(employee): 
+	"""Requires Employee name as argument"""
 	designation = frappe.db.get_value("Employee", employee, 'designation')
 	shift = frappe.db.get_value('Designation', designation, 'thirvu_shift')
 	if shift: return shift
