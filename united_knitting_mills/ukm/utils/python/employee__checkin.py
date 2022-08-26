@@ -4,15 +4,10 @@ import pandas
 
 def get_ukm_settings():
     buffer_time = frappe.db.get_single_value('United Knitting Mills Settings', 'buffer_time')
-    # check_date = frappe.db.get_single_value('United Knitting Mills Settings', 'check_in_date')
-    # if(not check_date):
-    #     frappe.throw("Please Fill ")
     reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
     return buffer_time, reset_time
 
 def get_between_dates(date_wise_checkin, from_date, to_date):
-    # print(date(from_date),date(to_date))
-    # print(date('2022,08,21'),date(to_date))
     from_d = tuple(map(int, from_date.split('-')))
     to_d = tuple(map(int, to_date.split('-')))
     between_dates = list(pandas.date_range(date(from_d[0], from_d[1], from_d[2]),date(to_d[0], to_d[1], to_d[2]),freq='d'))
@@ -68,7 +63,6 @@ def create_employee_checkins(date_wise_checkin, employee, buffer_time):
                     create_checkin = True
                 else:
                     create_checkin = False
-                print(date_wise_checkin[dates][i][1], final_time_str, create_checkin, i)
 
             if(create_checkin):
                 emp_chkn = frappe.new_doc('Employee Checkin')
@@ -90,4 +84,3 @@ def create_employee_checkin(from_date, to_date):
         date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
         # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
         create_employee_checkins(date_wise_checkin, employee, buffer_time)
-        print(date_wise_checkin, employee)

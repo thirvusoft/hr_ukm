@@ -26,7 +26,6 @@ frappe.ui.form.on('Employee Timing Details', {
 								docname: frm.doc.name
 							},
 							callback(r){
-								console.log('Success')
 							}
 						})
 					}
