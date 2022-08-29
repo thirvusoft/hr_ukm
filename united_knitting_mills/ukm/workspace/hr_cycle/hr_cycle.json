@@ -13,8 +13,8 @@
  "is_standard": 1,
  "label": "HR Cycle",
  "links": [],
- "modified": "2022-08-02 13:27:06.061054",
- "modified_by": "parameshwari@gmail.com",
+ "modified": "2022-08-27 12:41:19.616869",
+ "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
  "owner": "parameshwari@gmail.com",
@@ -106,6 +106,12 @@
    "type": "DocType"
   },
   {
+   "doc_view": "List",
+   "label": "Employee Timing Details",
+   "link_to": "Employee Timing Details",
+   "type": "DocType"
+  },
+  {
    "doc_view": "Report Builder",
    "label": "Salary Register",
    "link_to": "Salary Register",
@@ -115,6 +121,12 @@
    "doc_view": "Report Builder",
    "label": "Monthly Attendance Sheet",
    "link_to": "Monthly Attendance Sheet",
+   "type": "Report"
+  },
+  {
+   "doc_view": "Report Builder",
+   "label": "Decision Making Tool",
+   "link_to": "Decision Making Tool",
    "type": "Report"
   }
  ]
