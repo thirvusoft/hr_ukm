@@ -28,8 +28,13 @@ def create_attendance_custom_fields():
             dict(fieldname='total_shift_count', label='Total Shift Count',
 				fieldtype='Float',insert_after='column_break24'),
             
-            dict(fieldname='total_shift_hr', label='Total Shift Hour ( in Minutes )',
+            dict(fieldname='total_shift_hr', label='Total Shift Hour (in Minutes )',
 				fieldtype='Float',insert_after='section_break23'),
+            
+            dict(fieldname='col_brk_ts123',fieldtype='Column Break',insert_after='total_shift_hr'),
+            
+            dict(fieldname='ts_ot_hrs', label='Over Time (in Minutes )',
+				fieldtype='Float',insert_after='col_brk_ts123'),
            
             dict(fieldname='employee_shift_details', label='Shift Approval List',
 				fieldtype='Table',options='Thirvu Employee Checkin Details',insert_after='shift_details',read_only=1),
@@ -38,7 +43,7 @@ def create_attendance_custom_fields():
 				fieldtype='Section Break',insert_after='thirvu_shift_details'),
            
             dict(fieldname='column_break24', label='',
-				fieldtype='Column Break',insert_after='total_shift_hr'),
+				fieldtype='Column Break',insert_after='ts_ot_hrs'),
             
             dict(fieldname='thirvu_reason', label='Reason',
 				fieldtype='Data',depends_on='eval:doc.late_entry',mandatory_depends_on='eval:doc.late_entry',insert_after='late_entry'),
@@ -51,6 +56,9 @@ def create_attendance_custom_fields():
 
             dict(fieldname='insufficient_hours', label='Insufficient Working Hours',
 				fieldtype='Check',insert_after='early_exit', depends_on = "eval:doc.insufficient_hours"),
+            
+            dict(fieldname='reason', label='Reason for Draft',
+				fieldtype='Small Text',insert_after='out_time', read_only=1),
             ]
     }
     create_custom_fields(custom_fields)

@@ -1,6 +1,7 @@
 import frappe
 from datetime import date, datetime, timedelta
 import pandas
+from frappe.utils import today
 
 def get_ukm_settings():
     buffer_time = frappe.db.get_single_value('United Knitting Mills Settings', 'buffer_time')
@@ -74,7 +75,11 @@ def create_employee_checkins(date_wise_checkin, employee, buffer_time):
                 log = not(log)
 
 @frappe.whitelist()
-def create_employee_checkin(from_date, to_date):
+def create_employee_checkin(from_date = None, to_date = None):
+    if(from_date == None):
+        from_date = str(today())
+    if(to_date == None):
+        to_date = str(today())
     employees = frappe.db.get_all('Employee Checkin Without Log Type', filters={'time': ['between', (from_date, to_date)]}, pluck='employee')
     employees = list(set(employees))
     buffer_time, reset_time = get_ukm_settings()
