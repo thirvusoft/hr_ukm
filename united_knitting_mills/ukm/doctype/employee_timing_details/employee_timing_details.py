@@ -331,29 +331,28 @@ def create_staff_attendance(docname):
 	doc = frappe.get_doc("Employee Timing Details", docname)
 	employee_list = get_employees_for_shift(docname, doc.unit)
 	for employee in employee_list:
-		if(employee == 'UKM-I00001'):
-			submit_doc = True
-			reason = ''
-			date_wise_checkin = frappe._dict()
-			emp_checkins = frappe.db.get_all("Employee Checkin", 
-				filters={"employee": employee,'attendance':('is', 'not set')}, 
-				order_by="time",
-				fields=['time', 'log_type', 'name']
-				)
-			#Get checkin for this employee
-			get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin)
-			for data in date_wise_checkin:
-				if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
-					if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day):
-						submit_doc = False
-						reason += f"\n-> Insufficient Checkins({doc.total_no_of_checkins_per_day} required but only {len(date_wise_checkin[data])} is available)."
-					attendance = frappe.new_doc('Attendance')
-					submit_doc, reason = create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, data, date_wise_checkin[data])
-					submit_doc, reason = validate_total_working_hours(reason, doc, submit_doc, doc.no_working_hours_per_day, date_wise_checkin[data], attendance)
-					attendance.flags.ignore_validate = True
-					if(reason != ''):
-						attendance.reason = reason[1::]
-					attendance.flags.ignore_validate = True
-					attendance.save()
-					if(submit_doc):
-						attendance.submit()
+		submit_doc = True
+		reason = ''
+		date_wise_checkin = frappe._dict()
+		emp_checkins = frappe.db.get_all("Employee Checkin", 
+			filters={"employee": employee,'attendance':('is', 'not set')}, 
+			order_by="time",
+			fields=['time', 'log_type', 'name']
+			)
+		#Get checkin for this employee
+		get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin)
+		for data in date_wise_checkin:
+			if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
+				if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day):
+					submit_doc = False
+					reason += f"\n-> Insufficient Checkins({doc.total_no_of_checkins_per_day} required but only {len(date_wise_checkin[data])} is available)."
+				attendance = frappe.new_doc('Attendance')
+				submit_doc, reason = create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, data, date_wise_checkin[data])
+				submit_doc, reason = validate_total_working_hours(reason, doc, submit_doc, doc.no_working_hours_per_day, date_wise_checkin[data], attendance)
+				attendance.flags.ignore_validate = True
+				if(reason != ''):
+					attendance.reason = reason[1::]
+				attendance.flags.ignore_validate = True
+				attendance.save()
+				if(submit_doc):
+					attendance.submit()
