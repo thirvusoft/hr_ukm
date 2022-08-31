@@ -25,6 +25,8 @@ frappe.ui.form.on('Employee Timing Details', {
 							args:{
 								docname: frm.doc.name
 							},
+							freeze:true,
+							freeze_message: __("Creating Attendance..."),
 							callback(r){
 							}
 						})

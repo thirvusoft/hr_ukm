@@ -331,11 +331,13 @@ def create_staff_attendance(docname):
 		#Get checkin for this employee
 		get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin)
 		for data in date_wise_checkin:
-			if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day): submit_doc = False
-			attendance = frappe.new_doc('Attendance')
-			submit_doc = create_datewise_attendance_for_staff(submit_doc, employee, attendance, data, date_wise_checkin[data])
-			submit_doc = validate_total_working_hours(doc, submit_doc, doc.no_working_hours_per_day, date_wise_checkin[data], attendance)
-			attendance.flags.ignore_validate = True
-			attendance.save()
-			if(submit_doc):
-				attendance.submit()
+			if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
+				if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day): submit_doc = False
+				attendance = frappe.new_doc('Attendance')
+				submit_doc = create_datewise_attendance_for_staff(submit_doc, employee, attendance, data, date_wise_checkin[data])
+				submit_doc = validate_total_working_hours(doc, submit_doc, doc.no_working_hours_per_day, date_wise_checkin[data], attendance)
+				attendance.flags.ignore_validate = True
+				attendance.save()
+				if(submit_doc):
+					attendance.submit()
+			
