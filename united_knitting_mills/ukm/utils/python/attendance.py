@@ -18,6 +18,7 @@ def shift_hours(doc,event):
       #  doc.total_shift_amount = 0
        if(doc.thirvu_shift_details):
            for data in doc.thirvu_shift_details:
+               if(not data.start_time or not data.end_time):continue
                if(data.start_time<=data.end_time):
                   shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format(data.end_time, data.start_time),as_list = 1)[0][0]
                   shift_hours =  shift_hr / datetime.timedelta(hours=1)

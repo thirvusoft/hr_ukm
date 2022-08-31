@@ -1,4 +1,5 @@
 from united_knitting_mills.ukm.custom_fields.hr.employee import create_employee_fields_and_property_setter
+from united_knitting_mills.ukm.custom_fields.hr.leave_application import leave_application_customizations
 from united_knitting_mills.ukm.custom_fields.payroll.payroll_entry import create_payroll_entry_fields
 from united_knitting_mills.ukm.custom_fields.payroll.salary_slip import create_salary_slip_fields
 from united_knitting_mills.ukm.custom_fields.payroll.salary_structure import create_salary_structure_fields
@@ -20,6 +21,7 @@ from united_knitting_mills.ukm.utils.python.defaults import create_defults
 
 
 def create_custom_fields():
+    leave_application_customizations()
     create_defults()
     attendance_customisation()
     create_company_fields()
