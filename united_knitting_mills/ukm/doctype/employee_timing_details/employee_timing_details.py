@@ -309,7 +309,7 @@ def validate_total_working_hours(reason, doc, submit_doc, hours_to_work, checkin
 		})
 		attendance.total_shift_count = 1
 		attendance.total_shift_hr = worked_time*60
-		attendance.ts_ot_hrs = (worked_time - working_hours) if (worked_time >= working_hours) else 0
+		attendance.ts_ot_hrs = (worked_time - working_hours)*60 if (worked_time >= working_hours) else 0
 		emp_base_amount=frappe.db.sql("""select ssa.base
 					FROM `tabSalary Structure Assignment` as ssa
 					WHERE ssa.employee = '{0}' and ssa.docstatus = 1 ORDER BY ssa.creation DESC LIMIT 1
@@ -332,7 +332,6 @@ def create_staff_attendance(docname):
 	employee_list = get_employees_for_shift(docname, doc.unit)
 	for employee in employee_list:
 		submit_doc = True
-		reason = ''
 		date_wise_checkin = frappe._dict()
 		emp_checkins = frappe.db.get_all("Employee Checkin", 
 			filters={"employee": employee,'attendance':('is', 'not set')}, 
@@ -342,6 +341,7 @@ def create_staff_attendance(docname):
 		#Get checkin for this employee
 		get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin)
 		for data in date_wise_checkin:
+			reason = ''
 			if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
 				if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day):
 					submit_doc = False

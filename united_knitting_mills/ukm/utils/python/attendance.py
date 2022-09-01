@@ -14,11 +14,14 @@ def shift_hours(doc,event):
    labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
    if labour and (event == 'after_insert' or (event == 'validate' and not doc.is_new())):
        doc.total_shift_hr = 0
-      #  doc.total_shift_count = 0
-      #  doc.total_shift_amount = 0
+       doc.total_shift_count = 0
+       doc.total_shift_amount = 0
        if(doc.thirvu_shift_details):
            for data in doc.thirvu_shift_details:
                if(not data.start_time or not data.end_time):continue
+               if(str(type(data.start_time)) == "<class 'str'>" or str(type(data.end_time)) == "<class 'str'>"):
+                  data.start_time = str(data.start_time)
+                  data.end_time = str(data.end_time)
                if(data.start_time<=data.end_time):
                   shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format(data.end_time, data.start_time),as_list = 1)[0][0]
                   shift_hours =  shift_hr / datetime.timedelta(hours=1)
@@ -44,8 +47,8 @@ def shift_hours(doc,event):
                   if(not data.get('shif_hours')):
                      data.shift_hours = diff_time/ datetime.timedelta(hours=1)
                   doc.total_shift_hr +=  diff_time / datetime.timedelta(minutes=1)
-               # doc.total_shift_count += data.shift_count
-               # doc.total_shift_amount += data.shift_salary
+               doc.total_shift_count += data.shift_count
+               doc.total_shift_amount += data.shift_salary
            if(doc.total_shift_hr):
                doc.total_shift_hr -= get_total_break_time(doc.employee)
 def unlink_logs(doc,event):
