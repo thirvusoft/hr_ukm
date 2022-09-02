@@ -1,5 +1,7 @@
 from erpnext.hr.doctype.leave_application.leave_application import LeaveApplication
 import frappe
+from frappe import _
+
 from erpnext.hr.utils import (
 	get_holiday_dates_for_employee,
 	get_leave_period,
@@ -26,3 +28,20 @@ class TsLeaveApplication(LeaveApplication):
             if frappe.db.get_value("Leave Type", self.leave_type, "is_optional_leave"):
                 self.validate_optional_leave()
             self.validate_applicable_after()
+
+    def on_submit(self):
+        if self.status in ["Open", "Cancelled"]:
+            frappe.throw(
+                _("Only Leave Applications with status 'Approved' and 'Rejected' can be submitted")
+            )
+
+        self.validate_back_dated_application()
+        if self.leave_type not in ['On Duty','Permission']:
+            self.update_attendance()
+
+        # notify leave applier about approval
+        if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
+            self.notify_employee()
+
+        self.create_leave_ledger_entry()
+        self.reload()

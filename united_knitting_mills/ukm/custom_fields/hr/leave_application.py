@@ -20,7 +20,7 @@ def create_custom_fields_():
     custom_field = {
         'Leave Application':[
             dict(
-                fieldname='from_time', label='From Time', fieldtype='Time', insert_after='to_date', 
+                fieldname='from_time', label='From Time', fieldtype='Time', insert_after='attendance_date', 
                 mandatory_depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)', 
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)'
             ),
@@ -28,6 +28,15 @@ def create_custom_fields_():
                 fieldname='to_time', label='To Time', fieldtype='Time', insert_after='from_time', 
                 mandatory_depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)', 
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)'
+            ),
+            dict(
+                fieldname='attendance_date', label='Date', fieldtype='Date', insert_after='to_date', 
+                mandatory_depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)', 
+                depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)'
+            ),
+            dict(
+                fieldname='attendance_marked', label='attendance_marked', fieldtype='Check', insert_after='to_date', 
+                depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)',read_only=1,allow_on_submit=1
             )
         ]
     }

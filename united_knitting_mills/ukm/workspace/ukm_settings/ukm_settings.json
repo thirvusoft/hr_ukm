@@ -13,8 +13,8 @@
  "is_standard": 1,
  "label": "UKM Settings",
  "links": [],
- "modified": "2022-08-02 13:27:24.027860",
- "modified_by": "parameshwari@gmail.com",
+ "modified": "2022-09-02 11:11:19.199420",
+ "modified_by": "Administrator",
  "module": "UKM",
  "name": "UKM Settings",
  "owner": "parameshwari@gmail.com",
@@ -25,18 +25,6 @@
    "doc_view": "List",
    "label": "United Knitting Mills Settings",
    "link_to": "United Knitting Mills Settings",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "HR Settings",
-   "link_to": "HR Settings",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Payroll Settings",
-   "link_to": "Payroll Settings",
    "type": "DocType"
   }
  ]

@@ -4,13 +4,13 @@ def create_payroll_settings_fields():
     custom_fields = {
 		"Payroll Settings": [
 			dict(fieldname='fraction_of_daily_salary_for_quarter_day', label='Fraction of Daily Salary for Quarter Day',
-				fieldtype='Float', insert_after='salary_slip_based_on_timesheet',default='0.25'),
+				fieldtype='Float', insert_after='salary_slip_based_on_timesheet',default='0.25',hidden=1),
 			dict(fieldname='fraction_of_daily_salary_for_three_quarter_day', label='Fraction of Daily Salary for Three Quarter Day',
-				fieldtype='Float', insert_after='fraction_of_daily_salary_for_quarter_day',default='0.75'),
+				fieldtype='Float', insert_after='fraction_of_daily_salary_for_quarter_day',default='0.75',hidden=1),
             dict(fieldname='fraction_of_daily_salary_for_one_half_day', label='Fraction of Daily Salary for One Half Day',
-				fieldtype='Float', insert_after='fraction_of_daily_salary_for_three_quarter_day',default='1.50'),
+				fieldtype='Float', insert_after='fraction_of_daily_salary_for_three_quarter_day',default='1.50',hidden=1),
             dict(fieldname='fraction_of_daily_salary_for_one_quarter_day', label='Fraction of Daily Salary for One Quarter Day',
-				fieldtype='Float', insert_after='fraction_of_daily_salary_for_one_half_day',default='1.25')
+				fieldtype='Float', insert_after='fraction_of_daily_salary_for_one_half_day',default='1.25',hidden=1)
         ]
     }
     create_custom_fields(custom_fields)

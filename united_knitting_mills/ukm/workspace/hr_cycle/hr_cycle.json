@@ -1,4 +1,5 @@
 {
+ "cards_label": "Masters",
  "category": "Modules",
  "charts": [],
  "creation": "2022-06-30 14:12:44.740814",
@@ -12,8 +13,152 @@
  "is_default": 0,
  "is_standard": 1,
  "label": "HR Cycle",
- "links": [],
- "modified": "2022-08-27 12:41:19.616869",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Department",
+   "link_to": "Department",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Designation",
+   "link_to": "Designation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Holiday List",
+   "link_to": "Holiday List",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee",
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Thirvu Shift",
+   "link_to": "Employee Timing Details",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Checkin",
+   "link_to": "Employee Checkin",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Leave Application",
+   "link_to": "Leave Application",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance",
+   "link_to": "Attendance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salary Structure",
+   "link_to": "Salary Structure",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salary Structure Assignment",
+   "link_to": "Salary Structure Assignment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll Entry",
+   "link_to": "Payroll Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salary Slip",
+   "link_to": "Salary Slip",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2022-09-02 14:08:27.762572",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -22,112 +167,17 @@
  "pin_to_top": 1,
  "shortcuts": [
   {
-   "doc_view": "List",
-   "label": "Employee",
-   "link_to": "Employee",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Salary Structure",
-   "link_to": "Salary Structure",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Salary Slip",
-   "link_to": "Salary Slip",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Payroll Entry",
-   "link_to": "Payroll Entry",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Shift Type",
-   "link_to": "Shift Type",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Employee Advance Tool",
-   "link_to": "Employee Advance Tool",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Employee Bonus Tool",
-   "link_to": "Employee Bonus Tool",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Attendance",
-   "link_to": "Attendance",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Employee Checkin",
-   "link_to": "Employee Checkin",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Appointment Letter",
-   "link_to": "Appointment Letter",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Job Offer",
-   "link_to": "Job Offer",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Job Applicant Source",
-   "link_to": "Job Applicant Source",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Leave Application",
-   "link_to": "Leave Application",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Holiday List",
-   "link_to": "Holiday List",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "List",
-   "label": "Employee Timing Details",
-   "link_to": "Employee Timing Details",
-   "type": "DocType"
-  },
-  {
    "doc_view": "Report Builder",
-   "label": "Salary Register",
-   "link_to": "Salary Register",
+   "label": "Missing Checkin's",
+   "link_to": "Decision Making - Checkin Missing",
    "type": "Report"
   },
   {
    "doc_view": "Report Builder",
-   "label": "Monthly Attendance Sheet",
-   "link_to": "Monthly Attendance Sheet",
-   "type": "Report"
-  },
-  {
-   "doc_view": "Report Builder",
-   "label": "Decision Making Tool",
-   "link_to": "Decision Making Tool",
+   "label": " Insufficient Working Hours",
+   "link_to": "Decision Making - Insufficient Working Hours",
    "type": "Report"
   }
- ]
+ ],
+ "shortcuts_label": "Decision Making Reports"
 }

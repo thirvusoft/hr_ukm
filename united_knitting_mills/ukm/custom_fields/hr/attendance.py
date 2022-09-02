@@ -1,5 +1,7 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
 def attendance_customisation():
     attendance_property_setter()
     create_attendance_custom_fields()
@@ -16,6 +18,12 @@ def attendance_property_setter():
     })       
     attendance.insert() 
     attendance.save(ignore_permissions=True) 
+
+    make_property_setter('Attendance', "leave_type", "allow_on_submit", 1, "Link")
+    make_property_setter('Attendance', "leave_application", "allow_on_submit", 1, "Link")
+    make_property_setter('Attendance', "leave_type", "read_only", 1, "Link")
+    make_property_setter('Attendance', "leave_type", "read_only", 1, "Link")
+
 def create_attendance_custom_fields():
     custom_fields = {
 		"Attendance": [
@@ -28,12 +36,12 @@ def create_attendance_custom_fields():
             dict(fieldname='total_shift_count', label='Total Shift Count',
 				fieldtype='Float',insert_after='column_break24'),
             
-            dict(fieldname='total_shift_hr', label='Total Shift Hour (in Minutes )',
+            dict(fieldname='total_shift_hr', label='Total Shift in Minutes',
 				fieldtype='Float',insert_after='section_break23'),
             
             dict(fieldname='col_brk_ts123',fieldtype='Column Break',insert_after='total_shift_hr'),
             
-            dict(fieldname='ts_ot_hrs', label='Over Time (in Minutes )',
+            dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Hrs',
 				fieldtype='Float',insert_after='col_brk_ts123'),
            
             dict(fieldname='employee_shift_details', label='Shift Approval List',
