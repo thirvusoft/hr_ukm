@@ -1,5 +1,5 @@
 from . import __version__ as app_version
-
+import frappe
 app_name = "united_knitting_mills"
 app_title = "UKM"
 app_publisher = "UKM"
@@ -90,16 +90,16 @@ after_install = "united_knitting_mills.after_install.create_custom_fields"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Leave Application": "united_knitting_mills.ukm.utils.python.leave_application.TsLeaveApplication"
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 doc_events = {
 	"Salary Slip":{
-		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.salary_slip_based_on_shift",
+		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour_staff",
 		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
 		
 	},
@@ -126,11 +126,13 @@ doc_events = {
 
 # Scheduled Tasks
 # ---------------
-
 scheduler_events = {
 	"daily": [
 		"united_knitting_mills.tasks.all"
 	],
+ 	"cron":{
+	
+	}
 	# "daily": [
 	# 	"united_knitting_mills.tasks.daily"
 	# ],
@@ -144,6 +146,12 @@ scheduler_events = {
 	# 	"united_knitting_mills.tasks.monthly"
 	# ]
 }
+try:
+	time = str(frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time'))
+	time = time.split(':')
+	cron_time = f'{int(time[1])} {int(time[0])} * * *'
+	scheduler_events['cron'][cron_time] = ['united_knitting_mills.ukm.utils.python.employee__checkin.create_employee_checkin','united_knitting_mills.ukm.doctype.employee_timing_details.employee_timing_details.scheduler_for_employee_shift']
+except:pass
 
 # Testing
 # -------

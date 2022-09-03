@@ -7,7 +7,7 @@ def location():
     custom_fields = {
 		"Location": [
             dict(fieldname='current_series', label='Current Series',
-				fieldtype='Int', insert_after='cb_details',default=1,hidden=1),
+				fieldtype='Int', insert_after='cb_details',default='1',hidden=1),
             dict(fieldname='naming_series', label='Employee Naming Series',
 				fieldtype='Data', insert_after='current_series',hidden=0,),    
 		],

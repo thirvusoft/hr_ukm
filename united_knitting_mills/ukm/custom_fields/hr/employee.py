@@ -19,7 +19,7 @@ def create_employee_fields_and_property_setter():
         ]
     }
 
-
+    create_custom_fields(custom_fields)
     ## Property Setter
     employee=frappe.get_doc({
         'doctype':'Property Setter',

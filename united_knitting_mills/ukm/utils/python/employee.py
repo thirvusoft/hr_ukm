@@ -1,5 +1,6 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.utils.data import get_link_to_form
 @frappe.whitelist()
 def creating_hr_permission(doc):
 	ts_emp_doc=frappe.get_doc("Employee",doc)
@@ -33,7 +34,7 @@ def creating_hr_permission(doc):
 
 def sequence_user_id(doc,event):
 	frappe.db.set_value("Employee",doc.name,"attendance_device_id",doc.name)
-	if doc.approval_by_owner == 1 and doc.status == 'Inactive':
+	if doc.approval_by_owner == 1 and doc.status == 'Active':
 			doc.status = 'Active'
 	else:
 		doc.status = 'Inactive'
@@ -46,6 +47,7 @@ def employee_custom_field():
 		
 	],
     }
+	create_custom_fields(custom_fields)
 	employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",
@@ -53,10 +55,15 @@ def employee_custom_field():
         'property':"options",
         'property_type':"Data",
         'field_name':"naming_series",
-        "value":"employee_naming_series.-"
+        "value":"employee_naming_series.-\nUKM-II\nUKM-I"
     })
 	employee.save(ignore_permissions=True)
-	create_custom_fields(custom_fields)
+	
 
-
-
+def get_employee_shift(employee): 
+	"""Requires Employee name as argument"""
+	designation = frappe.db.get_value("Employee", employee, 'designation')
+	shift = frappe.db.get_value('Designation', designation, 'thirvu_shift')
+	if shift: return shift
+	designation_url = get_link_to_form('Designation', designation)
+	frappe.throw(f'Please Assign Shift for {frappe.bold(designation_url)}.')

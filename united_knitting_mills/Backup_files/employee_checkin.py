@@ -130,13 +130,11 @@ def add_log_based_on_employee_field(
 				doc.log_type="IN"
 			if cint(skip_auto_attendance) == 1:
 				doc.skip_auto_attendance = "1"
-			doc.check='Success'
 			doc.insert()
 			return doc
 		else:
 			return att_doc
-	except Exception as e:
-		frappe.log_error(title="Employee Checkin", message=frappe.get_traceback())
+	except:
 		if check_date <= validate_timestamp.date():
 			doc = frappe.new_doc("Employee Checkin")
 			doc.employee = employee.name
@@ -144,7 +142,6 @@ def add_log_based_on_employee_field(
 			doc.time = timestamp
 			doc.device_id = device_id
 			doc.log_type = 'IN'
-			doc.check = str(e) + " " + str(type(e)) + employee.name + str(resetting_datetime)
 			if cint(skip_auto_attendance) == 1:
 				doc.skip_auto_attendance = "1"
 			doc.insert()
@@ -318,5 +315,3 @@ def skip_attendance_in_checkins(log_names):
 		.set("skip_auto_attendance", 1)
 		.where(EmployeeCheckin.name.isin(log_names))
 	).run()
-
-# search-ms:displayname=Search%20Results%20in%20Local%20Disk%20(C%3A)&crumb=location:C%3A%5C\biometric-attendance-sync-tool

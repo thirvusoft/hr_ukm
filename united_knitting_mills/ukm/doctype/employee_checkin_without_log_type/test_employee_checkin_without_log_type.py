@@ -4,5 +4,5 @@
 # import frappe
 import unittest
 
-class TestThirvuShift(unittest.TestCase):
+class TestEmployeeCheckinWithoutLogType(unittest.TestCase):
 	pass

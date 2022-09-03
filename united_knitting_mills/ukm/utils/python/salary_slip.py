@@ -3,23 +3,34 @@ import frappe
 import json
 from erpnext.payroll.doctype.salary_slip.salary_slip import SalarySlip
 from frappe import _
+from frappe.utils.data import get_link_to_form
+from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
+
+def set_salary_for_labour_staff(doc,event):
+    shift = get_employee_shift(doc.employee)
+    shift_doc = frappe.get_doc('Employee Timing Details', shift)
+    if(shift_doc.labour):
+        salary_slip_for_labours(doc, event)
+    elif(shift_doc.staff):
+        salary_slip_for_staffs(doc, event)
 
 @frappe.whitelist()
-def salary_slip_based_on_shift(doc,event):
-
-    emp_struct=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_slip_based_on_shift")
+def salary_slip_for_labours(doc,event):
+    """Salary Slip For Labours"""
     emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
-
     emp_shift_amount = frappe.db.sql("""
 			select sum(total_shift_amount),sum(total_shift_count)
 			from `tabAttendance`
-			where employee=%s and attendance_date>=%s and attendance_date<=%s
+			where employee=%s and attendance_date>=%s and attendance_date<=%s and docstatus = 1
 		""", (doc.employee, doc.start_date, doc.end_date), as_list = 1)
-        
-    if emp_struct==1:
+    if(emp_shift_amount[0][0]):
         doc.total_shift_worked = emp_shift_amount[0][1]
-        doc.set('earnings', [])
-        doc.append("earnings", {"salary_component": emp_shift_component, "amount":emp_shift_amount[0][0] })
+        # doc.set('earnings', [])
+        for row in doc.earnings:
+            if(row.salary_component == emp_shift_component):
+                doc.earnings[row.idx -1].update( {"salary_component": emp_shift_component, "amount":emp_shift_amount[0][0] })
+        if(len(doc.earnings) == 0):
+            doc.append("earnings", {"salary_component": emp_shift_component, "amount":emp_shift_amount[0][0] })
         gross_pay=0
         for data in doc.earnings:
             gross_pay+=data.amount
@@ -36,22 +47,66 @@ def salary_slip_based_on_shift(doc,event):
         SalarySlip.compute_component_wise_year_to_date(doc)
         SalarySlip.set_net_total_in_words(doc)
 
+def salary_slip_for_staffs(doc, event):
+    """Salary Slip For Staff"""
+    emp_shift_amount = frappe.db.sql("""
+			select sum(total_shift_amount)
+			from `tabAttendance`
+			where employee=%s and attendance_date>=%s and attendance_date<=%s and docstatus = 1
+		""", (doc.employee, doc.start_date, doc.end_date), as_list = 1)
+    if(emp_shift_amount[0][0]):
+        emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
+        # doc.set('earnings', [])
+        for row in doc.earnings:
+            if(row.salary_component == emp_shift_component):
+                doc.earnings[row.idx -1].update( {"salary_component": emp_shift_component, "amount":emp_shift_amount[0][0] })
+        if(len(doc.earnings) == 0):
+            doc.append("earnings", {"salary_component": emp_shift_component, "amount":emp_shift_amount[0][0] })
+        gross_pay=0
+        for data in doc.earnings:
+            gross_pay+=data.amount
+        
+        doc.gross_pay=gross_pay
+        doc.net_pay=doc.gross_pay-doc.total_deduction
+        doc.rounded_total=round(doc.net_pay)    
+
+        #Calculation of year to date
+        SalarySlip.compute_year_to_date(doc)
+        
+        #Calculation of Month to date
+        SalarySlip.compute_month_to_date(doc)
+        SalarySlip.compute_component_wise_year_to_date(doc)
+        SalarySlip.set_net_total_in_words(doc)
+    
+    
+
 def create_journal_entry(doc,action):
-    component_list=[]
-    amount=[]
+    earn_component_list=[]
+    earn_amount=[]
+    ded_component_list=[]
+    ded_amount=[]
+    location = frappe.db.get_value('Employee', doc.employee, 'location')
     if doc.earnings:
         for data in doc.earnings:
             account = frappe.get_doc('Salary Component',data.salary_component)
-            for account in account.accounts:
-                component_list.append(account.account)
-            amount.append(data.amount)
+            url = get_link_to_form('Salary Component',data.salary_component)
+            if(not len(account.accounts)):frappe.throw(f"Please Fill the Account for Salary Component <b>{url}<b>.")
+            for row in account.accounts:
+                if(row.company == doc.company):
+                    if(not row.account):frappe.throw(f"Please Fill the Account for Salary Component <b>{url}<b>.")
+                    earn_component_list.append(row.account)
+            earn_amount.append(data.amount)
 
     if doc.deductions:
         for data in doc.deductions:
             account = frappe.get_doc('Salary Component',data.salary_component)
-            for account in account.accounts:
-                component_list.append(account.account)
-            amount.append(data.amount)
+            url = get_link_to_form('Salary Component',data.salary_component)
+            if(not len(account.accounts)):frappe.throw(f"Please Fill the Account for Salary Component <b>{url}<b>.")
+            for row in account.accounts:
+                if(row.company == doc.company):
+                    if(not row.account):frappe.throw(f"Please Fill the Account for Salary Component <b>{url}<b>.")
+                    ded_component_list.append(row.account)
+            ded_amount.append(data.amount)
 
     new_jv_doc=frappe.new_doc('Journal Entry')
     new_jv_doc.voucher_type='Journal Entry'
@@ -60,10 +115,12 @@ def create_journal_entry(doc,action):
     new_jv_doc.user_remark = _("Accrual Journal Entry for salaries from {0} to {1}").format(
 				doc.start_date, doc.end_date
 			)
-    for data in range(0,len(component_list),1):
-        new_jv_doc.append('accounts',{'account':component_list[data],'debit_in_account_currency':amount[data]})
+    for data in range(0,len(earn_component_list),1):
+        new_jv_doc.append('accounts',{'account':earn_component_list[data],'debit_in_account_currency':earn_amount[data], 'location':location})
+    for data in range(0,len(ded_component_list),1):
+        new_jv_doc.append('accounts',{'account':ded_component_list[data],'credit_in_account_currency':ded_amount[data], 'location':location})
     if(frappe.db.get_value("Company",doc.company, "default_payroll_payable_account")):
-        new_jv_doc.append('accounts',{'account':frappe.db.get_value("Company",doc.company, "default_payroll_payable_account"),'credit_in_account_currency':doc.net_pay})
+        new_jv_doc.append('accounts',{'account':frappe.db.get_value("Company",doc.company, "default_payroll_payable_account"),'credit_in_account_currency':doc.net_pay, 'location':location})
     else:
         frappe.msgprint(_("Set Default Payable Account in {0}").format(doc.company), alert=True)
     new_jv_doc.insert()
