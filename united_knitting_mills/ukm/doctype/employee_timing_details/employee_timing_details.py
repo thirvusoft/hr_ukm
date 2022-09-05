@@ -90,6 +90,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                 correct_shift_details = []
                 approval_details=[]
                 new_attendance_doc = frappe.new_doc('Attendance')
+                new_attendance_doc.staff = 0
                 new_attendance_doc.employee = employee
                 new_attendance_doc.attendance_date = date
                 # finalattendance = frappe._dict()
@@ -148,31 +149,43 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
 
                             shift_wise_details.update({'shift_count':shift_count,'shift_salary':shift_salary})
                             correct_shift_details.append(shift_wise_details)
+                            new_attendance_doc.update({
+                                'checkin_time':shift_wise_details['start_time'],
+                                'checkout_time':shift_wise_details['end_time']
+                            })
 
                     except:
+                        next = 1
+                        new_attendance_doc.update({
+                                'checkin_time':'',
+                                'checkout_time':''
+                            })
                         try:
-                            if shift_wise_details['start_time'] and approval_end_time:
+                            if shift_wise_details['start_time'] and approval_end_time and next:
                                 approval_timing = frappe._dict()
                                 approval_timing.update({'check_out_time':approval_end_time,'check_in_time':shift_wise_details['start_time']})
                                 approval_details.append(approval_timing)
+                                next = 0
                         except:
                             pass
 
                         try:
-                            if shift_wise_details['end_time'] and approval_start_time:
+                            if shift_wise_details['end_time'] and approval_start_time and next:
                                 approval_timing = frappe._dict()
                                 approval_timing.update({'check_out_time':shift_wise_details['end_time'],'check_in_time':approval_start_time})
                                 approval_details.append(approval_timing)
+                                next = 0
                         except:
                             pass
                         
                         try:
-                            if approval_start_time and approval_end_time:
+                            if approval_start_time and approval_end_time and next:
                                 approval_timing = frappe._dict()
                                 approval_timing.update({'check_out_time':approval_end_time,'check_in_time':approval_start_time})
                                 approval_details.append(approval_timing)
                         except:
                             pass
+
                     new_attendance_doc.update({
                         'thirvu_shift_details':correct_shift_details,
                         'employee_shift_details':approval_details,
@@ -188,6 +201,10 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     new_attendance_doc.update({
                         'employee_shift_details':approval_details
                     })
+                    new_attendance_doc.update({
+                                'checkin_time':'',
+                                'checkout_time':''
+                            })
                     new_attendance_doc.insert()
                 
                 # Link the Attendance
@@ -231,6 +248,7 @@ def create_datewise_attendance_for_staff(reason, submit_doc, employee, attendanc
             'start_time': ""
         })
         reason += '\n-> First In Checkin Missing.' 
+        attendance.mismatched_checkin = 1
         submit_doc=False
     if(checkins[-1]['log_type'] == 'OUT'):
         thirvu_shift_details[0].update({
@@ -241,13 +259,34 @@ def create_datewise_attendance_for_staff(reason, submit_doc, employee, attendanc
             'end_time': ""
         })
         reason += '\n-> Last Out Checkin Missing.'
+        attendance.mismatched_checkin = 1
         submit_doc=False
     attendance.update({
-        'thirvu_shift_details' : thirvu_shift_details
+        'thirvu_shift_details' : thirvu_shift_details,
     })
+    if attendance.thirvu_shift_details[0].end_time and attendance.thirvu_shift_details[0].start_time:
+        attendance.update({
+            'checkin_time':attendance.thirvu_shift_details[0].start_time,
+            'checkout_time':attendance.thirvu_shift_details[0].end_time
+        })
+    elif attendance.thirvu_shift_details[0].start_time:
+        attendance.update({
+            'checkin_time':attendance.thirvu_shift_details[0].start_time,
+            'checkout_time':''
+        })
+    elif attendance.thirvu_shift_details[0].end_time:
+        attendance.update({
+            'checkin_time':'',
+            'checkout_time':attendance.thirvu_shift_details[0].end_time
+        })
+    else:
+        attendance.update({
+            'checkin_time':'',
+            'checkout_time':''
+        })
     return submit_doc, reason
 
-def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, att_name, doc, submit_doc, times, start_time, end_time):
+def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance, doc, submit_doc, times, start_time, end_time):
     """Validate Break Time Consumed with Checkins Related to that time
        Conditions for IN: 
             i)  First IN should be less than or equal to start_time.
@@ -298,10 +337,11 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, att_name, d
                     
     if(comment):
         reason +=f"\n-> Break Time Over Consumed for Checkins {', '.join(checkin_list)}"
+        attendance.break_time_overconsumed = 1
         cmt = frappe.new_doc('Comment')
         cmt.comment_type = 'Comment'
         cmt.reference_doctype = 'Attendance'
-        cmt.reference_name = att_name
+        cmt.reference_name = attendance.name
         cmt.content = f"<p>Break Time Over Consumed.<p><p>For Checkins: {', '.join(checkin_list)}"
         cmt.insert()
     return submit_doc, reason, late_entry, early_exit
@@ -311,6 +351,8 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
     if(len(checkins)%2 == 1):
         submit_doc=False
         reason += '\n-> Odd number of Checkins Found(IN or Out is Missed)'
+        attendance.mismatched_checkin = 1 
+        attendance.no_of_checkin = len(checkins)
         return submit_doc, reason, 0, 0
     if(not attendance.thirvu_shift_details[0].get('start_time') or not attendance.thirvu_shift_details[0].get('end_time')):
         submit_doc = False
@@ -326,7 +368,7 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
         attendance.flags.ignore_validate = True
         attendance.insert()
         
-        submit_doc, reason, late_entry, early_exit = check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance.name, doc, submit_doc, times, start_time, end_time)
+        submit_doc, reason, late_entry, early_exit = check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,doc, submit_doc, times, start_time, end_time)
         for time in times:
             if(len(time) == 2):
                 worked_time += time_diff_in_hours(str(time[1]), str(time[0]))
@@ -336,7 +378,7 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
             'shift_hours':worked_time
         })
         attendance.total_shift_count = 1
-        attendance.total_shift_hr = worked_time*60
+        attendance.total_shift_hr = round(worked_time*60)
         act_work_hrs = calculate_working_hour(doc)
         attendance.ts_ot_hrs = (worked_time - act_work_hrs)*60 if (worked_time >= act_work_hrs) else 0
         emp_base_amount=frappe.db.sql("""select ssa.base
@@ -351,7 +393,8 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
         if(worked_time <act_work_hrs):
             reason +=f"\n-> Insufficient Working Hours({act_work_hrs} hrs required but only {worked_time} worked)."
             submit_doc = False
-            attendance.insufficient_hours = 1
+            attendance.insufficient_working_minutes = 1
+            attendance.insufficient_working_hrs= worked_time
         return submit_doc, reason, late_entry, early_exit
 
 def calculate_working_hour(doc):
@@ -380,10 +423,13 @@ def create_staff_attendance(docname):
         for data in date_wise_checkin:
             reason = ''
             if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
+                attendance = frappe.new_doc('Attendance')
                 if(len(date_wise_checkin[data]) < doc.total_no_of_checkins_per_day):
                     submit_doc = False
                     reason += f"\n-> Insufficient Checkins({doc.total_no_of_checkins_per_day} required but only {len(date_wise_checkin[data])} is available)."
-                attendance = frappe.new_doc('Attendance')
+                    attendance.mismatched_checkin = 1
+                    attendance.no_of_checkin = len(date_wise_checkin[data])
+                attendance.staff = 1
                 submit_doc, reason = create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, data, date_wise_checkin[data])
                 submit_doc, reason, late_entry, early_exit = validate_total_working_hours(reason, doc, submit_doc, date_wise_checkin[data], attendance, doc.start_time, doc.end_time)
                 attendance.flags.ignore_validate = True
@@ -409,7 +455,40 @@ def scheduler_for_employee_shift():
         elif timing_doc.labour ==1:
             create_labour_attendance(timing_doc.department, timing_doc.name, timing_doc.unit, str(timing_doc.entry_period) ,str(timing_doc.exit_period))
     
+    leave_application_to_attendance()
+   
+def leave_application_to_attendance():
     # leave application proccessed to attendance
-    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<=", today()],"attendance_marked":1,"leave_type":["in",['On Duty','Permission']]}):
-        application_doc = frappe.get_doc('Leave application',data)
-        
+    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<=", today()],"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
+        application_doc = frappe.get_doc('Leave Application',data)
+        if frappe.db.exists('Attendance',{"attendance_date": application_doc.date}):
+            existing_doc = frappe.db.exists('Attendance',{"attendance_date": application_doc.date})
+            if existing_doc.docstatus:
+                existing_doc.cancel()
+                new_doc = frappe.copy_doc(existing_doc) 
+                new_doc.amended_from = existing_doc.name
+                new_doc.status = "On Leave" 
+                new_doc.update({
+                    'leave_application':application_doc.name,
+                    'leave_type':application_doc.leave_type
+                    })
+                new_doc.insert()
+            else:
+                existing_doc.update({
+                    'leave_application':application_doc.name,
+                    'leave_type':application_doc.leave_type
+                    })
+                existing_doc.save()
+                
+            
+        else:
+            attendance = frappe.new_doc('Attendance')
+            attendance.employee = application_doc.employee
+            attendance.date = application_doc.date
+            attendance.status = "On Leave"
+            attendance.leave_application = application_doc.name
+            attendance.leave_type = application_doc.leave_type
+            attendance.save()
+        application_doc.attendance_marked=1
+        application_doc.save()
+

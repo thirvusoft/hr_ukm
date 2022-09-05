@@ -15,7 +15,7 @@ def create_employee_fields_and_property_setter():
             dict(fieldname='hr_permission', label='HR Permission',
                 fieldtype='Check', insert_after='location', hidden=1), 
             dict(fieldname='approval_by_owner', label='Approved By Owner',
-                fieldtype='Check', insert_after='company'),   
+                fieldtype='Check', insert_after='company',hidden=1),   
         ]
     }
 
