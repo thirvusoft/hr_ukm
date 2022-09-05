@@ -1,6 +1,6 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
-
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 def create_employee_fields_and_property_setter():
     custom_fields = {
         "Employee": [
@@ -15,12 +15,26 @@ def create_employee_fields_and_property_setter():
             dict(fieldname='hr_permission', label='HR Permission',
                 fieldtype='Check', insert_after='location', hidden=1), 
             dict(fieldname='approval_by_owner', label='Approved By Owner',
-                fieldtype='Check', insert_after='company'),   
+                fieldtype='Check', insert_after='company'),
+            dict(fieldname='ts_column_break_1',
+                fieldtype='Column Break', insert_after='payroll_cost_center'),
+            dict(fieldname='ts_column_break_2',
+                fieldtype='Column Break', insert_after='marital_status'),
+            dict(fieldname='ts_column_break_3',
+                fieldtype='Column Break', insert_after='department'),
         ]
     }
 
     create_custom_fields(custom_fields)
     ## Property Setter
+    make_property_setter("Employee", "emergency_contact_details", "collapsible", 1, "Section Break")
+    make_property_setter("Employee", "company", "default", "United Knitting Mills", "Text")
+    make_property_setter("Employee", "company", "hidden", 1, "Check")
+    make_property_setter("Employee", "branch", "hidden", 1, "Check")
+    make_property_setter("Employee", "approvers_section", "hidden", 1, "Section Break")
+    make_property_setter("Employee", "default_shift", "hidden", 1, "Check")
+    make_property_setter("Employee", "unsubscribed", "hidden", 1, "Check")
+    make_property_setter("Employee", "leave_encashed", "hidden", 1, "Check")
     employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",
