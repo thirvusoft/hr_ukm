@@ -36,7 +36,16 @@ doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js"}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
+			"Designation":"ukm/utils/javascript/designation_list.js",
+			"Holiday List":"ukm/utils/javascript/holiday_list_list.js",
+			"Employee":"ukm/utils/javascript/employee_list.js",
+			"Leave Application":"ukm/utils/javascript/leave_application_list.js",
+			"Attendance":"ukm/utils/javascript/attendance_list.js",
+			"Salary Slip":"ukm/utils/javascript/salary_slip_list.js",
+			"Payroll Entry":"ukm/utils/javascript/payroll_entry_list.js",
+			"Salary Structure":"ukm/utils/javascript/salary_structure_list.js",
+			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
