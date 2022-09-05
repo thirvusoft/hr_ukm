@@ -32,7 +32,8 @@ app_license = "MIT"
 doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
 		 "Journal Entry":"ukm/utils/javascript/journal_entry.js",
-		 "Location":"ukm/utils/javascript/location.js"}
+		 "Location":"ukm/utils/javascript/location.js",
+		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js"}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}

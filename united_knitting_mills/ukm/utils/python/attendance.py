@@ -51,6 +51,8 @@ def shift_hours(doc,event):
                doc.total_shift_amount += data.shift_salary
            if(doc.total_shift_hr):
                doc.total_shift_hr -= get_total_break_time(doc.employee)
+               temp = doc.total_shift_hr
+               doc.total_shift_hr = round(temp)
 def unlink_logs(doc,event):
    Attendance.unlink_attendance_from_checkins(doc)
 
