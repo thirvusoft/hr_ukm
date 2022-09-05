@@ -19,7 +19,11 @@ def get_between_dates(date_wise_checkin, from_date, to_date):
 def get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time):
     # last_checkin = frappe.get_last_doc('Employee Checkin', {'employee': employee})
     date_format_str = '%Y-%m-%d %H:%M:%S'
-    reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
+    thirvu_shift = frappe.db.get_value('Designation',frappe.db.get_value('Employee',employee,'designation'),'thirvu_shift')
+    if frappe.db.get_value('Employee Timing Details',thirvu_shift,'staff'):
+        reset_time = datetime.strptime(str('00:00:00'),'%H:%M:%S')
+    else:
+        reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
     for dates in date_wise_checkin:
         curr_date = datetime.strptime(str(dates), date_format_str)
         start_date = datetime.combine(curr_date.date(), reset_time.time())
@@ -77,9 +81,9 @@ def create_employee_checkins(date_wise_checkin, employee, buffer_time):
 @frappe.whitelist()
 def create_employee_checkin(from_date = None, to_date = None):
     if(from_date == None):
-        from_date = str(today())
+        from_date = str(date.today() - timedelta(days = 1))
     if(to_date == None):
-        to_date = str(today())
+        to_date = str(date.today() - timedelta(days = 1))
     employees = frappe.db.get_all('Employee Checkin Without Log Type', filters={'time': ['between', (from_date, to_date)]}, pluck='employee')
     employees = list(set(employees))
     buffer_time, reset_time = get_ukm_settings()
