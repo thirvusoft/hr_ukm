@@ -202,6 +202,8 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                         'employee_shift_details':approval_details
                     })
                     new_attendance_doc.update({
+                                'mismatched_checkin':1,
+                                'no_of_checkin':len(date_wise_checkin[date]),
                                 'checkin_time':'',
                                 'checkout_time':''
                             })
