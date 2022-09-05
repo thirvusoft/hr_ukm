@@ -17,7 +17,15 @@ def attendance_property_setter():
         "value":" \nPresent\nAbsent\nOn Leave\nHalf Day\nWork From Home\nQuarter Day\nThree Quarter Day\nOne Quarter Day\nOne Half Day"     
     })       
     attendance.insert() 
-    attendance.save(ignore_permissions=True) 
+    attendance.save(ignore_permissions=True)
+    make_property_setter("Attendance", "status", "hidden", 1, "Check")
+    make_property_setter("Attendance", "status", "hidden", 1, "Check")
+    make_property_setter("Attendance", "company", "default", "United Knitting Mills", "Text")
+    make_property_setter("Attendance", "company", "hidden", 1, "Check")
+    make_property_setter("Attendance", "naming_series", "default", "HR-ATT-.YYYY.-", "Text")
+    make_property_setter("Attendance", "naming_series", "hidden", 1, "Check")
+
+
 
 
 def create_attendance_custom_fields():
