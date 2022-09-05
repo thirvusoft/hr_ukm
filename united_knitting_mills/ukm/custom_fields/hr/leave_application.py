@@ -3,10 +3,10 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
 def leave_application_customizations():
-    create_property_setter()
-    create_custom_fields_()
+    leave_application_property_setter()
+    leave_application_custom_fields_()
     
-def create_property_setter():
+def leave_application_property_setter():
     make_property_setter('Leave Application', "from_date", "reqd", 0, "Check")
     make_property_setter('Leave Application', "to_date", "reqd", 0, "Check")
     make_property_setter('Leave Application', "from_date", "mandatory_depends_on", 'eval: !in_list(["Permission", "On Duty", ''], doc.leave_type)', "Small Text")
@@ -14,9 +14,13 @@ def create_property_setter():
     make_property_setter('Leave Application', "from_date", "depends_on", 'eval: !in_list(["Permission", "On Duty"], doc.leave_type)', "Small Text")
     make_property_setter('Leave Application', "to_date", "depends_on", 'eval: !in_list(["Permission", "On Duty"], doc.leave_type)', "Small Text")
     make_property_setter('Leave Application', "half_day", "depends_on", 'eval: !in_list(["Permission", "On Duty"], doc.leave_type)', "Small Text")
+    make_property_setter("Leave Application", "sb10", "hidden", 1, "Section Break")
+    make_property_setter("Leave Application", "leave_approver", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "leave_approver_name", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "salary_slip", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "leave_balance", "hidden", 1, "Check")
     
-    
-def create_custom_fields_():
+def leave_application_custom_fields_():
     custom_field = {
         'Leave Application':[
             dict(

@@ -1,8 +1,5 @@
 from united_knitting_mills.ukm.custom_fields.hr.employee import create_employee_fields_and_property_setter
 from united_knitting_mills.ukm.custom_fields.hr.leave_application import leave_application_customizations
-from united_knitting_mills.ukm.custom_fields.payroll.payroll_entry import create_payroll_entry_fields
-from united_knitting_mills.ukm.custom_fields.payroll.salary_slip import create_salary_slip_fields
-from united_knitting_mills.ukm.custom_fields.payroll.salary_structure import create_salary_structure_fields
 from united_knitting_mills.ukm.custom_fields.hr.company import create_company_fields
 from united_knitting_mills.ukm.custom_fields.hr.shift_type import create_shift_type_fields
 from united_knitting_mills.ukm.custom_fields.payroll.payroll_settings import create_payroll_settings_fields
@@ -18,7 +15,11 @@ from united_knitting_mills.ukm.utils.python.location import location
 from united_knitting_mills.ukm.custom_fields.hr.designation import designation_customisation
 from united_knitting_mills.ukm.custom_fields.hr.employee_checkin import checkin_customisation
 from united_knitting_mills.ukm.utils.python.defaults import create_defults
-
+from united_knitting_mills.ukm.custom_fields.hr.holiday_list import holiday_list_customisation
+from united_knitting_mills.ukm.custom_fields.hr.salary_structure import salary_structure_customizations
+from united_knitting_mills.ukm.custom_fields.hr.salary_structure_assignment import salary_structure_assignment_customizations
+from united_knitting_mills.ukm.custom_fields.hr.payroll_entry import payroll_entry_customizations
+from united_knitting_mills.ukm.custom_fields.hr.salary_slip import salary_slip_customizations
 
 def create_custom_fields():
     leave_application_customizations()
@@ -26,10 +27,7 @@ def create_custom_fields():
     attendance_customisation()
     create_company_fields()
     create_employee_fields_and_property_setter()
-    create_payroll_entry_fields()
     create_payroll_settings_fields()
-    create_salary_slip_fields()
-    create_salary_structure_fields()
     create_shift_type_fields()
     department_customisation()
     create_location_fields()
@@ -41,3 +39,8 @@ def create_custom_fields():
     location()
     designation_customisation()
     checkin_customisation()
+    holiday_list_customisation()
+    salary_structure_customizations()
+    salary_structure_assignment_customizations()
+    payroll_entry_customizations()
+    salary_slip_customizations()
