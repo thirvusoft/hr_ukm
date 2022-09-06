@@ -165,6 +165,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                 approval_timing = frappe._dict()
                                 approval_timing.update({'check_out_time':approval_end_time,'check_in_time':shift_wise_details['start_time']})
                                 approval_details.append(approval_timing)
+                                new_attendance_doc.update({'early_exit':1})
                                 next = 0
                         except:
                             pass
@@ -174,6 +175,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                 approval_timing = frappe._dict()
                                 approval_timing.update({'check_out_time':shift_wise_details['end_time'],'check_in_time':approval_start_time})
                                 approval_details.append(approval_timing)
+                                new_attendance_doc.update({'late_entry':1})
                                 next = 0
                         except:
                             pass
@@ -183,6 +185,8 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                 approval_timing = frappe._dict()
                                 approval_timing.update({'check_out_time':approval_end_time,'check_in_time':approval_start_time})
                                 approval_details.append(approval_timing)
+                                new_attendance_doc.update({'early_exit':1,'late_entry':1})
+
                         except:
                             pass
 
