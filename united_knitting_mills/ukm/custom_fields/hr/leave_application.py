@@ -39,9 +39,11 @@ def leave_application_custom_fields_():
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)'
             ),
             dict(
-                fieldname='attendance_marked', label='attendance_marked', fieldtype='Check', insert_after='to_date', 
+                fieldname='attendance_marked', label='Attendance Marked', fieldtype='Check', insert_after='to_date', 
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)',read_only=1,allow_on_submit=1
-            )
+            ),
+            dict(fieldname='unit', label='Unit',reqd=1,
+				fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location')
         ]
     }
     create_custom_fields(custom_field)
