@@ -158,7 +158,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-02 14:08:27.762572",
+ "modified": "2022-09-06 14:32:37.635675",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -167,15 +167,33 @@
  "pin_to_top": 1,
  "shortcuts": [
   {
-   "doc_view": "Report Builder",
-   "label": "Missing Checkin's",
+   "doc_view": "",
+   "label": "Decision Making - Checkin Missing",
    "link_to": "Decision Making - Checkin Missing",
    "type": "Report"
   },
   {
-   "doc_view": "Report Builder",
-   "label": " Insufficient Working Hours",
+   "doc_view": "",
+   "label": "Decision Making - Break Time Over Consumed",
+   "link_to": "Decision Making - Break Time Over Consumed",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making - Insufficient Working Hours",
    "link_to": "Decision Making - Insufficient Working Hours",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making - Late Entry",
+   "link_to": "Decision Making - Late Entry",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making - Early Exit",
+   "link_to": "Decision Making - Early Exit",
    "type": "Report"
   }
  ],
