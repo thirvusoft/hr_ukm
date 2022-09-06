@@ -17,14 +17,22 @@ def attendance_property_setter():
         "value":" \nPresent\nAbsent\nOn Leave\nHalf Day\nWork From Home\nQuarter Day\nThree Quarter Day\nOne Quarter Day\nOne Half Day"     
     })       
     attendance.insert() 
-    attendance.save(ignore_permissions=True) 
+    attendance.save(ignore_permissions=True)
+    make_property_setter("Attendance", "status", "hidden", 1, "Check")
+    make_property_setter("Attendance", "status", "hidden", 1, "Check")
+    make_property_setter("Attendance", "company", "default", "United Knitting Mills", "Text")
+    make_property_setter("Attendance", "company", "hidden", 1, "Check")
+    make_property_setter("Attendance", "naming_series", "default", "HR-ATT-.YYYY.-", "Text")
+    make_property_setter("Attendance", "naming_series", "hidden", 1, "Check")
+
+
 
 
 def create_attendance_custom_fields():
     custom_fields = {
 		"Attendance": [
 			dict(fieldname='shift_details', label='',
-				fieldtype='Section Break',insert_after='insufficient_hours'),
+				fieldtype='Section Break',insert_after='exit_period'),
 
          dict(fieldname='staff', label='',
 				fieldtype='Check',insert_after='employee',hidden=1),
@@ -39,13 +47,13 @@ def create_attendance_custom_fields():
 				fieldtype='Check',insert_after='no_of_checkin',read_only=1),
          
          dict(fieldname='insufficient_working_hrs', label='Insufficient Working (Minutes)',
-				fieldtype='Float',insert_after='insufficient_working_minutes',depends_on='eval:doc.insufficient_working_minutes',read_only=1,hidden=1),
+				fieldtype='Float',insert_after='insufficient_working_minutes',depends_on='eval:doc.insufficient_working_minutes',read_only=1),
 
          dict(fieldname='break_time_overconsumed', label='Breaktime Overconsumed',
 				fieldtype='Check',insert_after='insufficient_working_hrs',read_only=1),
 
          dict(fieldname='over_consumed_time', label='Consumed Minutes (Break Time)',
-				fieldtype='Float',insert_after='break_time_overconsumed',depends_on='eval:doc.break_time_overconsumed',read_only=1,hidden=1),
+				fieldtype='Float',insert_after='break_time_overconsumed',depends_on='eval:doc.break_time_overconsumed',read_only=1),
 
 			dict(fieldname='thirvu_shift_details', label='Employee Shift',
 				fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details',hidden=1),
@@ -90,8 +98,8 @@ def create_attendance_custom_fields():
          fieldtype='Float',insert_after='column_break23',depends_on='eval:!doc.staff'),
          
 
-         dict(fieldname='insufficient_hours', label='Insufficient Working Hours',
-         fieldtype='Check',insert_after='early_exit', depends_on = "eval:doc.insufficient_hours"),
+         dict(fieldname='exit_period', label='Early Exit (in Minutes)',
+         fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit"),
          
          dict(fieldname='reason', label='Reason for Draft',
          fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),

@@ -11,7 +11,7 @@ def set_salary_for_labour_staff(doc,event):
     shift_doc = frappe.get_doc('Employee Timing Details', shift)
     if(shift_doc.labour):
         salary_slip_for_labours(doc, event)
-    elif(shift_doc.staff):
+    elif(shift_doc.staff or shift_doc.house_keeping):
         salary_slip_for_staffs(doc, event)
 
 @frappe.whitelist()
@@ -123,5 +123,5 @@ def create_journal_entry(doc,action):
         new_jv_doc.append('accounts',{'account':frappe.db.get_value("Company",doc.company, "default_payroll_payable_account"),'credit_in_account_currency':doc.net_pay, 'location':location})
     else:
         frappe.msgprint(_("Set Default Payable Account in {0}").format(doc.company), alert=True)
-    new_jv_doc.insert()
-    new_jv_doc.submit()
+    # new_jv_doc.insert()
+    # new_jv_doc.submit()

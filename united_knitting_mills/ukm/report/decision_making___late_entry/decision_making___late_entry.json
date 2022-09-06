@@ -1,7 +1,7 @@
 {
  "add_total_row": 0,
  "columns": [],
- "creation": "2022-09-02 17:02:18.416268",
+ "creation": "2022-09-06 14:27:25.555452",
  "disable_prepared_report": 0,
  "disabled": 0,
  "docstatus": 0,
@@ -9,12 +9,12 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "json": "{\"filters\":[[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"late_entry\",\"=\",1,false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"reason\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":120,\"employee_name\":120,\"employee\":120,\"attendance_date\":120,\"reason\":120},\"group_by\":null}",
- "modified": "2022-09-05 16:32:05.971618",
+ "json": "{\"filters\":[[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"late_entry\",\"=\",1,false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"late_min\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":196,\"attendance_date\":120,\"employee_name\":188,\"employee\":197,\"late_min\":233},\"group_by\":null}",
+ "modified": "2022-09-06 14:27:33.140879",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making - Late Entry",
- "owner": "shankar@thirvusoft.in",
+ "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "Attendance",
  "report_name": "Decision Making - Late Entry",
@@ -28,6 +28,15 @@
   },
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Thirvu Owner"
+  },
+  {
+   "role": "Thirvu HR Manager"
+  },
+  {
+   "role": "Thirvu HR User"
   }
  ]
 }
