@@ -9,7 +9,7 @@ class UnitedKnittingMillsSettings(Document):
 
 @frappe.whitelist()
 def creating_hr_permission():
-	ts_hr_user=frappe.get_all("User",filters={"role_profile_name":"HR Manager"},fields=["name"])
+	ts_hr_user=frappe.get_all("User",filters={"role_profile_name":"Thirvu HR User"},fields=["name"])
 	if ts_hr_user:
 		for hr_user in ts_hr_user:
 			ts_hr_user_emp=frappe.get_all("Employee",filters={"user_id":hr_user["name"]},fields=["name","location","user_id"])
@@ -33,13 +33,12 @@ def creating_hr_permission():
 									})
 									new_user_permission.save()
 									ts_emp.hr_permission=1
-									ts_emp.save()
 					else:
-						frappe.throw("For HR Manager : "+ts_hr_emp+" Location not set...")
+						frappe.throw("For Thirvu HR User : "+ts_hr_emp+" Location not set...")
 			else:
-				frappe.throw("For HR Manager User : "+hr_user["name"]+" there is no Employee ID")
+				frappe.throw("For Thirvu HR User : "+hr_user["name"]+" there is no Employee ID")
 	else:
-		frappe.throw("HR Manager role not assigned for any User")
+		frappe.throw("Thirvu HR User role not assigned for any User")
 
 
 
