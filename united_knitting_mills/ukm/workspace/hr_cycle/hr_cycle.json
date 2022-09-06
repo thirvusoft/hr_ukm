@@ -158,7 +158,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-06 14:32:37.635675",
+ "modified": "2022-09-06 19:49:26.899998",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -194,6 +194,24 @@
    "doc_view": "",
    "label": "Decision Making - Early Exit",
    "link_to": "Decision Making - Early Exit",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Leave Application - Earned Leave",
+   "link_to": "Leave Application - Earned Leave",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Leave Application - Permission",
+   "link_to": "Leave Application - Permission",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Leave Application - On Duty",
+   "link_to": "Leave Application - On Duty",
    "type": "Report"
   }
  ],

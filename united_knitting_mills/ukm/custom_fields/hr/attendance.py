@@ -33,76 +33,81 @@ def create_attendance_custom_fields():
 		"Attendance": [
 			dict(fieldname='shift_details', label='',
 				fieldtype='Section Break',insert_after='exit_period'),
+        dict(fieldname='unit', label='Unit',reqd=1,
+			fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location'),
+			
+        dict(fieldname='staff', label='',
+            fieldtype='Check',insert_after='employee',hidden=1),
 
-         dict(fieldname='staff', label='',
-				fieldtype='Check',insert_after='employee',hidden=1),
+        dict(fieldname='mismatched_checkin', label='Mismatched Checkin',
+            fieldtype='Check',insert_after='reason',read_only=1),
+        
+        dict(fieldname='no_of_checkin', label='Checkin Count',
+            fieldtype='Float',insert_after='mismatched_checkin',depends_on='eval:doc.mismatched_checkin',read_only=1),
+        
+        dict(fieldname='insufficient_working_minutes', label='Insufficient Working Minutes',
+            fieldtype='Check',insert_after='no_of_checkin',read_only=1),
+        
+        dict(fieldname='insufficient_working_hrs', label='Insufficient Working (Minutes)',
+            fieldtype='Float',insert_after='insufficient_working_minutes',depends_on='eval:doc.insufficient_working_minutes',read_only=1),
 
-         dict(fieldname='mismatched_checkin', label='Mismatched Checkin',
-				fieldtype='Check',insert_after='reason',read_only=1),
-         
-         dict(fieldname='no_of_checkin', label='Checkin Count',
-				fieldtype='Float',insert_after='mismatched_checkin',depends_on='eval:doc.mismatched_checkin',read_only=1),
-         
-         dict(fieldname='insufficient_working_minutes', label='Insufficient Working Minutes',
-				fieldtype='Check',insert_after='no_of_checkin',read_only=1),
-         
-         dict(fieldname='insufficient_working_hrs', label='Insufficient Working (Minutes)',
-				fieldtype='Float',insert_after='insufficient_working_minutes',depends_on='eval:doc.insufficient_working_minutes',read_only=1),
+        dict(fieldname='break_time_overconsumed', label='Breaktime Overconsumed',
+            fieldtype='Check',insert_after='insufficient_working_hrs',read_only=1),
 
-         dict(fieldname='break_time_overconsumed', label='Breaktime Overconsumed',
-				fieldtype='Check',insert_after='insufficient_working_hrs',read_only=1),
+        dict(fieldname='over_consumed_time', label='Consumed Minutes (Break Time)',
+            fieldtype='Float',insert_after='break_time_overconsumed',depends_on='eval:doc.break_time_overconsumed',read_only=1),
 
-         dict(fieldname='over_consumed_time', label='Consumed Minutes (Break Time)',
-				fieldtype='Float',insert_after='break_time_overconsumed',depends_on='eval:doc.break_time_overconsumed',read_only=1),
+        dict(fieldname='action_taken_by_hr', label='Action Taken By HR',
+            fieldtype='Small Text',insert_after='over_consumed_time',mandatory_depends_on='eval:doc.break_time_overconsumed || doc.late_entry || doc.early_exit || doc.mismatched_checkin || doc.insufficient_working_minutes'),
 
-			dict(fieldname='thirvu_shift_details', label='Employee Shift',
-				fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details',hidden=1),
-         
-         dict(fieldname='time_sc_br', label='',
-				fieldtype='Section Break',insert_after='thirvu_shift_details'),
+        dict(fieldname='thirvu_shift_details', label='Employee Shift',
+            fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details',hidden=1),
+        
+        dict(fieldname='time_sc_br', label='',
+            fieldtype='Section Break',insert_after='thirvu_shift_details'),
 
-         dict(fieldname='checkin_time', label='Check-In Time',
-				fieldtype='Time',insert_after='time_sc_br',read_only=1),
-         
-         dict(fieldname='time_cl_br', label='',
-				fieldtype='Column Break',insert_after='checkin_time'),
+        dict(fieldname='checkin_time', label='Check-In Time',
+            fieldtype='Time',insert_after='time_sc_br',read_only=1),
+        
+        dict(fieldname='time_cl_br', label='',
+            fieldtype='Column Break',insert_after='checkin_time'),
 
-         dict(fieldname='checkout_time', label='Check-Out Time',
-				fieldtype='Time',insert_after='time_cl_br',read_only=1),
-         
-         dict(fieldname='total_shift_hr', label='Total Shift in Minutes',
-         fieldtype='Float',insert_after='section_break23',depends_on='eval:!doc.staff'), 
-                 
-         dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Hrs',
-         fieldtype='Float',insert_after='total_shift_hr',depends_on='eval:doc.staff'),           
-         
-         dict(fieldname='employee_shift_details', label='Shift Approval List',
-         fieldtype='Table',options='Thirvu Employee Checkin Details',insert_after='shift_details',read_only=1),
-         
-         dict(fieldname='section_break23', label='',
-         fieldtype='Section Break',insert_after='checkout_time'),
-         
-         dict(fieldname='column_break24', label='',
-         fieldtype='Column Break',insert_after='ts_ot_hrs'),
+        dict(fieldname='checkout_time', label='Check-Out Time',
+            fieldtype='Time',insert_after='time_cl_br',read_only=1),
+        
+        dict(fieldname='total_shift_hr', label='Total Shift in Minutes',
+        fieldtype='Float',insert_after='section_break23',depends_on='eval:!doc.staff'), 
+                
+        dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Hrs',
+        fieldtype='Float',insert_after='total_shift_hr',depends_on='eval:doc.staff'),           
+        
+        dict(fieldname='employee_shift_details', label='Shift Approval List',
+        fieldtype='Table',options='Thirvu Employee Checkin Details',insert_after='shift_details',read_only=1),
+        
+        dict(fieldname='section_break23', label='',
+        fieldtype='Section Break',insert_after='checkout_time'),
+        
+        dict(fieldname='column_break24', label='',
+        fieldtype='Column Break',insert_after='ts_ot_hrs'),
 
-         dict(fieldname='total_shift_amount', label='Amount to Pay',
-         fieldtype='Currency',insert_after='column_break24'),
-         
-         dict(fieldname='late_min', label='Consumed Minutes (Late Entry)',
-         fieldtype='Float',depends_on='eval:doc.late_entry',insert_after='late_entry',read_only=1),
-         
-         dict(fieldname='column_break23', label='',
-         fieldtype='Column Break',insert_after='total_shift_amount'),
+        dict(fieldname='total_shift_amount', label='Amount to Pay',
+        fieldtype='Currency',insert_after='column_break24'),
+        
+        dict(fieldname='late_min', label='Consumed Minutes (Late Entry)',
+        fieldtype='Float',depends_on='eval:doc.late_entry',insert_after='late_entry',read_only=1),
+        
+        dict(fieldname='column_break23', label='',
+        fieldtype='Column Break',insert_after='total_shift_amount'),
 
-         dict(fieldname='total_shift_count', label='Total Shift Count',
-         fieldtype='Float',insert_after='column_break23',depends_on='eval:!doc.staff'),
-         
+        dict(fieldname='total_shift_count', label='Total Shift Count',
+        fieldtype='Float',insert_after='column_break23',depends_on='eval:!doc.staff'),
+        
 
-         dict(fieldname='exit_period', label='Early Exit (in Minutes)',
-         fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit"),
-         
-         dict(fieldname='reason', label='Reason for Draft',
-         fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),
+        dict(fieldname='exit_period', label='Early Exit (in Minutes)',
+        fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit"),
+        
+        dict(fieldname='reason', label='Reason for Draft',
+        fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),
       
          ]
     }
