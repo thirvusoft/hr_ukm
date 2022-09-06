@@ -19,7 +19,7 @@ frappe.ui.form.on('Employee Timing Details', {
 					freeze_message: __("Creating Attendance..."),
 					});
 					}
-					else if(frm.doc.staff){
+					else if(frm.doc.staff || frm.doc.house_keeping){
 						frm.call({
 							method: 'create_staff_attendance',
 							args:{
@@ -36,8 +36,14 @@ frappe.ui.form.on('Employee Timing Details', {
 		// Check and Uncheck for labour and staff fields
 		cur_frm.fields_dict.staff.$input.on('click', ()=>{
 			uncheck(frm, 'labour')
+			uncheck(frm, 'house_keeping')
 		})
 		cur_frm.fields_dict.labour.$input.on('click', ()=>{
+			uncheck(frm, 'staff')
+			uncheck(frm, 'house_keeping')
+		})
+		cur_frm.fields_dict.house_keeping.$input.on('click', ()=>{
+			uncheck(frm, 'labour')
 			uncheck(frm, 'staff')
 		})
 	},

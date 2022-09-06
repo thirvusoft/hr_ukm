@@ -6,7 +6,14 @@ def holiday_list_customisation():
     holiday_list_property_setter()
 
 def holiday_list_custom_fields():
-    pass
+    custom_fields = {
+		"Holiday List": [
+            dict(fieldname='unit', label='Unit',reqd=1,
+				fieldtype='Link',options='Location',insert_after='total_holidays')
+            ]
+    }
+    create_custom_fields(custom_fields)
+
 
 def holiday_list_property_setter():
     make_property_setter("Holiday List", "color", "hidden", 1, "Check")
