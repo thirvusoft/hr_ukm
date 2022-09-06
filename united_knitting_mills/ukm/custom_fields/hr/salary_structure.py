@@ -10,7 +10,9 @@ def salary_structure_custom_fields():
 	custom_fields = {
 		"Salary Structure": [
 			dict(fieldname='salary_component_', label='Salary Component',
-				fieldtype='Link', options='Salary Component' ,insert_after='hour_rate', reqd=1)
+				fieldtype='Link', options='Salary Component' ,insert_after='hour_rate', reqd=1),
+			dict(fieldname='unit', label='Unit',reqd=1,
+				fieldtype='Link',options='Location',insert_after='company')
 			]
 	}
 	create_custom_fields(custom_fields)
