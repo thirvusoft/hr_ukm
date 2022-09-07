@@ -17,6 +17,10 @@ def create_customm_fields():
 
 def create_property_setter():
     make_property_setter("Salary Structure Assignment", "company", "default", "United Knitting Mills", "Text")
+    make_property_setter("Salary Structure Assignment", "salary_structure", "default", "Default Structure", "Link")
     make_property_setter("Salary Structure Assignment", "company", "hidden", 1, "Check")
+    make_property_setter("Salary Structure Assignment", "currency", "default", "INR", "Text")
+    make_property_setter("Salary Structure Assignment", "currency", "hidden", 1, "Check")
     make_property_setter("Salary Structure Assignment", "variable", "hidden", 1, "Check")
     make_property_setter("Salary Structure Assignment", "payroll_payable_account", "hidden", 1, "Check")
+    make_property_setter("Salary Structure Assignment", "income_tax_slab", "hidden", 1, "Check")
