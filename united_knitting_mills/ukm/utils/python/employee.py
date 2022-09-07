@@ -2,9 +2,8 @@ import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 from frappe.utils.data import get_link_to_form
 @frappe.whitelist()
-def creating_hr_permission(doc):
-	ts_emp_doc=frappe.get_doc("Employee",doc)
-	ts_hr_user=frappe.get_all("User",filters={"role_profile_name":"HR Manager"},fields=["name"])
+def creating_hr_permission(ts_emp_doc,event):
+	ts_hr_user=frappe.get_all("User",filters={"role_profile_name" : "Thirvu HR User"},fields=["name"])
 	if ts_hr_user:
 		ts_count=0
 		for hr_user in ts_hr_user:
@@ -21,16 +20,15 @@ def creating_hr_permission(doc):
 					})
 					new_user_permission.save()
 					ts_emp_doc.hr_permission=1
-					ts_emp_doc.save()
 					ts_count=1
 					return 0
 				else:
 					ts_count=1
 					return 1
 		if ts_count==0:
-			frappe.throw("For HR Manager's there is no Employee ID or Location")
+			frappe.throw("For Thirvu HR User there is no Employee ID or Location")
 	else:
-		frappe.throw("HR Manager role not assigned for any User")
+		frappe.throw("Thirvu HR User role not assigned for any User")
 
 def sequence_user_id(doc,event):
 	frappe.db.set_value("Employee",doc.name,"attendance_device_id",doc.name)
