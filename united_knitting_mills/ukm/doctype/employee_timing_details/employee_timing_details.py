@@ -211,7 +211,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     })
                     new_attendance_doc.update({
                                 'mismatched_checkin':1,
-                                'no_of_checkin':len(date_wise_checkin[date]),
+                                'no_of_checkin':f"{len(date_wise_checkin[date])}",
                                 'checkin_time':'',
                                 'checkout_time':''
                             })
@@ -345,12 +345,12 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
     else:        
         if not(times[0][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
             submit_doc = False
-            late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) -  datetime.timedelta(minutes=1))
+            late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
             late_entry = 1
 
         if not(times[0][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
             submit_doc = False
-            early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[0][1]), '%H:%M:%S'))) -  datetime.timedelta(minutes=1))
+            early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[0][1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
             early_exit= 1
 
     if late_entry:
@@ -376,7 +376,6 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
         submit_doc=False
         reason += '\n-> Odd number of Checkins Found(IN or Out is Missed)'
         attendance.mismatched_checkin = 1 
-        attendance.no_of_checkin = len(checkins)
         return submit_doc, reason, 0, 0
     if(not attendance.thirvu_shift_details[0].get('start_time') or not attendance.thirvu_shift_details[0].get('end_time')):
         submit_doc = False
@@ -452,7 +451,7 @@ def create_staff_attendance(docname):
                     submit_doc = False
                     reason += f"\n-> Insufficient Checkins({doc.total_no_of_checkins_per_day} required but only {len(date_wise_checkin[data])} is available)."
                     attendance.mismatched_checkin = 1
-                    attendance.no_of_checkin = len(date_wise_checkin[data])
+                    attendance.no_of_checkin = f"{len(date_wise_checkin[data])} / { doc.total_no_of_checkins_per_day}"
                 attendance.staff = 1
                 submit_doc, reason = create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, data, date_wise_checkin[data])
                 submit_doc, reason, late_entry, early_exit = validate_total_working_hours(reason, doc, submit_doc, date_wise_checkin[data], attendance, doc.start_time, doc.end_time)
@@ -483,10 +482,10 @@ def scheduler_for_employee_shift():
    
 def leave_application_to_attendance():
     # leave application proccessed to attendance
-    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<=", today()],"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
+    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<=", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
         application_doc = frappe.get_doc('Leave Application',data)
-        if frappe.db.exists('Attendance',{"attendance_date": application_doc.date}):
-            existing_doc = frappe.db.exists('Attendance',{"attendance_date": application_doc.date})
+        if frappe.db.exists('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee}):
+            existing_doc = frappe.get_doc('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee})
             if existing_doc.docstatus:
                 existing_doc.cancel()
                 new_doc = frappe.copy_doc(existing_doc) 
@@ -508,7 +507,7 @@ def leave_application_to_attendance():
         else:
             attendance = frappe.new_doc('Attendance')
             attendance.employee = application_doc.employee
-            attendance.date = application_doc.date
+            attendance.attendance_date = application_doc.attendance_date
             attendance.status = "On Leave"
             attendance.leave_application = application_doc.name
             attendance.leave_type = application_doc.leave_type

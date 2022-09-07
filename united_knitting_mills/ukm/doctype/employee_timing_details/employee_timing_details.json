@@ -1,6 +1,8 @@
 {
  "actions": [],
- "autoname": "format:shift_name",
+ "allow_rename": 1,
+ "autoname": "field:shift_name",
+
  "creation": "2022-07-25 19:14:35.138582",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,9 +10,9 @@
  "field_order": [
   "unit_details_section",
   "shift_name",
+  "unit",
   "column_break_3",
   "department",
-  "unit",
   "employee_ctaegory_section",
   "staff",
   "column_break_7",
@@ -178,12 +180,14 @@
    "fieldname": "shift_name",
    "fieldtype": "Data",
    "label": "Shift Name",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
+
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-09-06 18:47:06.813357",
+ "modified": "2022-09-07 13:04:40.189395",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Timing Details",

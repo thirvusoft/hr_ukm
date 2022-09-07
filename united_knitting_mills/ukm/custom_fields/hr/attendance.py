@@ -24,6 +24,11 @@ def attendance_property_setter():
     make_property_setter("Attendance", "company", "hidden", 1, "Check")
     make_property_setter("Attendance", "naming_series", "default", "HR-ATT-.YYYY.-", "Text")
     make_property_setter("Attendance", "naming_series", "hidden", 1, "Check")
+    make_property_setter("Attendance", "late_entry", "read_only", 1, "Check")
+    make_property_setter("Attendance", "early_exit", "read_only", 1, "Check")
+    make_property_setter("Attendance", "shift", "hidden", 1, "Link")
+    make_property_setter("Attendance", "employee", "read_only", 1, "Link")
+    make_property_setter("Attendance", "attendance_date", "read_only", 1, "Date")
 
 
 
@@ -34,7 +39,7 @@ def create_attendance_custom_fields():
 			dict(fieldname='shift_details', label='',
 				fieldtype='Section Break',insert_after='exit_period'),
         dict(fieldname='unit', label='Unit',reqd=1,
-			fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location'),
+			fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location',read_only=1),
 			
         dict(fieldname='staff', label='',
             fieldtype='Check',insert_after='employee',hidden=1),
@@ -43,12 +48,12 @@ def create_attendance_custom_fields():
             fieldtype='Check',insert_after='reason',read_only=1),
         
         dict(fieldname='no_of_checkin', label='Checkin Count',
-            fieldtype='Float',insert_after='mismatched_checkin',depends_on='eval:doc.mismatched_checkin',read_only=1),
+            fieldtype='Data',insert_after='mismatched_checkin',depends_on='eval:doc.mismatched_checkin',read_only=1),
         
         dict(fieldname='insufficient_working_minutes', label='Insufficient Working Minutes',
             fieldtype='Check',insert_after='no_of_checkin',read_only=1),
         
-        dict(fieldname='insufficient_working_hrs', label='Insufficient Working (Minutes)',
+        dict(fieldname='insufficient_working_hrs', label='Actual Worked (Hours)',
             fieldtype='Float',insert_after='insufficient_working_minutes',depends_on='eval:doc.insufficient_working_minutes',read_only=1),
 
         dict(fieldname='break_time_overconsumed', label='Breaktime Overconsumed',
@@ -104,7 +109,7 @@ def create_attendance_custom_fields():
         
 
         dict(fieldname='exit_period', label='Early Exit (in Minutes)',
-        fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit"),
+        fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit",read_only=1),
         
         dict(fieldname='reason', label='Reason for Draft',
         fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),
