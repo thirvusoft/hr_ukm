@@ -116,17 +116,18 @@ doc_events = {
 		
 	},
 	'Employee':{
-		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
-		"validate":"united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
+		# "validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
+		"after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
+		"united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
 	},
 	'Attendance':{
 		"validate":"united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
-	"Location":{
-		"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
-					"united_knitting_mills.ukm.utils.python.location.autoname"]
-	}
+	# "Location":{
+	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
+	# 				"united_knitting_mills.ukm.utils.python.location.autoname"]
+	# }
 }
 
 # doc_events = {

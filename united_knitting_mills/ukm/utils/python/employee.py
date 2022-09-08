@@ -65,3 +65,8 @@ def get_employee_shift(employee):
 	if shift: return shift
 	designation_url = get_link_to_form('Designation', designation)
 	frappe.throw(f'Please Assign Shift for {frappe.bold(designation_url)}.')
+
+def bio_metric_id(doc,event):
+	doc.attendance_device_id = doc.name
+	doc.save()
+	frappe.msgprint("Bio-Metric ID For Employee : <b>"+ doc.employee_name+"</b> Is <b>"+doc.attendance_device_id)
