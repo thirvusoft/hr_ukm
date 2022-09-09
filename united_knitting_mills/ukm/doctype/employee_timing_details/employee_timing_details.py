@@ -39,7 +39,7 @@ class EmployeeTimingDetails(Document):
 
 def get_employees_for_shift(doc, location):
     # To get designation List
-    designation = frappe.db.get_list('Designation',{'thirvu_shift':doc, 'name':['!=', 'LINE SUPERISOR']},pluck='name')
+    designation = frappe.db.get_list('Designation',{'thirvu_shift':doc},pluck='name')
 
     # To get employee only foe the particular department
     total_employees=frappe.db.get_all('Employee', filters={"designation":['in', designation],'location':location,'status':'Active'}, pluck='name')
