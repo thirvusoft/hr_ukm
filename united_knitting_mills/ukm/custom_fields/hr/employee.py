@@ -27,6 +27,9 @@ def create_employee_fields_and_property_setter():
 
     create_custom_fields(custom_fields)
     ## Property Setter
+    make_property_setter("Employee", "naming_series", "default", "employee_naming_series.-", "Select")
+    make_property_setter("Employee", "naming_series", "hidden", 1, "Select")
+    make_property_setter("Employee", "attendance_device_id", "read_only", 1, "Select")
     make_property_setter("Employee", "emergency_contact_details", "collapsible", 1, "Section Break")
     make_property_setter("Employee", "company", "default", "United Knitting Mills", "Text")
     make_property_setter("Employee", "company", "hidden", 1, "Check")

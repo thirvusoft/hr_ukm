@@ -23,6 +23,11 @@ def salary_slip_custom_fields():
 		"Salary Slip": [
 			dict(fieldname='total_shift_worked', label='Total Shift Worked',
 				fieldtype='Data', insert_after='total_working_days',read_only=1),
+            dict(fieldname='total_shift_minutes', label='Total Shift in Minutes',
+				fieldtype='Data', insert_after='total_shift_worked',read_only=1),
+            dict(fieldname='extra_minutes', label='Extra Shift in Minutes',
+				fieldtype='Data', insert_after='total_shift_minutes',read_only=1),
+            
             dict(fieldname='ts_column_break',
 				fieldtype='Column Break',insert_after='employee'),
         ]
