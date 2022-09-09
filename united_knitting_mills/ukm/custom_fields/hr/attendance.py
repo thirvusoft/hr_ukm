@@ -45,10 +45,13 @@ def create_attendance_custom_fields():
 
         dict(fieldname='thirvu_shift_details', label='Employee Shift',
             fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details',hidden=1),
-       
+
         dict(fieldname='unit', label='Unit',reqd=1,
 			fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location',read_only=1),
-			
+		
+        dict(fieldname='designation', label='Designation',reqd=1,
+			fieldtype='Link',options='Designation',insert_after='unit',fetch_from='employee.designation',read_only=1),
+        
         dict(fieldname='staff', label='',
             fieldtype='Check',insert_after='employee',hidden=1),
 
