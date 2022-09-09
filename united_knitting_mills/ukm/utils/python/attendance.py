@@ -12,11 +12,11 @@ def validate_shift_details(doc, event):
 def shift_hours(doc,event):
    shift = get_employee_shift(doc.employee)
    labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
-   if labour and (event == 'after_insert' or (event == 'validate' and not doc.is_new())):
-       doc.total_shift_hr = 0
-       doc.total_shift_count = 0
-       doc.total_shift_amount = 0
-       if(doc.thirvu_shift_details):
+   if labour and (event == 'after_insert'):
+       if(doc.thirvu_shift_details):      
+           doc.total_shift_hr = 0
+           doc.total_shift_count = 0
+           doc.total_shift_amount = 0
            for data in doc.thirvu_shift_details:
                if(not data.start_time or not data.end_time):continue
                if(str(type(data.start_time)) == "<class 'str'>" or str(type(data.end_time)) == "<class 'str'>"):
@@ -64,3 +64,25 @@ def get_total_break_time(employee):
    FMT = '%H:%M:%S'
    tot_brk_time =sum( (dt.strptime(str(row.end_time), FMT) - dt.strptime(str(row.start_time), FMT))/datetime.timedelta(minutes=1) for row in break_time if(row.start_time and row.end_time)) or 0
    return tot_brk_time
+
+@frappe.whitelist(allow_guest=True)
+def get_shift_amount(employee):
+      employee_name = employee
+      emp_base_amount=frappe.db.sql("""select ssa.base
+                  FROM `tabSalary Structure Assignment` as ssa
+                  WHERE ssa.employee = '{0}' and ssa.docstatus = 1 ORDER BY ssa.creation DESC LIMIT 1
+                  """.format(employee_name),as_list=1)
+      if emp_base_amount:
+         emp_base_amount = emp_base_amount[0][0]
+      else:
+         emp_base_amount = 0
+      return emp_base_amount
+
+def requested_amount_to_total(doc,event):
+   if doc.req_total_shift_amount and doc.req_total_shift_hr :
+      doc.total_shift_amount = doc.req_total_shift_amount
+      doc.total_shift_hr = doc.req_total_shift_hr
+      if doc.staff:
+         doc.ts_ot_hrs = doc.req_ts_ot_hrs
+      else:
+         doc.total_shift_count = doc.req_total_shift_count

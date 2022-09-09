@@ -21,8 +21,8 @@ class EmployeeTimingDetails(Document):
             self.validate_total_checkin()
 
     def validate_staff_or_labour(self):
-        if(not self.staff and not self.labour):
-            frappe.throw("Please Select <b>Staff</b> or <b>Labour</b>")
+        if(not self.staff and not self.labour and not self.house_keeping):
+            frappe.throw("Please Select <b>Staff</b> or <b>Labour</b> or <b>House Keeping</b>")
 
     def validate_total_checkin(self):
         if(self.total_no_of_checkins_per_day % 2 ==1):
