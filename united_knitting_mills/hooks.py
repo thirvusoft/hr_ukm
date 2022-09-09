@@ -33,6 +33,8 @@ doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
 		 "Journal Entry":"ukm/utils/javascript/journal_entry.js",
 		 "Location":"ukm/utils/javascript/location.js",
+		 "Holiday List":"ukm/utils/javascript/holiday_list.js",
+		 "Leave Application":"ukm/utils/javascript/leave_application.js",
 		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js"}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
@@ -45,7 +47,8 @@ doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
 			"Salary Slip":"ukm/utils/javascript/salary_slip_list.js",
 			"Payroll Entry":"ukm/utils/javascript/payroll_entry_list.js",
 			"Salary Structure":"ukm/utils/javascript/salary_structure_list.js",
-			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js"}
+			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js",
+			"Attendance":"ukm/utils/javascript/attendance.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -114,16 +117,19 @@ doc_events = {
 		
 	},
 	'Employee':{
-		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
+		# "validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
+		"after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
+		"united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
 	},
 	'Attendance':{
 		"validate":"united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
+		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
-	"Location":{
-		"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
-					"united_knitting_mills.ukm.utils.python.location.autoname"]
-	}
+	# "Location":{
+	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
+	# 				"united_knitting_mills.ukm.utils.python.location.autoname"]
+	# }
 }
 
 # doc_events = {

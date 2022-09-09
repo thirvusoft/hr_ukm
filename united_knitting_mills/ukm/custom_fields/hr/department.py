@@ -10,13 +10,16 @@ def create_department_custom_fields():
     custom_fields = {
 		"Department": [
 			dict(fieldname='department_approvers', label='Department Approvers',
-				fieldtype='Table',options='Department Approvers',insert_after='approvers')
+				fieldtype='Table',options='Department Approvers',insert_after='approvers'),
+            dict(fieldname='unit', label='Unit',reqd=1,
+				fieldtype='Link',options='Location',insert_after='company')
             ]
     }
     create_custom_fields(custom_fields)
 
 def department_property_setter():
     make_property_setter("Department", "section_break_4", "hidden", 1, "Section Break")
+    make_property_setter("Department", "is_group", "hidden", 1, "Check")
     make_property_setter("Department", "department_approvers", "hidden", 1, "Check")
     make_property_setter("Department", "expense_approvers", "hidden", 1, "Check")
     make_property_setter("Department", "shift_request_approver", "hidden", 1, "Check")

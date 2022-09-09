@@ -121,16 +121,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Salary Structure",
-   "link_to": "Salary Structure",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Salary Structure Assignment",
    "link_to": "Salary Structure Assignment",
    "link_type": "DocType",
@@ -158,7 +148,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-05 16:31:37.290949",
+ "modified": "2022-09-07 13:22:24.710595",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -168,32 +158,80 @@
  "shortcuts": [
   {
    "doc_view": "",
-   "label": "Decision Making - Checkin Missing",
-   "link_to": "Decision Making - Checkin Missing",
+   "label": "Decision Making (Labour) - Checkin Missing",
+   "link_to": "Decision Making (Labour) - Checkin Missing",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making - Break Time Over Consumed",
-   "link_to": "Decision Making - Break Time Over Consumed",
+   "label": "Decision Making (Labour) - Late Entry",
+   "link_to": "Decision Making (Labour) - Late Entry",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making - Insufficient Working Hours",
-   "link_to": "Decision Making - Insufficient Working Hours",
+   "label": "Decision Making (Labour) - Early Exit",
+   "link_to": "Decision Making (Labour) - Early Exit",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making - Late Entry",
-   "link_to": "Decision Making - Late Entry",
+   "label": "Decision Making (Labour) - Leave Applied",
+   "link_to": "Decision Making (Labour) - Leave Applied",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making - Early Exit",
-   "link_to": "Decision Making - Early Exit",
+   "label": "Decision Making (Staff) - Breaktime Overconsumed",
+   "link_to": "Decision Making (Staff) - Breaktime Overconsumed",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (Staff) - Checkin Missing",
+   "link_to": "Decision Making (Staff) - Checkin Missing",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (Staff) - Insufficient Working Hours",
+   "link_to": "Decision Making (Staff) - Insufficient Working Hours",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (Staff) - Late Entry",
+   "link_to": "Decision Making (Staff) - Late Entry",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (Staff) - Early Exit",
+   "link_to": "Decision Making (Staff) - Early Exit",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (Staff) - Leave Applied",
+   "link_to": "Decision Making (Staff) - Leave Applied",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Leave Application - On Duty",
+   "link_to": "Leave Application - On Duty",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Leave Application - Permission",
+   "link_to": "Leave Application - Permission",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Leave Appllication - Earned leave",
+   "link_to": "Leave Appllication - Earned leave",
    "type": "Report"
   }
  ],

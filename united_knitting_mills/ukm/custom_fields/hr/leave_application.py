@@ -18,6 +18,7 @@ def leave_application_property_setter():
     make_property_setter("Leave Application", "leave_approver", "hidden", 1, "Check")
     make_property_setter("Leave Application", "leave_approver_name", "hidden", 1, "Check")
     make_property_setter("Leave Application", "salary_slip", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "description", "reqd", 1, "Small Text")
     make_property_setter("Leave Application", "leave_balance", "hidden", 1, "Check")
     
 def leave_application_custom_fields_():
@@ -39,9 +40,11 @@ def leave_application_custom_fields_():
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)'
             ),
             dict(
-                fieldname='attendance_marked', label='attendance_marked', fieldtype='Check', insert_after='to_date', 
+                fieldname='attendance_marked', label='Attendance Marked', fieldtype='Check', hidden=1,insert_after='to_date', 
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)',read_only=1,allow_on_submit=1
-            )
+            ),
+            dict(fieldname='unit', label='Unit',reqd=1,
+				fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location')
         ]
     }
     create_custom_fields(custom_field)
