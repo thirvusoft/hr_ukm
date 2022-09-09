@@ -19,12 +19,13 @@ def salary_slip_for_labours(doc,event):
     """Salary Slip For Labours"""
     emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
     emp_shift_amount = frappe.db.sql("""
-			select sum(total_shift_amount),sum(total_shift_count)
+			select sum(total_shift_amount),sum(total_shift_count),sum(total_shift_hr)
 			from `tabAttendance`
 			where employee=%s and attendance_date>=%s and attendance_date<=%s and docstatus = 1
 		""", (doc.employee, doc.start_date, doc.end_date), as_list = 1)
     if(emp_shift_amount[0][0]):
         doc.total_shift_worked = emp_shift_amount[0][1]
+        doc.total_shift_minutes = emp_shift_amount[0][2]
         # doc.set('earnings', [])
         for row in doc.earnings:
             if(row.salary_component == emp_shift_component):
@@ -50,11 +51,13 @@ def salary_slip_for_labours(doc,event):
 def salary_slip_for_staffs(doc, event):
     """Salary Slip For Staff"""
     emp_shift_amount = frappe.db.sql("""
-			select sum(total_shift_amount)
+			select sum(total_shift_amount),sum(ts_ot_hrs),sum(total_shift_hr)
 			from `tabAttendance`
 			where employee=%s and attendance_date>=%s and attendance_date<=%s and docstatus = 1
 		""", (doc.employee, doc.start_date, doc.end_date), as_list = 1)
     if(emp_shift_amount[0][0]):
+        doc.extra_minutes = emp_shift_amount[0][1]
+        doc.total_shift_minutes = emp_shift_amount[0][2]
         emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
         # doc.set('earnings', [])
         for row in doc.earnings:

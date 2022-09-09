@@ -12,7 +12,7 @@ def validate_shift_details(doc, event):
 def shift_hours(doc,event):
    shift = get_employee_shift(doc.employee)
    labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
-   if labour and (event == 'after_insert'):
+   if labour and (event == 'after_insert') or (event == 'validate' and not doc.is_new()):
        if(doc.thirvu_shift_details):      
            doc.total_shift_hr = 0
            doc.total_shift_count = 0
@@ -79,10 +79,17 @@ def get_shift_amount(employee):
       return emp_base_amount
 
 def requested_amount_to_total(doc,event):
-   if doc.req_total_shift_amount and doc.req_total_shift_hr :
-      doc.total_shift_amount = doc.req_total_shift_amount
-      doc.total_shift_hr = doc.req_total_shift_hr
-      if doc.staff:
-         doc.ts_ot_hrs = doc.req_ts_ot_hrs
-      else:
-         doc.total_shift_count = doc.req_total_shift_count
+
+   if doc.req_total_shift_amount:
+      frappe.db.set_value("Attendance", doc.name, "total_shift_amount", doc.req_total_shift_amount)
+
+   if doc.req_total_shift_hr:
+      frappe.db.set_value("Attendance", doc.name, "total_shift_hr", doc.req_total_shift_hr)
+
+   if doc.staff and doc.req_ts_ot_hrs:
+      frappe.db.set_value("Attendance", doc.name, "ts_ot_hrs", doc.req_ts_ot_hrs)
+
+   elif not doc.staff and doc.req_total_shift_count:
+      frappe.db.set_value("Attendance", doc.name, "total_shift_count", doc.req_total_shift_count)
+
+   frappe.db.commit()
