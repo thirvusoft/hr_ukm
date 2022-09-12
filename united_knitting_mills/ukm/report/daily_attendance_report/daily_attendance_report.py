@@ -51,7 +51,7 @@ def get_columns():
         _("Employee Name") + ":Data:200",
         _("In-Time") + ":Time:100",
         _("Out-Time") + ":Time:100",
-        _("Late Entry Minutes") + ":Data:200",
+        _("Late Entry in Minutes") + ":Data:200",
         _("Total Shift") + ":Float:100",
         ]
     
