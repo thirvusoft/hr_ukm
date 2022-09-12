@@ -1,0 +1,34 @@
+<h2 class="text-center">{%= __("UNITED KNITTING MILLS") %}</h2>
+<h5 class="text-center">
+    {%= __("PRESENT WORKERS DAILY INOUT STATUS LIST ON : ")%} {%= frappe.datetime.str_to_user(filters.attendance_date) %}
+</h5>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th style="width: 12%">{%= __("Designation") %}</th>
+			<th style="width: 15%">{%= __("Name") %}</th>
+			<th style="width: 15%">{%= __("Employee Code") %}</th>
+			<th style="width: 15%">{%= __("Employee Name") %}</th>
+			<th style="width: 10%">{%= __("In - Time") %}</th>
+			<th style="width: 10%">{%= __("Out - Time") %}</th>
+            <th style="width: 18%">{%= __("Late Entry in Minutes") %}</th>
+			<th style="width: 18%">{%= __("Total Shift") %}</th>
+		</tr>
+	</thead>
+    <tbody>
+		{% for(var i=0, l=data.length; i<l; i++) { %}
+			<tr>
+			{% if(data[i].name) { %}
+				<td>{%= data[i].designation %}</td>
+				<td><b>{%= frappe.format(data[i].name, {fieldtype: "Link"}) || "&nbsp;" %}</b></td>
+				<td>{%= frappe.format(data[i].employee_code, {fieldtype: "Link"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].employee_name, {fieldtype: "Data"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].in_time, {fieldtype: "Time"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].out_time, {fieldtype: "Time"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].late_entry_in_minutes, {fieldtype: "Float"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].total_shift, {fieldtype: "Float"}) || "&nbsp;" %}</td>
+            {% } %}
+			</tr>
+		{% } %}
+	</tbody>
+</table>
