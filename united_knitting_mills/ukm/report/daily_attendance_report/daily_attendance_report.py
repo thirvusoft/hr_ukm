@@ -9,7 +9,7 @@ def execute(filters=None):
     designation = filters.get("designation")
     conditions = ""
     if attendance_date or designation:
-        conditions = " where docstatus = 1"
+        conditions = " where 1 = 1"
         if attendance_date :
             conditions += "  and attendance_date = '{0}' ".format(attendance_date)
         if designation:
@@ -17,15 +17,18 @@ def execute(filters=None):
 
             
     report_data = frappe.db.sql(""" select
-    							designation,
-                                name,
-                                employee,
-                                employee_name,
-                                checkin_time,
-                                checkout_time,
-                                late_min,
-                                total_shift_count
-                                from `tabAttendance`
+    							att.designation,
+                                att.name,
+                                att.employee,
+                                att.employee_name,
+                                att.checkin_time,
+                                att.checkout_time,
+                                att.late_min,
+                                att.total_shift_count,
+                                doc.check_in_time,
+                                doc.check_out_time
+                                from `tabAttendance` as att left outer join `tabThirvu Employee Checkin Details` as doc
+                                on doc.parent = att.name
                                 {0} order by designation
                                 """.format(conditions))
 
@@ -35,11 +38,15 @@ def execute(filters=None):
     check =''
     for i in range (0,len(data),1):
         if data[i][0] != check:
-            if i<len(data)-1: check = data[i+1][0] 
+            check = data[i][0] 
             data[i][0] = f'<b>{data[i][0]}</b>'
 
         else:
             data[i][0]=''
+        if data[i][8]:
+            data[i][4] = data[i][8]
+        if data[i][9]:
+            data[i][5] = data[i][9]
     columns = get_columns()
     return columns, data
  
