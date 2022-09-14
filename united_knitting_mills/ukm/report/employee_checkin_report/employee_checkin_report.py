@@ -23,12 +23,12 @@ def execute(filters=None):
 		first_row = 1
 		for logs in frappe.get_list("Employee Checkin Without Log Type",fields=["time"],filters={"employee": data[i][0],'time':['between',(attendance_date,attendance_date)]},pluck='time'):
 			if first_row:
-				result_data.append([f'<b>{data[i][0]}</b>',data[i][1],data[i][2],data[i][3],logs.time()])
+				result_data.append([data[i][0],data[i][1],data[i][2],data[i][3],logs.time()])
 				first_row = 0
 			else:
 				result_data.append(['','','','',logs.time()])
 		if first_row:
-			result_data.append([f'<b>{data[i][0]}</b>',data[i][1],data[i][2],data[i][3],''])
+			result_data.append([data[i][0],data[i][1],data[i][2],data[i][3],''])
 
 	columns = get_columns()
 	return columns, result_data

@@ -18,7 +18,6 @@ def execute(filters=None):
             
     report_data = frappe.db.sql(""" select
     							att.designation,
-                                att.name,
                                 att.employee,
                                 att.employee_name,
                                 att.checkin_time,
@@ -43,23 +42,22 @@ def execute(filters=None):
 
         else:
             data[i][0]=''
+        if data[i][7]:
+            data[i][3] = data[i][7]
         if data[i][8]:
             data[i][4] = data[i][8]
-        if data[i][9]:
-            data[i][5] = data[i][9]
     columns = get_columns()
     return columns, data
  
 def get_columns():
     columns = [
-        _("Designation") + ":Data:100",
-        _("Name") + ":Link/Attendance:200",
+        _("Designation") + ":Data:200",
         _("Employee Code") + ":Link/Employee:200",
         _("Employee Name") + ":Data:200",
         _("In-Time") + ":Time:100",
         _("Out-Time") + ":Time:100",
         _("Late Entry in Minutes") + ":Data:200",
-        _("Total Shift") + ":Float:100",
+        _("Total Shift") + ":Float:150",
         ]
     
     return columns

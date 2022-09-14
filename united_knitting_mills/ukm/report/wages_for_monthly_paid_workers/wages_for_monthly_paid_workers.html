@@ -1,0 +1,80 @@
+<!-- <table class="table table-bordered">
+<thead>
+	<tr><h2 class="text-center">{%= __("UNITED KNITTING MILLS") %}</h2>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+		<h3 class="text-center">
+		<b>{%= __("Wages for Monthly Paid Workers for the Period of ")%} {%= frappe.datetime.str_to_user(filters.from_date) %} {%= __("To")%} {%= frappe.datetime.str_to_user(filters.to_date) %} </h5></b>
+	</h3>
+	<h5 class="text-center">	{%= __("8/372, PONNAMMAL NAGAR, Pandiyan Nagar,Tirupur-641602.")%} </h5></tr>
+
+</tbody>
+</table> -->
+
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th class="text-center" colspan="20"><h4>{%= __("Register of Adult Workers Men/Woman (Form No.12) Combined with Muster (Roll Form No.25) Rule No.80 & 103")	%}</h4></th>
+		</tr>
+		<tr>
+			<th class="text-center" colspan="20"><h5><b>{%= __("Wages for Monthly Paid Workers for the Period of ")%} {%= frappe.datetime.str_to_user(filters.from_date) %} {%= __("to")%} {%= frappe.datetime.str_to_user(filters.to_date) %}</b></h></th>
+		</tr>
+		<tr>
+			<th class="text-center" style="font-size: 100%" colspan="3">{%= __("Name of the Factory :") %}</th>
+			<th style="font-size: 120% " colspan="15">{%=  __(" &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;UNITED KNITTING MILLS") %}</th>
+
+		</tr>
+		<tr>
+			<th class="text-center" style="font-size: 100%" colspan="3">{%= __("") %}</th>
+			<th style="font-size: 100%" colspan="15">{%= __(" &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8/372, PONNAMMAL NAGAR, Pandiyan Nagar,Tirupur-641602.")%}</th>
+		</tr>
+		<tr>         
+			<th style="width: 12% ;height: 80px;">{%= __("S.No") %}</th>
+			<th style="width: 12%;height: 80px;">{%= __("Employee Code") %}</th>
+			<th style="width: 18%;height: 80px;">{%= __("Employee Name") %}</th>
+			<th style="width: 15%;height: 80px;">{%= __("Designation") %}</th>
+			<th style="width: 15%;height: 80px;">{%= __("Department") %}</th>
+			<th style="width: 8%;height: 80px;">{%= __("Present Days") %}</th>
+            <th style="width: 5%;height: 80px;">{%= __("Total Days") %}</th>
+			<th style="width: 5%;height: 80px;">{%= __("Total OT Hours") %}</th>
+            <th style="width: 10%;height: 80px;">{%= __("Rate of Wages") %}</th>
+			<th style="width: 10%;height: 80px;">{%= __("Shift Wages") %}</th>
+			<th style="width: 10%;height: 80px;">{%= __("OT Wages") %}</th>
+			<th style="width: 10%;height: 80px;">{%= __("Gross Wages") %}</th>
+            <th style="width: 11%;height: 80px;">{%= __("PF") %}</th>
+			<th style="width: 11%;height: 80px;">{%= __("ESI") %}</th>
+			<th style="width: 10%;height: 80px;">{%= __("Total Deductions") %}</th>
+			<th style="width: 15%;height: 80px;">{%= __("Net Wages") %}</th>
+            <th style="width: 11%;height: 80px;">{%= __("Signature") %}</th>
+		</tr>
+	</thead>
+    <tbody>
+		{% for(var i=0, l=data.length; i<l; i++) { %}
+			<tr>
+			{% if(data[i].employee_code) { %}
+                <td>{%= i+1 %}</td>
+				<td>{%= frappe.format(data[i].employee_code, {fieldtype: "Link"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].employee_name, {fieldtype: "Data"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].designation, {fieldtype: "Link"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].department, {fieldtype: "Link"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].present_days, {fieldtype: "Data"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].total_days, {fieldtype: "Data"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].total_ot_hours, {fieldtype: "Float"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].rate_of_wages, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+                <td>{%= frappe.format(data[i].shift_wages, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].ot_wages, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].gross_wages, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].pf, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].esi, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].total_deductions, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].net_wages, {fieldtype: "Currency"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].signature, {fieldtype: "Data"}) || "&nbsp;" %}</td>
+
+            {% } %}
+			</tr>
+		{% } %}
+	</tbody>
+</table>
