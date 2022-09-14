@@ -11,64 +11,49 @@ def execute(filters=None):
 	department = filters.get("department")
 	conditions = ""
 	if from_date or to_date or department or designation:
-		conditions = " where 1 = 1"
+		conditions = " where status = 'Active'"
 		# if from_date and to_date:
-		# 	conditions += "  and start_date = '{0}' and end_date = '{0}' ".format(from_date,to_date)
+		# 	conditions += "  and start_date = '{0}' and end_date = '{1}' ".format(from_date,to_date)
 		if designation:
 			conditions += " and designation = '{0}' ".format(designation)
 		if department:
-			conditions += " and designation = '{0}' ".format(department)
+			conditions += " and department = '{0}' ".format(department)
 		
 	employees = frappe.db.sql("""select name,employee_name,designation,department from `tabEmployee` {0} """.format(conditions))
 	data = [list(i) for i in employees]
 	result_data = []
 	for i in range (0,len(data),1):
 		first_row = 1
-		for logs in frappe.get_list("Salary Slip",fields=["start",''],filters={"employee": data[i][0],'time':['between',(attendance_date,attendance_date)]},pluck='time'):
-			if first_row:
-				result_data.append([f'<b>{data[i][0]}</b>',data[i][1],data[i][2],data[i][3],logs.time()])
-				first_row = 0
-			else:
-				result_data.append(['','','','',logs.time()])
-		if first_row:
-			result_data.append([f'<b>{data[i][0]}</b>',data[i][1],data[i][2],data[i][3],''])
-
-    report_data = frappe.db.sql(""" select
-    							att.designation,
-                                att.name,
-                                att.employee,
-                                att.employee_name,
-                                att.checkin_time,
-                                att.checkout_time,
-                                att.late_min,
-                                att.total_shift_count,
-                                doc.check_in_time,
-                                doc.check_out_time
-                                from `tabAttendance` as att left outer join `tabThirvu Employee Checkin Details` as doc
-                                on doc.parent = att.name
-                                {0} order by designation
-                                """.format(conditions))
-	# check =''
-	# for i in range (0,len(data),1):
-	# 	if data[i][0] != check:
-	# 		check = data[i][0] 
-	# 		data[i][0] = f'<b>{data[i][0]}</b>'
-
-	# 	else:
-	# 		data[i][0]=''
-	# 	if data[i][8]:
-	# 		data[i][4] = data[i][8]
-	# 	if data[i][9]:
-	# 		data[i][5] = data[i][9]
+		for slip in frappe.get_list("Salary Slip",fields=["name","payment_days",'total_working_days','net_pay','total_deduction','extra_minutes','gross_pay'],filters={"docstatus":1,"employee": data[i][0],'start_date':['>=',(from_date)],'end_date':['<=',(to_date)]}):
+			emp_base_amount=frappe.db.sql("""select ssa.base
+				FROM `tabSalary Structure Assignment` as ssa
+				WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
+				ORDER BY ssa.from_date DESC LIMIT 1 """.format(data[i][0],from_date),as_list=1)
+			
+			if emp_base_amount:
+				result_data.append([data[i][0],data[i][1],data[i][2],data[i][3],slip['name'],slip['payment_days'],slip['total_working_days'],slip['extra_minutes'],emp_base_amount[0][0],slip['gross_pay'],0,slip['gross_pay'],0,0,slip['total_deduction'],slip['net_pay']])			
+			
 	columns = get_columns()
-	return columns, data
+	return columns, result_data
  
 def get_columns():
 	columns = [
-		_("Employee Code") + ":Link/Employee:250",
-		_("Employee Name") + ":Data:200",
-		_("Designation") + ":Link/Designation:250",
-		_("Department") + ":Link/Department:250",
+		_("Employee Code") + ":Link/Employee:200",
+		_("Employee Name") + ":Data:100",
+		_("Designation") + ":Link/Designation:200",
+		_("Department") + ":Link/Department:200",
+		_("Salary Slip") + ":Link/Salary Slip:100",
+		_("Present Days") + ":Data:100",
+		_("Total Days") + ":Data:100",
+		_("Total OT Hours") + ":Float:100",
+		_("Rate of Wages") + ":Currency:100",
+		_("Shift Wages") + ":Currency:100",
+		_("OT Wages") + ":Currency:100",
+		_("Gross Wages") + ":Currency:100",
+		_("PF") + ":Currency:100",
+		_("ESI") + ":Currency:100",
+		_("Total Deductions") + ":Currency:100",
+		_("Net Wages") + ":Currency:100",
 		]
 	
 	return columns

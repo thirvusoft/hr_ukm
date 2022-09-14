@@ -1,5 +1,5 @@
 {
- "add_total_row": 0,
+ "add_total_row": 1,
  "columns": [],
  "creation": "2022-09-13 11:31:29.720788",
  "disable_prepared_report": 0,
@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{}",
  "letter_head": "",
- "modified": "2022-09-13 15:03:50.296228",
+ "modified": "2022-09-14 11:57:18.481942",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Wages for Monthly Paid Workers",
