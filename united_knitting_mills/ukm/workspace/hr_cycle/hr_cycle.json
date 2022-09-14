@@ -148,7 +148,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-07 13:22:24.710595",
+ "modified": "2022-09-14 11:05:08.985869",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -156,6 +156,12 @@
  "pin_to_bottom": 0,
  "pin_to_top": 1,
  "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "Employee Checkin Report",
+   "link_to": "Employee Checkin Report",
+   "type": "Report"
+  },
   {
    "doc_view": "",
    "label": "Decision Making (Labour) - Checkin Missing",

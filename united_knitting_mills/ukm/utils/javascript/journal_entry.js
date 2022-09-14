@@ -4,7 +4,17 @@ frappe.ui.form.on('Journal Entry Account',{
         if(row.account){
             if(row.account == 'Petty Cash 2 - UKM'){
                 if(frappe.session.user == "annalakshmi@gmail.com"){
-                    frappe.model.set_value(cdt,cdn,"location",'');
+                    frappe.model.set_value(cdt,cdn,"location",'UNIT 2');
+                }
+                else{
+                    frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location'], function(data) {
+                        frappe.model.set_value(cdt,cdn,'location',data.location);
+                    })
+                }
+            }
+            else if(row.account == 'Petty Cash 1 - UKM'){
+                if(frappe.session.user == "annalakshmi@gmail.com"){
+                    frappe.model.set_value(cdt,cdn,"location",'UNIT 1');
                 }
                 else{
                     frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location'], function(data) {
