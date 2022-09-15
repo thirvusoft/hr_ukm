@@ -9,6 +9,13 @@ from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
 def set_salary_for_labour_staff(doc,event):
     shift = get_employee_shift(doc.employee)
     shift_doc = frappe.get_doc('Employee Timing Details', shift)
+
+    emp_base_amount=frappe.db.sql("""select ssa.base
+                    FROM `tabSalary Structure Assignment` as ssa
+                    WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
+                    ORDER BY ssa.from_date DESC LIMIT 1 """.format(doc.employee,doc.start_date),as_list=1)
+    if emp_base_amount:
+        doc.ts_shift_amount = emp_base_amount[0][0]
     if(shift_doc.labour):
         salary_slip_for_labours(doc, event)
     elif(shift_doc.staff or shift_doc.house_keeping):

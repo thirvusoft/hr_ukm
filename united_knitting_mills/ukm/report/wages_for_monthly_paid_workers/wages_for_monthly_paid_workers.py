@@ -24,14 +24,8 @@ def execute(filters=None):
 	result_data = []
 	for i in range (0,len(data),1):
 		first_row = 1
-		for slip in frappe.get_list("Salary Slip",fields=["name","payment_days",'total_working_days','net_pay','total_deduction','extra_minutes','gross_pay'],filters={"docstatus":1,"employee": data[i][0],'start_date':['>=',(from_date)],'end_date':['<=',(to_date)]}):
-			emp_base_amount=frappe.db.sql("""select ssa.base
-				FROM `tabSalary Structure Assignment` as ssa
-				WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
-				ORDER BY ssa.from_date DESC LIMIT 1 """.format(data[i][0],from_date),as_list=1)
-			
-			if emp_base_amount:
-				result_data.append([data[i][0],data[i][1],data[i][2],data[i][3],slip['name'],slip['payment_days'],slip['total_working_days'],slip['extra_minutes'],emp_base_amount[0][0],slip['gross_pay'],0,slip['gross_pay'],0,0,slip['total_deduction'],slip['net_pay']])			
+		for slip in frappe.get_list("Salary Slip",fields=["name","payment_days",'total_working_days','net_pay','total_deduction','extra_minutes','gross_pay','ts_shift_amount'],filters={"docstatus":1,"employee": data[i][0],'start_date':['>=',(from_date)],'end_date':['<=',(to_date)]}):
+			result_data.append([data[i][0],data[i][1],data[i][2],data[i][3],slip['name'],slip['payment_days'],slip['total_working_days'],slip['extra_minutes'],slip['ts_shift_amount'],slip['gross_pay'],0,slip['gross_pay'],0,0,slip['total_deduction'],slip['net_pay']])			
 			
 	columns = get_columns()
 	return columns, result_data
