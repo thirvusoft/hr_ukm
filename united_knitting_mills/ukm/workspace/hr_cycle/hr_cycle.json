@@ -148,7 +148,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-14 11:05:08.985869",
+ "modified": "2022-09-15 16:26:09.999160",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -158,8 +158,20 @@
  "shortcuts": [
   {
    "doc_view": "",
+   "label": "Daily Attendance Report",
+   "link_to": "Daily Attendance Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
    "label": "Employee Checkin Report",
    "link_to": "Employee Checkin Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Wages for Monthly Paid Workers",
+   "link_to": "Wages for Monthly Paid Workers",
    "type": "Report"
   },
   {

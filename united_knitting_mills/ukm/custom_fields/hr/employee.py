@@ -22,6 +22,10 @@ def create_employee_fields_and_property_setter():
                 fieldtype='Column Break', insert_after='marital_status'),
             dict(fieldname='ts_column_break_3',
                 fieldtype='Column Break', insert_after='department'),
+            dict(fieldname='ts_column_break_4',
+                fieldtype='Column Break', insert_after='emergency_phone_number'),
+            dict(fieldname='relationship', label='Relationship',
+                fieldtype='Link', insert_after='ts_column_break_4', options='Relationship'),
         ]
     }
 
