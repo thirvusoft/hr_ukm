@@ -1,7 +1,7 @@
 import frappe
 import datetime
 
-
+@frappe.whitelist()
 def all():
     doc_list = frappe.get_all('Employee Checkin', ['employee', 'time', 'name'])
     date_format_str = '%Y-%m-%d %H:%M:%S'
@@ -34,3 +34,4 @@ def all():
             })
             doc.save()
     frappe.db.commit()
+    return "TEST"
