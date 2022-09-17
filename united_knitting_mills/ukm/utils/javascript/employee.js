@@ -19,6 +19,22 @@ frappe.ui.form.on('Employee',{
             frm.set_df_property("approval_by_owner", "hidden",1);
 
         }
-}
+        
+    },
+    onload(frm){
+        if(!frm.is_new() && frm.doc.ts_interview_details){
+            if(!frm.doc.ts_interview_details.length){
+                console.log("HH")
+                frappe.call({
+                    method: 'united_knitting_mills.ukm.utils.python.employee.create_interview_details',
+                    args:{name:frm.doc.name},
+                    async:false,
+                    callback(r){
+                        cur_frm.reload_doc(); 
+                    }
+                })
+            }
+        }
+    }
 
 })

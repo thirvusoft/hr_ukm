@@ -70,3 +70,25 @@ def bio_metric_id(doc,event):
 	doc.attendance_device_id = doc.name
 	doc.save()
 	frappe.msgprint("Bio-Metric ID For Employee : <b>"+ doc.employee_name+"</b> Is <b>"+doc.attendance_device_id)
+
+@frappe.whitelist()
+def create_interview_details(name):
+	details = ['வயது சான்று பெறப்பட்டதா ?', 
+				'கல்விச் சான்று சரிபார்க்கப்பட்டதா ?', 
+				'பணியார்வம் கண்டறியப்பட்டதா ?', 
+				'முன் அனுபவம் கேட்ட்டறியப்பட்டதா ?', 
+				'வேலை நேரம் தெரிவிக்கப்பட்டதா ?' ,
+				'பணி வரையறைகள் விளக்கப்பட்டதா ?' ,
+				'நிர்வாக கொள்கைகள் எடுத்துரைக்கப்பட்டதா ?' ,
+				'எந்த நிலையிலும் பணியாற்றுவாரா ?' ,
+				'சாதி மத பேதமில்லா சூழலை உருவாக்குவாரா ?', 
+				'பணி நியமன ஆணை வழங்கப்பட்டதா ?',
+				]
+	for i in details:
+		if not frappe.db.exists('TS INTERVIEW DETAILS', {'parent':name, 'details':i}):
+			doc = frappe.new_doc('TS INTERVIEW DETAILS')
+			doc.parent = name
+			doc.parentfield = "ts_interview_details"
+			doc.parenttype = "Employee"
+			doc.details = i
+			doc.save()
