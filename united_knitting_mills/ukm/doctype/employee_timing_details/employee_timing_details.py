@@ -459,15 +459,6 @@ def create_staff_attendance(docname):
         #Get checkin for this employee
         get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin,logs)
         for data in date_wise_checkin:
-            frappe.log_error(
-                message=_("Shift while processing deferred accounting for checkin {0}").format(emp_checkins),
-            )
-            frappe.log_error(
-                message=_("Date while processing deferred accounting for date {0}").format(date_wise_checkin),
-            )
-            frappe.log_error(
-                message=_("Logs while processing deferred accounting for logs {0}").format(logs),
-            )
             reason = ''
             if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
                 attendance = frappe.new_doc('Attendance')
