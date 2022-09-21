@@ -19,11 +19,7 @@ def get_between_dates(date_wise_checkin, from_date, to_date):
 def get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time):
     # last_checkin = frappe.get_last_doc('Employee Checkin', {'employee': employee})
     date_format_str = '%Y-%m-%d %H:%M:%S'
-    thirvu_shift = frappe.db.get_value('Designation',frappe.db.get_value('Employee',employee,'designation'),'thirvu_shift')
-    if frappe.db.get_value('Employee Timing Details',thirvu_shift,'staff'):
-        reset_time = datetime.strptime(str('00:00:00'),'%H:%M:%S')
-    else:
-        reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
+    reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
     for dates in date_wise_checkin:
         curr_date = datetime.strptime(str(dates), date_format_str)
         start_date = datetime.combine(curr_date.date(), reset_time.time())

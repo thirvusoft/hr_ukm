@@ -233,15 +233,30 @@ def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
     # return temp_dict
 
 def get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin,logs):
-    """Generate a dictionary with date wise checkins of employee"""
-    for checkin in emp_checkins:
-        if(checkin['time'].date() not in date_wise_checkin):
-            date_wise_checkin[checkin['time'].date()] = []
-            logs[checkin['time'].date()] = []
 
-    for checkin in emp_checkins:
-        date_wise_checkin[checkin['time'].date()].append(checkin)
-        logs[checkin['time'].date()].append(checkin['name'])
+    validate_time = frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time")
+    for data in emp_checkins:
+        if data.time.date() in date_wise_checkin:
+            adding_checkin_datewise(date_wise_checkin,data.time.date(),[data])
+            adding_checkin_datewise(logs,data.time.date(),[data['name']])
+        else:
+            if to_timedelta(str(data.time.time())) < validate_time:
+                adding_checkin_datewise(date_wise_checkin,data.time.date() - datetime.timedelta(days = 1),[data])
+                adding_checkin_datewise(logs,data.time.date() - datetime.timedelta(days = 1),[data['name']])
+            else:
+                date_wise_checkin.update({data.time.date():[data]})
+                logs.update({data.time.date():[data['name']]})
+
+
+    # """Generate a dictionary with date wise checkins of employee"""
+    # for checkin in emp_checkins:
+    #     if(checkin['time'].date() not in date_wise_checkin):
+    #         date_wise_checkin[checkin['time'].date()] = []
+    #         logs[checkin['time'].date()] = []
+
+    # for checkin in emp_checkins:
+    #     date_wise_checkin[checkin['time'].date()].append(checkin)
+    #     logs[checkin['time'].date()].append(checkin['name'])
 
 def create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, date, checkins):
     """Fill Attendance doc with start time, end time and other employee details"""
