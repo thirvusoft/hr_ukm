@@ -5,6 +5,8 @@ def create_location_fields():
 		"Location": [
 			dict(fieldname='abbr', label='Abbreviation',
 				fieldtype='Data', insert_after='area'),
+      dict(fieldname='address', label='Address',
+				fieldtype='Link', options="Address",insert_after='parent_location',reqd=1),
         dict(fieldname='sec_break', label='',
 				fieldtype='Section Break', insert_after='abbr'),
         dict(fieldname='user_list', label='User List',
