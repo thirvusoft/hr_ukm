@@ -224,6 +224,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
 
                 # If all shift details are correct it will submit automatically
                 if not new_attendance_doc.employee_shift_details and new_attendance_doc.thirvu_shift_details:
+                    new_attendance_doc.reload()
                     new_attendance_doc.submit()
 
 def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
@@ -478,6 +479,7 @@ def create_staff_attendance(docname):
                 attendance.flags.ignore_validate = True
                 attendance.save()
                 if(submit_doc):
+                    attendance.reload()
                     attendance.submit()
                 # Link the Attendance
                 frappe.db.sql("""update `tabEmployee Checkin`

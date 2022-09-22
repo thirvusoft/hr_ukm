@@ -11,5 +11,21 @@ frappe.ui.form.on('Attendance',{
                 }
             })
         }
+    },
+    before_save:function(frm){
+        if (cur_frm.doc.req_checkin_time){
+            cur_frm.set_value('time1',1)
+        }
+        else{
+            cur_frm.set_value('time1',0)
+
+        }
+        if (cur_frm.doc.req_checkout_time){
+            cur_frm.set_value('time2',1)
+        }
+        else{
+            cur_frm.set_value('time2',0)
+        }
+
     }
 })
