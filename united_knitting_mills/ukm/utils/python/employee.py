@@ -1,5 +1,7 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
 from frappe.utils.data import get_link_to_form
 @frappe.whitelist()
 def creating_hr_permission(ts_emp_doc,event):
@@ -30,8 +32,11 @@ def creating_hr_permission(ts_emp_doc,event):
 	else:
 		frappe.throw("Thirvu HR User role not assigned for any User")
 
-def sequence_user_id(doc,event):
-	frappe.db.set_value("Employee",doc.name,"attendance_device_id",doc.name)
+def address_html(doc,event):
+	address = doc.current_address
+	address= address.replace("\n", "<br>")
+	doc.add_html =address
+
 	# if doc.approval_by_owner == 1 and doc.status == 'Active':
 	# 		doc.status = 'Active'
 	# else:

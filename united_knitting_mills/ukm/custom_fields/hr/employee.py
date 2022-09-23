@@ -24,12 +24,14 @@ def create_employee_fields_and_property_setter():
                 fieldtype='Column Break', insert_after='department'),
             dict(fieldname='ts_column_break_4',
                 fieldtype='Column Break', insert_after='emergency_phone_number'),
-            dict(fieldname='relationship', label='Relationship',
-                fieldtype='Link', insert_after='ts_column_break_4', options='Relationship'),
+            # dict(fieldname='relationship', label='Relationship',
+            #     fieldtype='Link', insert_after='ts_column_break_4', options='Relationship'),
             dict(fieldname='ts_sec_brk_111', label='Interview Details',
                 fieldtype='Section Break', insert_after='date_of_joining'),
             dict(fieldname='ts_interview_details',
-                fieldtype='Table', insert_after='ts_sec_brk_111', options='TS INTERVIEW DETAILS')
+                fieldtype='Table', insert_after='ts_sec_brk_111', options='TS INTERVIEW DETAILS'),
+            dict(fieldname='add_html',
+                fieldtype='Small Text', insert_after='current_address',)
         ]
     }
 

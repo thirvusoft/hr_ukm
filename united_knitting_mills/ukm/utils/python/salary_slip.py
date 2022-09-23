@@ -12,7 +12,7 @@ def set_salary_for_labour_staff(doc,event):
 
     emp_base_amount=frappe.db.sql("""select ssa.base
                     FROM `tabSalary Structure Assignment` as ssa
-                    WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
+                    WHERE ssa.employee = '{0}' and ssa.from_date >='{1}'
                     ORDER BY ssa.from_date DESC LIMIT 1 """.format(doc.employee,doc.start_date),as_list=1)
     if emp_base_amount:
         doc.ts_shift_amount = emp_base_amount[0][0]
