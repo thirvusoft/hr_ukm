@@ -117,12 +117,13 @@ doc_events = {
 		
 	},
 	'Employee':{
-		# "validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id",
+		"validate":"united_knitting_mills.ukm.utils.python.employee.address_html",
 		"after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
 		"united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
 	},
 	'Attendance':{
 		"validate":"united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
+		"on_update":"united_knitting_mills.ukm.utils.python.attendance.update_time_field",
 		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
