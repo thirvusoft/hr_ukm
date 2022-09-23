@@ -123,6 +123,7 @@ doc_events = {
 	},
 	'Attendance':{
 		"validate":"united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
+		"on_update":"united_knitting_mills.ukm.utils.python.attendance.update_time_field",
 		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},

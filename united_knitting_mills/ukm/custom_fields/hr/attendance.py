@@ -122,8 +122,11 @@ def create_attendance_custom_fields():
         dict(fieldname='req_total_shift_hr', label='Requested Shift in Minutes',
         fieldtype='Float',insert_after='req_section_break23'),           
         
+        dict(fieldname='req_checkin_time', label='Requested Checkin Time',
+        fieldtype='Time',insert_after='req_total_shift_hr',depends_on='eval:!doc.checkin_time',description="For reference only"),
+
         dict(fieldname='req_column_break24', label='',
-        fieldtype='Column Break',insert_after='req_total_shift_hr'),
+        fieldtype='Column Break',insert_after='req_checkin_time'),
         
         dict(fieldname='req_ts_ot_hrs', label='Requested Extra Time in Minutes',
         fieldtype='Float',insert_after='req_column_break24',depends_on='eval:doc.staff'), 
@@ -131,16 +134,25 @@ def create_attendance_custom_fields():
         dict(fieldname='req_total_shift_count', label='Requested Shift Count',
         fieldtype='Float',insert_after='req_ts_ot_hrs',depends_on='eval:!doc.staff'),
         
+        dict(fieldname='req_checkout_time', label='Requested Checkout Time',
+        fieldtype='Time',insert_after='req_total_shift_count',depends_on='eval:!doc.checkout_time',description="For reference only"), 
+
         dict(fieldname='req_column_break23', label='',
-        fieldtype='Column Break',insert_after='req_total_shift_count'),
+        fieldtype='Column Break',insert_after='req_checkout_time'),
 
         dict(fieldname='req_total_shift_amount', label='Requested Amount to Pay',
         fieldtype='Currency',insert_after='req_column_break23',read_only_depends_on='eval:!doc.staff'),
         
+
+        dict(fieldname='time1', label='Time1 Check',
+        fieldtype='Check',insert_after='req_total_shift_amount',hidden=1),
+
+        dict(fieldname='time2', label='Time2 Check',
+        fieldtype='Check',insert_after='time1',hidden=1),
+
         dict(fieldname='reason', label='Reason for Draft',
         fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),
 
-        
       
          ]
     }
