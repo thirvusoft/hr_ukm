@@ -2,7 +2,7 @@ import frappe
 from datetime import date, datetime, timedelta
 import pandas
 from frappe.utils import today
-
+from united_knitting_mills.ukm.doctype.employee_timing_details.employee_timing_details import scheduler_for_employee_shift
 def get_ukm_settings():
     buffer_time = frappe.db.get_single_value('United Knitting Mills Settings', 'buffer_time')
     reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
@@ -89,3 +89,4 @@ def create_employee_checkin(from_date = None, to_date = None):
         date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
         # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
         create_employee_checkins(date_wise_checkin, employee, buffer_time)
+    scheduler_for_employee_shift()
