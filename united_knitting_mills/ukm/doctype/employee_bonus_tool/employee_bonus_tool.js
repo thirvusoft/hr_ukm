@@ -3,12 +3,13 @@
 	
 frappe.ui.form.on("Employee Bonus Tool",{
 	designation:function(frm,cdt,cdn){
-		
 		var bonus=locals[cdt][cdn]
 		var from_date=frm.doc.from_date
 		var to_date = frm.doc.to_date
 		var bonus1=bonus.designation
 		frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location','name'], function(data) {
+			console.log(data)
+			console.log(frappe.session.user)
 			var location=data.location
 			if(location){
 				
