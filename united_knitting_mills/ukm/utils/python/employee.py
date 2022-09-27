@@ -33,9 +33,10 @@ def creating_hr_permission(ts_emp_doc,event):
 		frappe.throw("Thirvu HR User role not assigned for any User")
 
 def address_html(doc,event):
-	address = doc.current_address
-	address= address.replace("\n", "<br>")
-	doc.add_html =address
+	if doc.current_address:
+		address = doc.current_address
+		address= address.replace("\n", "<br>")
+		doc.add_html =address
 
 	# if doc.approval_by_owner == 1 and doc.status == 'Active':
 	# 		doc.status = 'Active'
@@ -49,17 +50,17 @@ def employee_custom_field():
 			fieldtype='Data', insert_after='location',fetch_from="location.naming_series"),
 		
 	],
-    }
+	}
 	create_custom_fields(custom_fields)
 	employee=frappe.get_doc({
-        'doctype':'Property Setter',
-        'doctype_or_field': "DocField",
-        'doc_type': "Employee",
-        'property':"options",
-        'property_type':"Data",
-        'field_name':"naming_series",
-        "value":"employee_naming_series.-\nUKM-II\nUKM-I"
-    })
+		'doctype':'Property Setter',
+		'doctype_or_field': "DocField",
+		'doc_type': "Employee",
+		'property':"options",
+		'property_type':"Data",
+		'field_name':"naming_series",
+		"value":"employee_naming_series.-\nUKM-II\nUKM-I"
+	})
 	employee.save(ignore_permissions=True)
 	
 

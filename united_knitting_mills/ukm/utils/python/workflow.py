@@ -1,5 +1,6 @@
 import frappe
 def workflow_document_creation():
+    create_roles()
     create_state()
     create_action()
     create_workflow_doc()
@@ -15,27 +16,30 @@ def create_workflow_doc():
     workflow.send_email_alert = 1
 
     workflow.append('states', dict(
-        state = 'Approval Pending',doc_status=0, allow_edit = 'HR User'
+        state = 'Approval Pending',doc_status=0, allow_edit = 'Thirvu HR User'
     ))
     workflow.append('states', dict(
-        state = 'Approved by HR Manager',doc_status=1, allow_edit = 'HR Manager'
+        state = 'Approval Pending',doc_status=0, allow_edit = 'Thirvu HR Manager'
     ))
     workflow.append('states', dict(
-        state = 'Rejected by HR manager',doc_status=0, allow_edit = 'HR Manager'
+        state = 'Approved by Owner',doc_status=1, allow_edit = 'Thirvu Owner'
+    ))
+    workflow.append('states', dict(
+        state = 'Rejected by Owner',doc_status=0, allow_edit = 'Thirvu Owner'
     ))
 
     workflow.append('transitions', dict(
-        state = 'Approval Pending', action='Approve', next_state = 'Approved by HR Manager',
-        allowed='HR Manager', allow_self_approval= 1
+        state = 'Approval Pending', action='Approve', next_state = 'Approved by Owner',
+        allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.append('transitions', dict(
-        state = 'Approval Pending', action='Reject', next_state = 'Rejected by HR manager',
-        allowed='HR Manager', allow_self_approval= 1
+        state = 'Approval Pending', action='Reject', next_state = 'Rejected by Owner',
+        allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.insert(ignore_permissions=True)
     return workflow
 def create_state():
-    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by HR Manager','Rejected by HR manager']
+    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by Owner','Rejected by Owner']
     for row in list:
         if not frappe.db.exists('Workflow State', row):
             new_doc = frappe.new_doc('Workflow State')
@@ -46,11 +50,11 @@ def create_state():
                 new_doc.style="Success"
             if(row=="Rejected"):
                 new_doc.style="Danger"
-            if(row=="Approved by HR Manager"):
+            if(row=="Approved by Owner"):
                 new_doc.style="Success"
             if(row=="Approval Pending"):
                 new_doc.style="Warning"
-            if(row=="Rejected by HR manager"):
+            if(row=="Rejected by Owner"):
                 new_doc.style="Danger"
             new_doc.save()
 
@@ -61,3 +65,11 @@ def create_action():
             new_doc = frappe.new_doc('Workflow Action Master')
             new_doc.workflow_action_name = row
             new_doc.save()
+
+def create_roles():
+    role_list = ['Thirvu Owner','Thirvu HR User','Thirvu HR Manager']
+    for role in role_list:
+        if not frappe.db.exists("Role",role):
+            role = frappe.get_doc({'doctype':'Role', 'role_name':role}).insert()
+        
+   

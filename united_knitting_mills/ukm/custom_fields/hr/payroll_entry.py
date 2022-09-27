@@ -10,7 +10,7 @@ def payroll_entry_custom_fields():
     custom_fields = {
 		"Payroll Entry": [
 			dict(fieldname='location', label='Location',
-				fieldtype='Link', options='Location',insert_after='accounting_dimensions_section', hidden=0),
+				fieldtype='Link', options='Location',insert_after='accounting_dimensions_section', reqd=1),
             dict(fieldname='ts_column_break',
 				fieldtype='Column Break',insert_after='start_date'),
         ]
