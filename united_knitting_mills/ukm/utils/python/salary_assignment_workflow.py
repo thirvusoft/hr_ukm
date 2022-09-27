@@ -15,22 +15,22 @@ def create_workflow_doc():
     workflow.send_email_alert = 1
 
     workflow.append('states', dict(
-        state = 'Approval Pending',doc_status=0, allow_edit = 'HR User'
+        state = 'Approval Pending',doc_status=0, allow_edit = 'Thirvu HR User'
     ))
     workflow.append('states', dict(
-        state = 'Approved by HR Manager',doc_status=1, allow_edit = 'HR Manager'
+        state = 'Approved by HR Manager',doc_status=1, allow_edit = 'Thirvu Owner'
     ))
     workflow.append('states', dict(
-        state = 'Rejected by HR manager',doc_status=0, allow_edit = 'HR Manager'
+        state = 'Rejected by HR manager',doc_status=0, allow_edit = 'Thirvu Owner'
     ))
 
     workflow.append('transitions', dict(
         state = 'Approval Pending', action='Approve', next_state = 'Approved by HR Manager',
-        allowed='HR Manager', allow_self_approval= 1
+        allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.append('transitions', dict(
         state = 'Approval Pending', action='Reject', next_state = 'Rejected by HR manager',
-        allowed='HR Manager', allow_self_approval= 1
+        allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.insert(ignore_permissions=True)
     return workflow
