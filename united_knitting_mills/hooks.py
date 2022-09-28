@@ -30,7 +30,7 @@ app_license = "MIT"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
-		 "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
+		#  "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
 		 "Journal Entry":"ukm/utils/javascript/journal_entry.js",
 		 "Location":"ukm/utils/javascript/location.js",
 		 "Holiday List":"ukm/utils/javascript/holiday_list.js",
@@ -113,7 +113,7 @@ override_doctype_class = {
 doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour_staff",
-		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
+		# "on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
 		
 	},
 	'Employee':{
