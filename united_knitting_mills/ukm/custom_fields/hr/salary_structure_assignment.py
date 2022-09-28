@@ -10,7 +10,9 @@ def create_customm_fields():
     custom_fields = {
 		"Salary Structure Assignment": [
 			dict(fieldname='unit', label='Unit',reqd=1,
-				fieldtype='Link',options='Location',insert_after='department',fetch_from='employee.location')
+				fieldtype='Link',options='Location',insert_after='department',fetch_from='employee.location'),
+            dict(fieldname='min_wages', label='Minimum Wages',
+				fieldtype='Currency',insert_after='designation_name',fetch_from='designation.min_wages')  , 
 			]
 	}
     create_custom_fields(custom_fields)

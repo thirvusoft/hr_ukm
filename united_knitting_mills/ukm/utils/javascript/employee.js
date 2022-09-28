@@ -24,7 +24,6 @@ frappe.ui.form.on('Employee',{
     onload(frm){
         if(!frm.is_new() && frm.doc.ts_interview_details){
             if(!frm.doc.ts_interview_details.length){
-                console.log("HH")
                 frappe.call({
                     method: 'united_knitting_mills.ukm.utils.python.employee.create_interview_details',
                     args:{name:frm.doc.name},
