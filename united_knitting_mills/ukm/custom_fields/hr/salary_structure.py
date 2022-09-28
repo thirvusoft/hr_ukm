@@ -30,5 +30,5 @@ def salary_structure_property_setter():
 	make_property_setter("Salary Structure", "leave_encashment_amount_per_day", "hidden", 1, "Check")
 	make_property_setter("Salary Structure", "max_benefits", "hidden", 1, "Check")
 	make_property_setter("Salary Structure", "account", "hidden", 1, "Check")
-	make_property_setter("Salary Structure", "deductions", "hidden", 1, "Section Break")
+	make_property_setter("Salary Structure", "deductions", "hidden", 0, "Section Break")
 	make_property_setter("Salary Structure", "conditions_and_formula_variable_and_example", "hidden", 1, "Check")
