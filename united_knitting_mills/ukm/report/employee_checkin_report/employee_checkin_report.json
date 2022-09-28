@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "",
- "modified": "2022-09-15 16:14:52.261067",
+ "modified": "2022-09-27 14:39:20.460544",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Checkin Report",
@@ -34,6 +34,12 @@
   },
   {
    "role": "Thirvu HR Manager"
+  },
+  {
+   "role": "Thirvu Owner"
+  },
+  {
+   "role": "Thirvu HR User"
   }
  ]
 }
