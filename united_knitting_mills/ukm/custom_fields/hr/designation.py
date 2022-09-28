@@ -8,8 +8,10 @@ def designation_customisation():
 def create_designation_custom_fields():
     custom_fields = {
 		"Designation": [
+            dict(fieldname='min_wages', label='Minimum Wages',
+				fieldtype='Currency',insert_after='designation_name',reqd =1)  ,     
             dict(fieldname='ts_column_break',
-				fieldtype='Column Break',insert_after='designation_name'),
+				fieldtype='Column Break',insert_after='min_wages'),
 			dict(fieldname='thirvu_shift', label='Thirvu Shift',
 				fieldtype='Link',options='Employee Timing Details',insert_after='ts_column_break',reqd =1)
             ]
