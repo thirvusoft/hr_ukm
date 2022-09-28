@@ -7,14 +7,19 @@ from frappe import _
 def execute(filters=None):
     attendance_date = filters.get("attendance_date")
     designation = filters.get("designation")
+    staff_labour = filters.get("staff_or_labour")
     conditions = ""
-    if attendance_date or designation:
+    if attendance_date or designation or staff_labour:
         conditions = " where 1 = 1"
         if attendance_date :
             conditions += "  and attendance_date = '{0}' ".format(attendance_date)
         if designation:
             conditions += " and designation = '{0}' ".format(designation)
-
+        if staff_labour and staff_labour=='Staff':
+            conditions += ' and staff = 1'
+        elif staff_labour and staff_labour=='Labour':
+            conditions += ' and staff = 0'
+            
             
     report_data = frappe.db.sql(""" select
     							att.designation,
