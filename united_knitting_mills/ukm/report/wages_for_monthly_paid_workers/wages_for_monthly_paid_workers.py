@@ -9,8 +9,9 @@ def execute(filters=None):
 	to_date = filters.get("to_date")
 	designation = filters.get("designation")
 	department = filters.get("department")
+	location = filters.get("location")
 	conditions = ""
-	if from_date or to_date or department or designation:
+	if from_date or to_date or department or designation or location:
 		conditions = " where status = 'Active'"
 		# if from_date and to_date:
 		# 	conditions += "  and start_date = '{0}' and end_date = '{1}' ".format(from_date,to_date)
@@ -18,6 +19,9 @@ def execute(filters=None):
 			conditions += " and designation = '{0}' ".format(designation)
 		if department:
 			conditions += " and department = '{0}' ".format(department)
+		if location:
+			conditions += " and location = '{0}' ".format(location)
+		
 		
 	employees = frappe.db.sql("""select name,employee_name,designation,department from `tabEmployee` {0} """.format(conditions))
 	data = [list(i) for i in employees]

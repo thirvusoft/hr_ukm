@@ -18,6 +18,13 @@ frappe.query_reports["Daily Attendance Report"] = {
 			"options": "Designation",
 			"width": "100"
 		},
+		{
+			"fieldname":"staff_or_labour",
+			"label": __("Staff / Labour"),
+			"fieldtype": "Select",
+			"options": "\nStaff\nLabour",
+			"width": "100"
+		},
 	]
  };
  
