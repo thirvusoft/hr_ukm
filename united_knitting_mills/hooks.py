@@ -35,7 +35,8 @@ doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Location":"ukm/utils/javascript/location.js",
 		 "Holiday List":"ukm/utils/javascript/holiday_list.js",
 		 "Leave Application":"ukm/utils/javascript/leave_application.js",
-		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js"}
+		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js",
+   		 "Employee Advance":"ukm/utils/javascript/employee_advance.js"}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
@@ -48,7 +49,8 @@ doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
 			"Payroll Entry":"ukm/utils/javascript/payroll_entry_list.js",
 			"Salary Structure":"ukm/utils/javascript/salary_structure_list.js",
 			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js",
-			"Attendance":"ukm/utils/javascript/attendance.js"}
+			"Attendance":"ukm/utils/javascript/attendance.js",
+   			"Employee Advance":"ukm/utils/javascript/employee_advance_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -127,6 +129,12 @@ doc_events = {
 		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
+	'Employee Advance':{
+		"validate":"united_knitting_mills.ukm.utils.python.employee_advance.validate",
+	},
+	'Additional Salary':{
+		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
+	}
 	# "Location":{
 	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
 	# 				"united_knitting_mills.ukm.utils.python.location.autoname"]

@@ -20,7 +20,7 @@ from united_knitting_mills.ukm.custom_fields.hr.salary_structure import salary_s
 from united_knitting_mills.ukm.custom_fields.hr.salary_structure_assignment import salary_structure_assignment_customizations
 from united_knitting_mills.ukm.custom_fields.hr.payroll_entry import payroll_entry_customizations
 from united_knitting_mills.ukm.custom_fields.hr.salary_slip import salary_slip_customizations
-from united_knitting_mills.ukm.custom_fields.hr.employee_advance import employee_advance_custom_fields
+from united_knitting_mills.ukm.custom_fields.hr.employee_advance import employee_advance_customisation
 
 def create_custom_fields():
     leave_application_customizations()
@@ -45,4 +45,4 @@ def create_custom_fields():
     salary_structure_assignment_customizations()
     payroll_entry_customizations()
     salary_slip_customizations()
-    employee_advance_custom_fields()
+    employee_advance_customisation()
