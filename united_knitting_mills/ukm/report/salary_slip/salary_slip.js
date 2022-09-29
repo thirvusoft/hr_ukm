@@ -32,7 +32,13 @@ frappe.query_reports["Salary Slip"] = {
 			"label": __("Designation"),
 			"fieldtype": "Link",
 			"options": "Designation",
-			
+			"width": "100"
+		},
+		{
+			"fieldname":"unit",
+			"label": __("Unit"),
+			"fieldtype": "Link",
+			"options": "Location",
 			"width": "100"
 		},
 

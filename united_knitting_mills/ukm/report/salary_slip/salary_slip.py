@@ -23,8 +23,9 @@ def get_columns(filters):
         },
         {
             "label": _("Code"),
-            "fieldtype": "Data",
+            "fieldtype": "Link",
             "fieldname": "code",
+            "options":"Employee",
             "width": 100
         },
         {
@@ -53,7 +54,7 @@ def get_columns(filters):
             "label": i,
             "fieldtype": "Float",
             "fieldname": i,
-            "width": 100
+            "print_width": 10
         })
     columns+=[
         {
@@ -104,6 +105,20 @@ def get_columns(filters):
             "fieldtype": "Data",
             "fieldname": "signature",
             "width": 200
+        },
+        {
+            "label": _("From Date"),
+            "fieldtype": "Data",
+            "fieldname": "from_date",
+            "width": 200,
+            "hidden":1
+        },
+        {
+            "label": _("To Date"),
+            "fieldtype": "Data",
+            "fieldname": "to_date",
+            "width": 200,
+            "hidden":1
         }
     ]
     return columns
@@ -121,18 +136,22 @@ def get_data(filters):
     between_dates = list(map(str, list(daterange(date(from_d[0], from_d[1], from_d[2]),date(to_d[0], to_d[1], to_d[2])))))
     if ("designation" in keys):
         filter["designation"] = filters["designation"]
+    if ("department" in keys):
+        filter["department"] = filters["department"]
+    if ("unit" in keys):
+        filter["unit"] = filters["unit"]
     ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["employee","employee_name", "sum(total_shift_worked) as total_shift_worked","sum(net_pay) as net_pay","designation"],group_by="employee", order_by="designation")
 
     for j in ss:
         f=frappe._dict()
-        get_ssa=frappe.db.get_all("Salary Structure Assignment", filters={'employee':j.employee, 'docstatus':1}, pluck='base')
-        f.update({"designation":j.designation ,"code":j['employee'],"worker_name":j.employee_name,"salary":sum(get_ssa)})
+        get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
+        f.update({"designation":j.designation ,"code":j['employee'],"worker_name":j.employee_name,"salary":get_ssa})
 
         for k in between_dates:
             get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'docstatus':1,'attendance_date':k}, 'total_shift_count')
             f.update({k:get_attendance})
             
-        f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"tiffen":'',"pf_deduction":'',"esi_deduction":'',"total_deduction":'',"net_salary":j.net_pay,"signature":''})
+        f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"tiffen":'',"pf_deduction":'',"esi_deduction":'',"total_deduction":'',"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         data.append(f)
     d = [list(i.values()) for i in data]
    
