@@ -3,7 +3,7 @@ import frappe
 from frappe.utils import (add_days,nowdate,)
 @frappe.whitelist()
 def advance_validation(employee):
-    latest_salary_slip=frappe.get_all("Salary Slip",{"employee":employee},["name","end_date"],
+    latest_salary_slip=frappe.get_all("Salary Slip",{"employee":employee,"docstatus":"1"},["name","end_date"],
                                     order_by="end_date desc",
                                     limit=1)
     if latest_salary_slip:
