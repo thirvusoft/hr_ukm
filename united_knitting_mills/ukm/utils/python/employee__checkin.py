@@ -71,25 +71,26 @@ def create_employee_checkins(date_wise_checkin, employee, buffer_time):
                 emp_chkn.device_id = frappe.db.get_value('Employee Checkin Without Log Type', date_wise_checkin[dates][i][0], 'device_id')
                 emp_chkn.time = date_wise_checkin[dates][i][1]
                 emp_chkn.log_type = log_type
-                emp_chkn.save()
+                try:
+                    emp_chkn.save()
+                except:
+                    pass
                 log = not(log)
 
 @frappe.whitelist()
 def create_employee_checkin(from_date = None, to_date = None):
-    try:
-        if(from_date == None):
-            from_date = str(date.today() - timedelta(days = 1))
-        if(to_date == None):
-            to_date = str(date.today() - timedelta(days = 1))
-        employees = frappe.db.get_all('Employee Checkin Without Log Type', filters={'time': ['between', (from_date, to_date)]}, pluck='employee')
-        employees = list(set(employees))
-        buffer_time, reset_time = get_ukm_settings()
-        for employee in employees:
-            date_wise_checkin = frappe._dict()
-            date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
-            date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
-            # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
-            create_employee_checkins(date_wise_checkin, employee, buffer_time)
-    except:
-        pass
+    if(from_date == None):
+        from_date = str(date.today() - timedelta(days = 1))
+    if(to_date == None):
+        to_date = str(date.today())
+    employees = frappe.db.get_all('Employee Checkin Without Log Type', filters={'time': ['between', (from_date, to_date)]}, pluck='employee')
+    employees = list(set(employees))
+    buffer_time, reset_time = get_ukm_settings()
+    for employee in employees:
+        date_wise_checkin = frappe._dict()
+        date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
+        date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
+        # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
+        create_employee_checkins(date_wise_checkin, employee, buffer_time)
+
     scheduler_for_employee_shift()
