@@ -61,7 +61,7 @@ frappe.views.TreeView = Class.extend({
 		this.onload();
 		// Customised by Thirvusoft
 		// Start
-		if (!frappe.session.user in ['clinton@gmail.com','vallidevi@gmail.com','vivekanathan@gmail.com']){
+		if (frappe.session.user_fullname == 'Administrator' ){
 			this.set_menu_item();
 		}
 		// End

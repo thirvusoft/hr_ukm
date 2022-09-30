@@ -15,8 +15,8 @@ def salary_slip_property_setter():
     make_property_setter("Salary Slip", "letter_head", "hidden", 1, "Check")
     make_property_setter("Salary Slip", "salary_slip_based_on_timesheet", "hidden", 1, "Check")
     make_property_setter("Salary Slip", "section_break_32", "hidden", 1, "Check")
-    make_property_setter("Salary Slip", "company", "hidden", 1, "Check")
-    make_property_setter("Salary Slip", "company", "hidden", 1, "Check")
+    make_property_setter("Salary Slip", "loan_repayment", "hidden", 1, "Check")
+    make_property_setter("Salary Slip", "section_break_43", "hidden", 1, "Check")
 
 def salary_slip_custom_fields():
     custom_fields = {

@@ -17,6 +17,7 @@ def leave_application_property_setter():
     make_property_setter("Leave Application", "sb10", "hidden", 1, "Section Break")
     make_property_setter("Leave Application", "leave_approver", "hidden", 1, "Check")
     make_property_setter("Leave Application", "leave_approver_name", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "total_leave_days", "hidden", 1, "Check")
     make_property_setter("Leave Application", "salary_slip", "hidden", 1, "Check")
     make_property_setter("Leave Application", "description", "reqd", 1, "Small Text")
     make_property_setter("Leave Application", "leave_balance", "hidden", 1, "Check")
