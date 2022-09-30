@@ -65,6 +65,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "User",
+   "link_to": "User",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Attendance",
    "link_type": "DocType",
    "onboard": 0,
@@ -150,15 +159,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "User",
-   "link_to": "User",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Employee Advance",
    "link_to": "Employee Advance",
    "link_type": "DocType",
@@ -175,7 +175,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-09-28 09:36:40.462190",
+ "modified": "2022-09-30 14:46:54.797870",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -193,6 +193,12 @@
    "doc_view": "",
    "label": "Employee Checkin Report",
    "link_to": "Employee Checkin Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Salary Details Report",
+   "link_to": "Salary Details Report",
    "type": "Report"
   },
   {
