@@ -51,7 +51,7 @@ def get_columns(filters):
         
         columns.append({
 
-            "label": i,
+            "label": i[len(i)-2:],
             "fieldtype": "Float",
             "fieldname": i,
             "print_width": 10
