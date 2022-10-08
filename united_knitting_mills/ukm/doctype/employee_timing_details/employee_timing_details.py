@@ -481,6 +481,10 @@ def create_staff_attendance(docname):
                 if(submit_doc):
                     attendance.reload()
                     attendance.submit()
+                else:
+                    attendance.total_shift_count = 0
+                    attendance.save()
+
                 # Link the Attendance
                 frappe.db.sql("""update `tabEmployee Checkin`
                     set attendance = %s

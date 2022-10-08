@@ -134,6 +134,9 @@ doc_events = {
 	},
 	'Additional Salary':{
 		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
+	},
+	'Payroll Entry':{
+		"validate":"united_knitting_mills.ukm.utils.python.payroll_entry.validate_to_date",
 	}
 	# "Location":{
 	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
