@@ -1,6 +1,7 @@
 # Copyright (c) 2022, UKM and contributors
 # For license information, please see license.txt
 
+from ctypes.wintypes import PFLOAT
 import frappe
 import pandas
 from datetime import date, datetime, timedelta
@@ -22,7 +23,7 @@ def get_columns(filters):
             "width": 100
         },
         {
-            "label": _("Code"),
+            "label": _("ID"),
             "fieldtype": "Link",
             "fieldname": "code",
             "options":"Employee",
@@ -69,9 +70,14 @@ def get_columns(filters):
             "fieldname": "total_amount",
             "width": 100
         },
-       
         {
-            "label": _("Tiffen"),
+            "label": _("Advance"),
+            "fieldtype": "Currency",
+            "fieldname": "advance",
+            "width": 100
+        },
+        {
+            "label": _("Food Expense"),
             "fieldtype": "Currency",
             "fieldname": "tiffen",
             "width": 100
@@ -98,7 +104,7 @@ def get_columns(filters):
             "label": _("Net Salary"),
             "fieldtype": "Currency",
             "fieldname": "net_salary",
-            "width": 200
+            "width": 100
         },
         {
             "label": _("Signature"),
@@ -140,8 +146,7 @@ def get_data(filters):
         filter["department"] = filters["department"]
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
-    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["employee","employee_name", "sum(total_shift_worked) as total_shift_worked","sum(net_pay) as net_pay","designation"],group_by="employee", order_by="designation")
-
+    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "sum(total_shift_worked) as total_shift_worked","sum(net_pay) as net_pay, total_deduction ","designation"],group_by="employee", order_by="designation")
     for j in ss:
         f=frappe._dict()
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
@@ -150,8 +155,38 @@ def get_data(filters):
         for k in between_dates:
             get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'docstatus':1,'attendance_date':k}, 'total_shift_count')
             f.update({k:get_attendance})
-            
-        f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"tiffen":'',"pf_deduction":'',"esi_deduction":'',"total_deduction":'',"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+
+        salary_slip_detail=frappe.get_doc("Salary Slip",j.name)
+        food_expence_count = 0
+        pf_count = 0
+        esi_count = 0
+        advance_count = 0
+        advance = "" 
+        food_expence = ""
+        esi = ""
+        pf = ""
+        for x in range(0,len(salary_slip_detail.deductions),1):
+            if food_expence_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Food Expense":
+                    food_expence = salary_slip_detail.deductions[x].__dict__["amount"]
+                    food_expence_count = 1
+
+            if esi_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "ESI":
+                    esi = salary_slip_detail.deductions[x].__dict__["amount"]
+                    esi_count = 1
+
+            if pf_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "PF":
+                    pf = salary_slip_detail.deductions[x].__dict__["amount"]
+                    pf_count = 1
+ 
+            if advance_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Employee Advance":
+                    advance = salary_slip_detail.deductions[x].__dict__["amount"]
+                    advance_count = 1
+
+        f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         data.append(f)
     d = [list(i.values()) for i in data]
    
@@ -161,7 +196,6 @@ def get_data(filters):
             check = d[i][0] 
             d[i][0] = f'<b>{d[i][0]}</b>'
            
-
         else:
             d[i][0]=''
    

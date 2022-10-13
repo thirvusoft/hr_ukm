@@ -24,6 +24,15 @@ def advance_validation(employee):
             return (emp_shift_amount[0][0] - previous_advance)
         elif emp_shift_amount:
             return (emp_shift_amount[0][0])
+    else:
+        emp_shift_amount = frappe.db.sql("""
+                        select sum(total_shift_amount)
+                        from `tabAttendance`
+                        where employee=%s and attendance_date>=%s and attendance_date<=%s and docstatus = 1
+		        """, (employee,from_date,to_date), as_list = 1)
+       
+        if emp_shift_amount:
+            return (emp_shift_amount[0][0])
         
         
 def validate(doc,event):

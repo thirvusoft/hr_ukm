@@ -26,4 +26,5 @@ def create_property_setter():
     make_property_setter("Salary Structure Assignment", "variable", "hidden", 1, "Check")
     make_property_setter("Salary Structure Assignment", "payroll_payable_account", "hidden", 1, "Check")
     make_property_setter("Salary Structure Assignment", "income_tax_slab", "hidden", 1, "Check")
-    make_property_setter("Salary Structure Assignment", "employee", "unique", 1, "Check")
+    make_property_setter("Salary Structure Assignment", "employee", "unique", 0, "Check")
+    make_property_setter("Salary Structure Assignment", "base", "label", "Wages", "Data")

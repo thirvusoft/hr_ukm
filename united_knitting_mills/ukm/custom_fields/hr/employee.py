@@ -49,6 +49,8 @@ def create_employee_fields_and_property_setter():
     make_property_setter("Employee", "unsubscribed", "hidden", 1, "Check")
     make_property_setter("Employee", "leave_encashed", "hidden", 1, "Check")
     make_property_setter("Employee", "create_user", "hidden", 1, "Button")
+    make_property_setter("Employee", "employment_details", "hidden", 1, "Section Break")
+    make_property_setter("Employee", "erpnext_user", "hidden", 1, "Section Break")
     employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",

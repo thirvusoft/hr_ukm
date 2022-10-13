@@ -29,6 +29,7 @@ def execute(filters=None):
                                 att.checkout_time,
                                 att.late_min,
                                 att.total_shift_count,
+                                att.total_shift_amount,
                                 doc.check_in_time,
                                 doc.check_out_time
                                 from `tabAttendance` as att left outer join `tabThirvu Employee Checkin Details` as doc
@@ -47,10 +48,10 @@ def execute(filters=None):
 
         else:
             data[i][0]=''
-        if data[i][7]:
-            data[i][3] = data[i][7]
         if data[i][8]:
-            data[i][4] = data[i][8]
+            data[i][3] = data[i][8]
+        if data[i][9]:
+            data[i][4] = data[i][9]
     columns = get_columns()
     return columns, data
  
@@ -61,8 +62,9 @@ def get_columns():
         _("Employee Name") + ":Data:200",
         _("In-Time") + ":Time:100",
         _("Out-Time") + ":Time:100",
-        _("Late Entry in Minutes") + ":Data:200",
-        _("Total Shift") + ":Float:150",
+        _("Late Entry in Minutes") + ":Data:160",
+        _("Total Shift") + ":Float:100",
+        _("Wages") + ":Float:100",
         ]
     
     return columns
