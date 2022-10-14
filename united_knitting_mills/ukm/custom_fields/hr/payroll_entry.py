@@ -22,6 +22,7 @@ def payroll_entry_property_setter():
     make_property_setter("Payroll Entry", "company", "hidden", 1, "Check")
     make_property_setter("Payroll Entry", "currency", "default", "INR", "Text")
     make_property_setter("Payroll Entry", "account", "hidden", 1, "Section Break")
+    make_property_setter("Payroll Entry", "section_break_13", "hidden", 1, "Section Break")
     make_property_setter("Payroll Entry", "currency", "hidden", 1, "Check")
     make_property_setter('Payroll Entry', 'payroll_frequency', 'default', 'Monthly', 'Select')
     make_property_setter('Payroll Entry', 'payroll_frequency', 'hidden', 1, 'Select')
