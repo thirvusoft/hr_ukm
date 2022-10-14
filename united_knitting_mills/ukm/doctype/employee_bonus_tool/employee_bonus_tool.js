@@ -28,6 +28,7 @@ frappe.ui.form.on("Employee Bonus Tool",{
 						frappe.model.set_value(child.doctype, child.name, "employee", r.message[0][i]["name"])
 						frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[0][i]["employee_name"])
 						frappe.model.set_value(child.doctype, child.name, "designation", designation)
+						frappe.model.set_value(child.doctype, child.name, "working_days", r.message[2][i])
 						frappe.model.set_value(child.doctype, child.name, "current_bonus", r.message[1][i])
 					}
 					cur_frm.refresh_field("employee_bonus_details")
