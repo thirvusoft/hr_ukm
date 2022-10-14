@@ -83,6 +83,26 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Thirvu Settings",
+   "link_to": "United Knitting Mills Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Thirvu Shift Status",
+   "link_to": "Thirvu Shift Status",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Thirvu Shift",
    "link_to": "Employee Timing Details",
    "link_type": "DocType",
@@ -106,6 +126,7 @@
    "link_to": "Leave Application",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Link"
   },
   {
@@ -159,8 +180,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Employee Advance",
-   "link_to": "Employee Advance",
+   "label": "Employee Bonus Tool",
+   "link_to": "Employee Bonus Tool",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -168,14 +189,14 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Additional Salary",
-   "link_to": "Additional Salary",
+   "label": "Employee Advance",
+   "link_to": "Employee Advance",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2022-09-30 14:46:54.797870",
+ "modified": "2022-10-14 17:26:56.746248",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
