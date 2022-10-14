@@ -7,12 +7,15 @@
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "from_date",
+  "to_date",
   "column_break_2",
   "bonus_account",
+  "location",
   "designation",
+  "section_break_8",
   "employee_bonus_details",
   "total_bonus_amount",
-  "id",
   "amended_from"
  ],
  "fields": [
@@ -24,15 +27,7 @@
    "reqd": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Employee Bonus Tool",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
+   "depends_on": "eval:doc.from_date && doc.to_date && doc.location",
    "fieldname": "designation",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -44,19 +39,14 @@
    "fieldname": "employee_bonus_details",
    "fieldtype": "Table",
    "label": "Employee Bonus Details",
-   "options": "Employee Bonus Details"
+   "options": "Employee Bonus Details",
+   "reqd": 1
   },
   {
    "fieldname": "total_bonus_amount",
    "fieldtype": "Currency",
-   "label": "Total Bonus Amount"
-  },
-  {
-   "fieldname": "id",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "ID",
-   "options": "Employee"
+   "label": "Total Bonus Amount",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_2",
@@ -66,13 +56,46 @@
    "fieldname": "bonus_account",
    "fieldtype": "Link",
    "label": "Bonus Account",
-   "options": "Account"
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Bonus Tool",
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-09-27 11:42:27.206677",
+ "modified": "2022-10-14 16:01:48.090373",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Tool",

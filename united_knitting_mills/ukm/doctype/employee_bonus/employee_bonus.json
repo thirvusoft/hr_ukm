@@ -63,7 +63,8 @@
    "fieldname": "reference",
    "fieldtype": "Link",
    "label": "Reference",
-   "options": "Employee Bonus Tool"
+   "options": "Employee Bonus Tool",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -89,13 +90,14 @@
    "fieldname": "bonus_account",
    "fieldtype": "Link",
    "label": "Bonus Account",
-   "options": "Account"
+   "options": "Account",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-09-27 11:38:28.246526",
+ "modified": "2022-10-14 16:00:11.578007",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus",

@@ -137,7 +137,12 @@ doc_events = {
 	},
 	'Payroll Entry':{
 		"validate":"united_knitting_mills.ukm.utils.python.payroll_entry.validate_to_date",
+	},
+ 	"Employee Bonus Tool":{
+		"validate":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.total_bonus_amt_total",
+		"on_submit":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.create_bonus"
 	}
+
 	# "Location":{
 	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
 	# 				"united_knitting_mills.ukm.utils.python.location.autoname"]
