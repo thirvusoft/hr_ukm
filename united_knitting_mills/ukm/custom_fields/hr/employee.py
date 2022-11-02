@@ -35,7 +35,7 @@ def create_employee_fields_and_property_setter():
         ]
     }
 
-    # create_custom_fields(custom_fields)
+    create_custom_fields(custom_fields)
     ## Property Setter
     make_property_setter("Employee", "naming_series", "default", "employee_naming_series.-.####", "Select")
     make_property_setter("Employee", "naming_series", "hidden", 1, "Select")
