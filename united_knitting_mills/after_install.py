@@ -27,7 +27,7 @@ def create_custom_fields():
     create_defults()
     attendance_customisation()
     create_company_fields()
-    create_employee_fields_and_property_setter()
+    # create_employee_fields_and_property_setter()
     create_payroll_settings_fields()
     create_shift_type_fields()
     department_customisation()
