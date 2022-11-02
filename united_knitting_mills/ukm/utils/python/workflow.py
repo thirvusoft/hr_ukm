@@ -62,13 +62,9 @@ def create_state():
             if(row=="Absent"):
                 new_doc.style="Danger"
             if(row=="pending Approval for Absent"):
-                new_doc.style="Primary"
+                new_doc.style="Warning"
             if(row=="pending Approval for Present"):
-                new_doc.style="Info"
-            if(row=="Approval for Absent"):
                 new_doc.style="Primary"
-            if(row=="Approval for Present"):
-                new_doc.style="Info"
             new_doc.save()
 
 def create_action():
