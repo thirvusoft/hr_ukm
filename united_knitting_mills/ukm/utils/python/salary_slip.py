@@ -143,7 +143,6 @@ def create_journal_entry(doc,action):
 def staff_salary_calculation(doc,event):
 
     if not doc.is_staff_calulation:
-        print("helooo")
         if doc.department:
             department = doc.department
             department_doc = frappe.get_doc("Department",department)
