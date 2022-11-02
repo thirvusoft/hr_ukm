@@ -11,7 +11,9 @@
   "buffer_time",
   "checkin_type_resetting_time",
   "column_break_4",
-  "check_in_date"
+  "check_in_date",
+  "attendance_settings_section",
+  "pay_leave"
  ],
  "fields": [
   {
@@ -19,6 +21,7 @@
    "description": "To create the permission for HR",
    "fieldname": "ts_create",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "Create"
   },
   {
@@ -39,7 +42,8 @@
   {
    "fieldname": "check_in_date",
    "fieldtype": "Date",
-   "label": "Check-In Date"
+   "label": "Check-In Date",
+   "read_only": 1
   },
   {
    "fieldname": "checkin_type_resetting_time",
@@ -47,12 +51,24 @@
    "in_list_view": 1,
    "label": "Resetting Time For Checkin Type",
    "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "attendance_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Attendance Settings"
+  },
+  {
+   "description": "Allowed Pay Leave For A Staff For A Single Month",
+   "fieldname": "pay_leave",
+   "fieldtype": "Int",
+   "label": "Pay Leave"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-09-06 18:50:33.301202",
+ "modified": "2022-11-02 17:45:48.103327",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

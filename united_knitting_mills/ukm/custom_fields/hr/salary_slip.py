@@ -31,8 +31,13 @@ def salary_slip_custom_fields():
 				fieldtype='Currency', insert_after='extra_minutes',hidden=1),
             dict(fieldname="is_staff_calulation", label='Is Staff Calulation',
 				fieldtype='Check', insert_after='ts_shift_amount',hidden=1),
+            dict(fieldname="per_day_salary_for_staff", label='Per Day Salary For Staff',
+				fieldtype='Float', insert_after='is_staff_calulation',hidden=1),
             dict(fieldname='ts_column_break',
 				fieldtype='Column Break',insert_after='employee'),
+            dict(fieldname="add_pay_leave", label='<p style="color:DodgerBlue;"><b>Add Pay Leave</b></p>',
+				fieldtype='Button', insert_after='earnings',depends_on="eval:doc.is_staff_calulation"),
+            
         ]
     }
     create_custom_fields(custom_fields)
