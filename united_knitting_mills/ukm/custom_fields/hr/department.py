@@ -12,7 +12,9 @@ def create_department_custom_fields():
 			dict(fieldname='department_approvers', label='Department Approvers',
 				fieldtype='Table',options='Department Approvers',insert_after='approvers'),
             dict(fieldname='unit', label='Unit',reqd=1,
-				fieldtype='Link',options='Location',insert_after='company')
+				fieldtype='Link',options='Location',insert_after='company'),
+            dict(fieldname='is_staff', label='Is Staff',
+				fieldtype='Check',insert_after='unit')
             ]
     }
     create_custom_fields(custom_fields)

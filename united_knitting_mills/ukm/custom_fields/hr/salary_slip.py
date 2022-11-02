@@ -29,6 +29,8 @@ def salary_slip_custom_fields():
 				fieldtype='Data', insert_after='total_shift_minutes',read_only=1),
             dict(fieldname='ts_shift_amount', label='Shift amount',
 				fieldtype='Currency', insert_after='extra_minutes',hidden=1),
+            dict(fieldname="is_staff_calulation", label='Is Staff Calulation',
+				fieldtype='Check', insert_after='ts_shift_amount',hidden=1),
             dict(fieldname='ts_column_break',
 				fieldtype='Column Break',insert_after='employee'),
         ]
