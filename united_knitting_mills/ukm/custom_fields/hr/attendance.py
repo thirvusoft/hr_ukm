@@ -98,7 +98,7 @@ def create_attendance_custom_fields():
         fieldtype='Section Break',insert_after='checkout_time'),
 
         dict(fieldname='total_shift_hr', label='Total Shift in Minutes',
-        fieldtype='Float',insert_after='section_break23',read_only=1),          
+        fieldtype='Float',insert_after='section_break23',read_only=1,depends_on='eval:!doc.staff'),          
         
         dict(fieldname='column_break24', label='',
         fieldtype='Column Break',insert_after='total_shift_hr'),       
@@ -107,13 +107,13 @@ def create_attendance_custom_fields():
         fieldtype='Float',insert_after='column_break24',depends_on='eval:!doc.staff',read_only=1),
 
         dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Minutes',
-        fieldtype='Float',insert_after='total_shift_count',depends_on='eval:doc.staff',read_only=1), 
+        fieldtype='Float',insert_after='total_shift_count',hidden=1,read_only=1), 
 
         dict(fieldname='column_break23', label='',
         fieldtype='Column Break',insert_after='ts_ot_hrs'),
 
         dict(fieldname='total_shift_amount', label='Amount to Pay',
-        fieldtype='Currency',insert_after='column_break23',read_only=1),
+        fieldtype='Currency',insert_after='column_break23',read_only=1,depends_on='eval:!doc.staff'),
 
         # Requested change fields
         dict(fieldname='req_section_break23', label='',
@@ -141,7 +141,7 @@ def create_attendance_custom_fields():
         fieldtype='Column Break',insert_after='req_checkout_time'),
 
         dict(fieldname='req_total_shift_amount', label='Requested Amount to Pay',
-        fieldtype='Currency',insert_after='req_column_break23',read_only_depends_on='eval:!doc.staff'),
+        fieldtype='Currency',insert_after='req_column_break23',depends_on='eval:!doc.staff',read_only_depends_on='eval:!doc.staff'),
         
 
         dict(fieldname='time1', label='Time1 Check',
