@@ -196,7 +196,8 @@
    "type": "Link"
   }
  ],
- "modified": "2022-10-14 17:26:56.746248",
+
+ "modified": "2022-11-02 17:19:12.748686",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -304,6 +305,13 @@
    "doc_view": "",
    "label": "Leave Appllication - Earned leave",
    "link_to": "Leave Appllication - Earned leave",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making Attendance Report",
+   "link_to": "Decision Making Attendance Report",
+   "restrict_to_domain": "",
    "type": "Report"
   }
  ],
