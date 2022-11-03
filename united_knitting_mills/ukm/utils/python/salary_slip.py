@@ -9,7 +9,7 @@ from frappe import _
 from frappe.utils.data import get_link_to_form
 from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
 
-def set_salary_for_labour_staff(doc,event):
+def set_salary_for_labour(doc,event):
     
     shift = get_employee_shift(doc.employee)
     shift_doc = frappe.get_doc('Employee Timing Details', shift)
@@ -23,7 +23,8 @@ def set_salary_for_labour_staff(doc,event):
     if(shift_doc.labour):
         salary_slip_for_labours(doc, event)
     # elif(shift_doc.staff or shift_doc.house_keeping):
-    #     salary_slip_for_staffs(doc, event)
+    #     # salary_slip_for_staffs(doc, event)
+    #     staff_salary_calculation(doc,event)
 
 @frappe.whitelist()
 def salary_slip_for_labours(doc,event):
@@ -150,8 +151,8 @@ def staff_salary_calculation(doc,event):
             if department_doc.is_staff:
                 salary_structure_assignment = frappe.get_value("Salary Structure Assignment",{"employee":doc.employee},["base"])
                 
-                per_day_salary = salary_structure_assignment/doc.total_working_days
-                salary_for_persent_days = per_day_salary * doc.payment_days
+                doc.per_day_salary_for_staff = salary_structure_assignment/doc.total_working_days
+                salary_for_persent_days = doc.per_day_salary_for_staff * doc.payment_days
                 doc.append("earnings",{"salary_component":"Basic",
                     "amount":salary_for_persent_days})
 
@@ -193,3 +194,25 @@ def staff_salary_calculation(doc,event):
         SalarySlip.set_net_total_in_words(doc)
                 
         
+@frappe.whitelist()
+def add_pay_leave(start_date = None, to_date = None, employee = None, per_day_salary_for_staff = None):
+
+    if not start_date:
+        frappe.throw("Please Select The Start Date.",title=_("Message"))
+    
+    if not to_date:
+        frappe.throw("Please Select The To Date.",title=_("Message"))
+
+    pay_leave = frappe.get_all("Leave Application",{
+                    "employee":employee,
+                    "is_pay_leave_application":1,
+                    "status":"Approved",
+                    "from_date":["between", (start_date, to_date)]
+                    },
+                "name")
+    
+    if not per_day_salary_for_staff:
+        per_day_salary_for_staff = 0
+
+    return len(pay_leave) * per_day_salary_for_staff, len(pay_leave)
+    
