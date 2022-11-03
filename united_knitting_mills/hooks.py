@@ -36,7 +36,8 @@ doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Holiday List":"ukm/utils/javascript/holiday_list.js",
 		 "Leave Application":"ukm/utils/javascript/leave_application.js",
 		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js",
-   		 "Employee Advance":"ukm/utils/javascript/employee_advance.js"}
+   		 "Employee Advance":"ukm/utils/javascript/employee_advance.js",
+		 "Salary Slip":"ukm/utils/javascript/salary_slip.js"}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
@@ -114,7 +115,7 @@ override_doctype_class = {
 # Hook on document methods and events
 doc_events = {
 	"Salary Slip":{
-		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour_staff",
+		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.staff_salary_calculation"
 		# "on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
 		
@@ -143,6 +144,9 @@ doc_events = {
 		"validate":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.total_bonus_amt_total",
 		"on_submit":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.create_bonus"
 	},
+	"Leave Application":{
+		"validate":"united_knitting_mills.ukm.utils.python.leave_application.validating_pay_leave"
+	}
 
 	# "Location":{
 	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
