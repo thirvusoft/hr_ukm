@@ -7,6 +7,15 @@ from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
 
 def validate_shift_details(doc, event):
    shift_hours(doc, event)
+
+   try:
+    if not doc.action_taken_by_hr:
+        if doc.early_exit or doc.insufficient_working_minutes or doc.mismatched_checkin or doc.break_time_overconsumed or doc.late_entry:
+            doc.total_shift_hr = 0
+            doc.total_shift_count = 0
+            doc.total_shift_amount = 0
+   except:
+        pass
  
   
 def shift_hours(doc,event):
