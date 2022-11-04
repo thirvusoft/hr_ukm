@@ -203,6 +203,7 @@ def add_pay_leave(start_date = None, to_date = None, employee = None, per_day_sa
     if not to_date:
         frappe.throw("Please Select The To Date.",title=_("Message"))
 
+
     pay_leave = frappe.get_all("Leave Application",{
                     "employee":employee,
                     "is_pay_leave_application":1,
@@ -210,9 +211,10 @@ def add_pay_leave(start_date = None, to_date = None, employee = None, per_day_sa
                     "from_date":["between", (start_date, to_date)]
                     },
                 "name")
-    
+
     if not per_day_salary_for_staff:
         per_day_salary_for_staff = 0
 
     return len(pay_leave) * per_day_salary_for_staff, len(pay_leave)
+
     

@@ -101,7 +101,7 @@ def validating_pay_leave(doc, event):
                 if leave_application:
                     allocated_leave = frappe.db.get_single_value("United Knitting Mills Settings","pay_leave")
 
-                    if allocated_leave < len(leave_application):
+                    if allocated_leave <= len(leave_application):
                         frappe.throw("Already You Consumed Pay Leave For This Month.",title=_("Message"))
                 else:
                     doc.is_pay_leave_application = 1
