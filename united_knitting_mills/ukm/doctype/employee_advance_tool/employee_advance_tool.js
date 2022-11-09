@@ -4,35 +4,31 @@ frappe.ui.form.on("Employee Advance Tool",{
 		var advance=locals[cdt][cdn]
 		var designation = advance.designation
 		var department = advance.department
-		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, ['location','name'], function(data) {
-			var location=data.location
-			if(location){
-				cur_frm.set_value('id',data.name)
-				frappe.call({
-					method:"united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.employee_finder",
-					args:{designation,location,department},
-					callback(r){
-						frm.clear_table("employee_advance_details");
-						for(let i=0;i<r.message.length;i++){
-							var child = cur_frm.add_child("employee_advance_details");
-							frappe.model.set_value(child.doctype, child.name, "employee", r.message[i]["name"])
-							frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[i]["employee_name"])
-							frappe.model.set_value(child.doctype, child.name, "designation", designation)
-							frappe.model.set_value(child.doctype, child.name, "payment_method",'Deduct from Salary')
-							frappe.model.set_value(child.doctype, child.name, "eligible_amount",r.message[i]["eligible_amount"] || 0)
-							frappe.model.set_value(child.doctype, child.name, "current_advance",r.message[i]["current_advance"] || 0)
-
-						}
-						cur_frm.refresh_field("employee_advance_details")
-					}
-				})
-			}
-			else{
-				frappe.msgprint('Location not assigned for this user')
-			}
+		var location = advance.ts_location
+		if(location){
 			
-		});		
+			frappe.call({
+				method:"united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.employee_finder",
+				args:{designation,location,department},
+				callback(r){
+					frm.clear_table("employee_advance_details");
+					for(let i=0;i<r.message.length;i++){
+						var child = cur_frm.add_child("employee_advance_details");
+						frappe.model.set_value(child.doctype, child.name, "employee", r.message[i]["name"])
+						frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[i]["employee_name"])
+						frappe.model.set_value(child.doctype, child.name, "designation", r.message[i]["designation"])
+						frappe.model.set_value(child.doctype, child.name, "payment_method",'Deduct from Salary')
+						frappe.model.set_value(child.doctype, child.name, "eligible_amount",r.message[i]["eligible_amount"] || 0)
+						frappe.model.set_value(child.doctype, child.name, "current_advance",r.message[i]["current_advance"] || 0)
 
+					}
+					cur_frm.refresh_field("employee_advance_details")
+				}
+			})
+		}
+		else{
+			frappe.msgprint('Location not assigned for this user')
+		}	
 	},
 	
 	on_submit:function(frm,cdt,cdn){
@@ -54,8 +50,7 @@ frappe.ui.form.on("Employee Advance Tool",{
 		var total = 0;
 		for(var i in table) {
 			total = total + table[i].current_advance;
-		 }
-		 frm.set_value("total_advance_amount",total);
 		}
-	
+		frm.set_value("total_advance_amount",total);
+	}
 })

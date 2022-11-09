@@ -18,7 +18,7 @@ def employee_finder(location,designation=None,department=None):
 		filters.update({"department":department})
 	if designation:
 		filters.update({"designation":designation})
-	emp_list=frappe.db.get_all("Employee",filters=filters,fields=["name", "employee_name"])
+	emp_list=frappe.db.get_all("Employee",filters=filters,fields=["name", "employee_name","designation"],order_by = "name")
 	for name in emp_list:
 		name.update({
 			"eligible_amount":advance_validation(name['name']),
@@ -43,5 +43,5 @@ def create_employee_advance(name,amount,eligible_amount,date,payment_type):
 		if payment_type=="Deduct from Salary":
 			advance_doc.repay_unclaimed_amount_from_salary=1
 		advance_doc.insert()
-		advance_doc.submit()
-		frappe.db.commit()
+		# advance_doc.submit()
+		# frappe.db.commit()
