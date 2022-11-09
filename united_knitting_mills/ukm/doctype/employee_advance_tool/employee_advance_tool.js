@@ -1,25 +1,27 @@
 	
 frappe.ui.form.on("Employee Advance Tool",{
-	designation:function(frm,cdt,cdn){
+	get_employees:function(frm,cdt,cdn){
 		var advance=locals[cdt][cdn]
-		var advance1=advance.designation
+		var designation = advance.designation
+		var department = advance.department
 		frappe.db.get_value('Employee', {'user_id':frappe.session.user}, ['location','name'], function(data) {
 			var location=data.location
 			if(location){
 				cur_frm.set_value('id',data.name)
 				frappe.call({
 					method:"united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.employee_finder",
-					args:{advance1,location},
+					args:{designation,location,department},
 					callback(r){
 						frm.clear_table("employee_advance_details");
 						for(let i=0;i<r.message.length;i++){
 							var child = cur_frm.add_child("employee_advance_details");
 							frappe.model.set_value(child.doctype, child.name, "employee", r.message[i]["name"])
 							frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[i]["employee_name"])
-							frappe.model.set_value(child.doctype, child.name, "designation", advance1)
-							if (frm.doc.designation == "Labour Worker"){
-								frappe.model.set_value(child.doctype, child.name, "payment_method",'Deduct from Salary')
-							}
+							frappe.model.set_value(child.doctype, child.name, "designation", designation)
+							frappe.model.set_value(child.doctype, child.name, "payment_method",'Deduct from Salary')
+							frappe.model.set_value(child.doctype, child.name, "eligible_amount",r.message[i]["eligible_amount"] || 0)
+							frappe.model.set_value(child.doctype, child.name, "current_advance",r.message[i]["current_advance"] || 0)
+
 						}
 						cur_frm.refresh_field("employee_advance_details")
 					}
@@ -39,6 +41,7 @@ frappe.ui.form.on("Employee Advance Tool",{
 			frappe.call({
 				method:"united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.create_employee_advance",
 				args:{amount:advance.employee_advance_details[i].current_advance,
+					eligible_amount:advance.employee_advance_details[i].eligible_amount,
 					name:advance.employee_advance_details[i].employee,
 					date:frm.doc.date,
 					payment_type:advance.employee_advance_details[i].payment_method},

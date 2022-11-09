@@ -7,6 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "ts_create",
+  "column_break_2",
+  "advance_percentage",
   "biometric_settings_section",
   "buffer_time",
   "checkin_type_resetting_time",
@@ -63,12 +65,22 @@
    "fieldname": "pay_leave",
    "fieldtype": "Int",
    "label": "Pay Leave"
+  },
+  {
+   "fieldname": "advance_percentage",
+   "fieldtype": "Percent",
+   "label": "Advance Percentage",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-11-02 17:45:48.103327",
+ "modified": "2022-11-09 14:44:15.304179",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
