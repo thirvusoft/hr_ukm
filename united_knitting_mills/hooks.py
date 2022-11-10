@@ -116,7 +116,7 @@ override_doctype_class = {
 doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
-		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.staff_salary_calculation"
+		# "validate":"united_knitting_mills.ukm.utils.python.salary_slip.staff_salary_calculation"
 		# "on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
 		
 	},
@@ -131,9 +131,9 @@ doc_events = {
 		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
-	'Employee Advance':{
-		"validate":"united_knitting_mills.ukm.utils.python.employee_advance.validate",
-	},
+	# 'Employee Advance':{
+	# 	"validate":"united_knitting_mills.ukm.utils.python.employee_advance.validate",
+	# },
 	'Additional Salary':{
 		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
 	},

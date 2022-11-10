@@ -22,9 +22,9 @@ def set_salary_for_labour(doc,event):
         doc.ts_shift_amount = emp_base_amount[0][0]
     if(shift_doc.labour):
         salary_slip_for_labours(doc, event)
-    # elif(shift_doc.staff or shift_doc.house_keeping):
-    #     # salary_slip_for_staffs(doc, event)
-    #     staff_salary_calculation(doc,event)
+    elif(shift_doc.staff or shift_doc.house_keeping):
+        # salary_slip_for_staffs(doc, event)
+        staff_salary_calculation(doc,event)
 
 @frappe.whitelist()
 def salary_slip_for_labours(doc,event):
