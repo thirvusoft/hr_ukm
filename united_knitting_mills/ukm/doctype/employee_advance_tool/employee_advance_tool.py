@@ -56,5 +56,4 @@ def create_employee_advance(name,amount,eligible_amount,payment_type):
 		if payment_type=="Deduct from Salary":
 			advance_doc.repay_unclaimed_amount_from_salary = 1
 		advance_doc.insert()
-		# advance_doc.submit()
-		# frappe.db.commit()
+		advance_doc.submit()
