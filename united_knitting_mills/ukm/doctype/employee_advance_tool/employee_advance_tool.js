@@ -54,3 +54,10 @@ frappe.ui.form.on("Employee Advance Tool",{
 		frm.set_value("total_advance_amount",total);
 	}
 })
+frappe.ui.form.on("Employee Advance Details",{
+	current_advance:function(frm, cdt, cdn) {
+		let row = locals[cdt][cdn]
+		if (row.current_advance > row.eligible_amount){
+			frappe.throw({message: __("{0}  is greater than {1}",[row.current_advance,row.eligible_amount])});		}
+	}
+})
