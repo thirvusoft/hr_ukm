@@ -133,7 +133,8 @@ def get_columns(filters):
 def get_data(filters):
     data=[]
 
-    filter={'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']],'docstatus':1}
+    # filter={'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']],'docstatus':1}
+    filter={'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']]}
     keys = list(filters.keys())
     from_date = filters["from_date"]
     to_date = filters["to_date"]
@@ -146,7 +147,7 @@ def get_data(filters):
         filter["department"] = filters["department"]
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
-    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "sum(total_shift_worked) as total_shift_worked","sum(net_pay) as net_pay, total_deduction ","designation"],group_by="employee", order_by="designation")
+    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation"],group_by="employee", order_by="designation")
     for j in ss:
         f=frappe._dict()
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
