@@ -145,7 +145,7 @@ doc_events = {
 		"on_submit":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.create_bonus"
 	},
 	"Leave Application":{
-		"validate":"united_knitting_mills.ukm.utils.python.leave_application.validating_pay_leave"
+		"validate":"united_knitting_mills.ukm.utils.python.leave_application.validating_pay_leave",
 	}
 
 	# "Location":{

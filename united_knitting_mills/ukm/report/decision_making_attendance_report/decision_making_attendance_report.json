@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"workflow_state\",\"!=\",\"Absent\",false],[\"Attendance\",\"workflow_state\",\"!=\",\"Present\",false],[\"Attendance\",\"workflow_state\",\"!=\",\"Draft\",false]],\"fields\":[[\"employee\",\"Attendance\"],[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"workflow_state\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"action_taken_by_hr\",\"Attendance\"],[\"req_total_shift_hr\",\"Attendance\"],[\"req_total_shift_count\",\"Attendance\"],[\"req_total_shift_amount\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"employee\":120,\"name\":120,\"workflow_state\":120,\"attendance_date\":120,\"action_taken_by_hr\":120,\"req_total_shift_hr\":120,\"req_total_shift_count\":120,\"req_total_shift_amount\":120},\"group_by\":null}",
  "letter_head": "UKM UNIT II",
- "modified": "2022-11-04 11:34:58.149866",
+ "modified": "2022-11-10 18:09:40.794100",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making Attendance Report",
@@ -32,12 +32,6 @@
   },
   {
    "role": "Thirvu Owner"
-  },
-  {
-   "role": "Thirvu HR Manager"
-  },
-  {
-   "role": "Thirvu HR User"
   }
  ]
 }

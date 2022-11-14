@@ -25,4 +25,11 @@ frappe.ui.form.on("Leave Application",{
            
 
     },
+    after_save:function(frm){
+        if(frm.doc.docstatus != 1){
+            if(frm.doc.status == "Rejected" || frm.doc.status == "Approved"){
+                cur_frm.savesubmit()
+            }
+        }
+    }
 })
