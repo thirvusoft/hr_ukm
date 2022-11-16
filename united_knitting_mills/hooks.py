@@ -202,6 +202,9 @@ except:pass
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "united_knitting_mills.event.get_events"
 # }
+override_whitelisted_methods = {
+	"erpnext.payroll.doctype.payroll_entry.payroll_entry.get_start_end_dates": "united_knitting_mills.ukm.utils.python.payroll_entry.get_start_end_dates"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
