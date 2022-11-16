@@ -22,12 +22,16 @@ from united_knitting_mills.ukm.custom_fields.hr.salary_slip import salary_slip_c
 from united_knitting_mills.ukm.custom_fields.hr.additional_salary import additional_salary_customizations
 from united_knitting_mills.ukm.custom_fields.hr.employee_advance import employee_advance_customisation
 from united_knitting_mills.ukm.custom_fields.hr.leave_type import leave_type_customizations
+from united_knitting_mills.ukm.custom_fields.accounts.bank import bank_customization
+
+
 def create_custom_fields():
     leave_application_customizations()
     create_defults()
     attendance_customisation()
     create_company_fields()
     create_employee_fields_and_property_setter()
+    bank_customization()
     create_payroll_settings_fields()
     create_shift_type_fields()
     department_customisation()
