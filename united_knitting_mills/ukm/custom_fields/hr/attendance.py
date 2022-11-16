@@ -113,7 +113,7 @@ def create_attendance_custom_fields():
         fieldtype='Column Break',insert_after='ts_ot_hrs'),
 
         dict(fieldname='total_shift_amount', label='Amount to Pay',
-        fieldtype='Currency',insert_after='column_break23',read_only=1,depends_on='eval:!doc.staff'),
+        fieldtype='Currency',insert_after='column_break23',read_only=1,depends_on='eval:!doc.staff',allow_on_submit = 1),
 
         # Requested change fields
         dict(fieldname='req_section_break23', label='',
