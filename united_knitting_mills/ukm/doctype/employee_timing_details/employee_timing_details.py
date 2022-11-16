@@ -428,7 +428,7 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
             emp_base_amount = emp_base_amount[0][0]
         else:
             emp_base_amount=0
-        attendance.total_shift_amount = emp_base_amount
+        attendance.total_shift_amount = 0
         if(worked_time <act_work_hrs):
             reason +=f"\n-> Insufficient Working Hours({act_work_hrs} hrs required but only {worked_time} worked)."
             submit_doc = False

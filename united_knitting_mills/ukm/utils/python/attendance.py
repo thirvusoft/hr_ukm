@@ -14,6 +14,9 @@ def validate_shift_details(doc, event):
             doc.total_shift_hr = 0
             doc.total_shift_count = 0
             doc.total_shift_amount = 0
+    else:
+        if doc.staff:
+            doc.total_shift_count = 1
    except:
         pass
  

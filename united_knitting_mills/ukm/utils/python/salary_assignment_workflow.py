@@ -18,24 +18,24 @@ def create_workflow_doc():
         state = 'Approval Pending',doc_status=0, allow_edit = 'Thirvu HR User'
     ))
     workflow.append('states', dict(
-        state = 'Approved by HR Manager',doc_status=1, allow_edit = 'Thirvu Owner'
+        state = 'Approved by MD',doc_status=1, allow_edit = 'Thirvu Owner'
     ))
     workflow.append('states', dict(
-        state = 'Rejected by HR manager',doc_status=0, allow_edit = 'Thirvu Owner'
+        state = 'Rejected by MD',doc_status=0, allow_edit = 'Thirvu Owner'
     ))
 
     workflow.append('transitions', dict(
-        state = 'Approval Pending', action='Approve', next_state = 'Approved by HR Manager',
+        state = 'Approval Pending', action='Approve', next_state = 'Approved by MD',
         allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.append('transitions', dict(
-        state = 'Approval Pending', action='Reject', next_state = 'Rejected by HR manager',
+        state = 'Approval Pending', action='Reject', next_state = 'Rejected by MD',
         allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.insert(ignore_permissions=True)
     return workflow
 def create_state():
-    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by HR Manager','Rejected by HR manager']
+    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by MD','Rejected by MD']
     for row in list:
         if not frappe.db.exists('Workflow State', row):
             new_doc = frappe.new_doc('Workflow State')
@@ -46,11 +46,11 @@ def create_state():
                 new_doc.style="Success"
             if(row=="Rejected"):
                 new_doc.style="Danger"
-            if(row=="Approved by HR Manager"):
+            if(row=="Approved by MD"):
                 new_doc.style="Success"
             if(row=="Approval Pending"):
                 new_doc.style="Warning"
-            if(row=="Rejected by HR manager"):
+            if(row=="Rejected by MD"):
                 new_doc.style="Danger"
             new_doc.save()
 
