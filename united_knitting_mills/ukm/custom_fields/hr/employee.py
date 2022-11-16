@@ -31,11 +31,14 @@ def create_employee_fields_and_property_setter():
             dict(fieldname='ts_interview_details',
                 fieldtype='Table', insert_after='ts_sec_brk_111', options='TS INTERVIEW DETAILS'),
             dict(fieldname='add_html',
-                fieldtype='Small Text', insert_after='current_address',)
+                fieldtype='Small Text', insert_after='current_address'),
+            dict(fieldname='ts_bank_branch_name', label='Branch Name',
+                fieldtype='Link', insert_after='bank_name', options='Territory', depends_on = "eval:doc.salary_mode == 'Bank'")
         ]
     }
 
     create_custom_fields(custom_fields)
+    
     ## Property Setter
     make_property_setter("Employee", "naming_series", "default", "employee_naming_series.-.####", "Select")
     make_property_setter("Employee", "naming_series", "hidden", 1, "Select")
@@ -51,6 +54,7 @@ def create_employee_fields_and_property_setter():
     make_property_setter("Employee", "create_user", "hidden", 1, "Button")
     make_property_setter("Employee", "employment_details", "hidden", 1, "Section Break")
     make_property_setter("Employee", "erpnext_user", "hidden", 1, "Section Break")
+    
     employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",
