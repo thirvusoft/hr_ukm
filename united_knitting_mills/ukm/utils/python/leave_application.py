@@ -6,6 +6,8 @@ from frappe import _
 import datetime
 from dateutil.relativedelta import relativedelta
 
+from frappe.utils.data import today, get_datetime
+
 from erpnext.hr.utils import (
 	get_holiday_dates_for_employee,
 	get_leave_period,
@@ -17,7 +19,7 @@ from erpnext.hr.utils import (
 
 class TsLeaveApplication(LeaveApplication):
     def validate(self):
-        if(self.leave_type not in ['Permission', 'On Duty']):
+        if(self.leave_type not in ['Permission', 'On Duty', 'Pay Leave']):
             validate_active_employee(self.employee)
             set_employee_name(self)
             self.validate_dates()
@@ -40,7 +42,7 @@ class TsLeaveApplication(LeaveApplication):
             )
 
         self.validate_back_dated_application()
-        if self.leave_type not in ['On Duty','Permission']:
+        if self.leave_type not in ['On Duty','Permission','Pay Leave']:
             self.update_attendance()
 
         # notify leave applier about approval
@@ -94,6 +96,7 @@ def validating_pay_leave(doc, event):
                     "employee":doc.employee,
                     "leave_type":leave_type,
                     "status":"Approved",
+                    "docstatus":1,
                     "from_date":["between", (first_date_of_month, last_date_of_month)]
                     },
                 "name")
@@ -108,3 +111,53 @@ def validating_pay_leave(doc, event):
         else:
             frappe.throw("For Pay Leave, From Date And To Date Should Be Same Date.",title=_("Message"))
             
+@frappe.whitelist()
+def attendance_updation(doc, event):
+    
+    if doc.leave_type != 'Pay Leave':
+        if frappe.db.exists('Attendance',{"attendance_date": doc.attendance_date,"employee": doc.employee, "docstatus":["!=", 2]}):
+
+            existing_doc = frappe.get_doc('Attendance',{"attendance_date": doc.attendance_date,"employee":doc.employee, "docstatus":["!=", 2]})
+            
+            if existing_doc.docstatus:
+                new_doc = frappe.copy_doc(existing_doc)
+                new_doc.workflow_state = "Draft"
+                existing_doc.workflow_state = "Cancelled"
+                existing_doc.cancel()
+                
+                new_doc.amended_from = existing_doc.name
+                
+                new_doc.update({
+                    'leave_application': doc.name,
+                    'leave_type': doc.leave_type
+                    })
+                new_doc.insert()
+
+                doc.attendance_marked = 1
+                doc.save()
+
+            else:
+                existing_doc.update({
+                    'leave_application': doc.name,
+                    'leave_type': doc.leave_type
+                    })
+                existing_doc.save()
+
+                doc.attendance_marked = 1
+                doc.save()
+                
+            
+        else:
+            
+            if get_datetime(doc.attendance_date) < get_datetime(today()):
+
+                attendance = frappe.new_doc('Attendance')
+                attendance.employee = doc.employee
+                attendance.attendance_date = doc.attendance_date
+                attendance.leave_application = doc.name
+                attendance.leave_type = doc.leave_type
+                attendance.save()
+
+                doc.attendance_marked = 1
+                doc.save()
+        

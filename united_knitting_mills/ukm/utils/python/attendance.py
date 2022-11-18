@@ -6,66 +6,85 @@ from erpnext.hr.doctype.attendance.attendance import Attendance
 from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
 
 def validate_shift_details(doc, event):
-   shift_hours(doc, event)
+    
+    shift_hours(doc, event)
 
-   try:
     if not doc.action_taken_by_hr:
         if doc.early_exit or doc.insufficient_working_minutes or doc.mismatched_checkin or doc.break_time_overconsumed or doc.late_entry:
+            
             doc.total_shift_hr = 0
             doc.total_shift_count = 0
             doc.total_shift_amount = 0
     else:
         if doc.staff:
             doc.total_shift_count = 1
-   except:
-        pass
+
  
   
 def shift_hours(doc,event):
+
     shift = get_employee_shift(doc.employee)
     labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
     if labour and (event == 'after_insert') or (event == 'validate' and not doc.is_new()):
-        if(doc.thirvu_shift_details):      
+        
+        if doc.thirvu_shift_details:      
             doc.total_shift_hr = 0
             doc.total_shift_count = 0
             doc.total_shift_amount = 0
-            for data in doc.thirvu_shift_details:
-                    if(not data.start_time or not data.end_time):continue
-                    if(str(type(data.start_time)) == "<class 'str'>" or str(type(data.end_time)) == "<class 'str'>"):
-                        data.start_time = str(data.start_time)
-                        data.end_time = str(data.end_time)
-                    if(data.start_time<=data.end_time):
-                        shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format(data.end_time, data.start_time),as_list = 1)[0][0]
-                        shift_hours =  shift_hr / datetime.timedelta(hours=1)
-                    else:
-                        shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format("23:59:59", data.start_time),as_list = 1)[0][0].__str__()
-                        shift_hr = list(map(float, shift_hr.split(':')))
-                        end_time = str(data.end_time).split(':')
-                        for i in range(len(end_time)):
-                            shift_hr[i]= str(int(shift_hr[i]) + int(float(end_time[i])))
-                        # shift_hr = ':'.join(shift_hr)
-                        # shift_hr = dt.strptime(shift_hr, '%H:%M:%S').time()
-                        delta = datetime.timedelta(hours=int(shift_hr[0]), minutes=int(shift_hr[1]), seconds=int(shift_hr[2]))
-                        shift_hours = delta.total_seconds()/ (60*60) 
-                        shift_hr = delta
 
-                    
-                    if shift_hours > 0:
-                        if(not data.get('shif_hours')):
-                            data.shift_hours = shift_hours
-                        doc.total_shift_hr += shift_hr / datetime.timedelta(minutes=1)
-                    else:
-                        diff_time = (to_timedelta(str(data.end_time)) - to_timedelta(str(data.start_time)))
-                        if(not data.get('shif_hours')):
-                            data.shift_hours = diff_time/ datetime.timedelta(hours=1)
-                        doc.total_shift_hr +=  diff_time / datetime.timedelta(minutes=1)
-                    doc.total_shift_count += data.shift_count
-                    doc.total_shift_amount += data.shift_salary
-            if(doc.total_shift_hr):
-                    doc.total_shift_hr -= get_total_break_time(doc.employee)
-                    temp = doc.total_shift_hr
-                    doc.total_shift_hr = round(temp)
+            if doc.action_taken_by_hr:    
+                doc.total_shift_hr = doc.req_total_shift_hr
+                doc.total_shift_count = doc.req_total_shift_count
+                doc.total_shift_amount = doc.req_total_shift_amount
 
+            else:
+                for data in doc.thirvu_shift_details:
+                        if not data.start_time or not data.end_time:
+                            continue
+
+                        if(str(type(data.start_time)) == "<class 'str'>" or str(type(data.end_time)) == "<class 'str'>"):
+                            data.start_time = str(data.start_time)
+                            data.end_time = str(data.end_time)
+
+                        if(data.start_time<=data.end_time):
+                            shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format(data.end_time, data.start_time),as_list = 1)[0][0]
+                            shift_hours =  shift_hr / datetime.timedelta(hours=1)
+                        
+                        else:
+                            shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format("23:59:59", data.start_time),as_list = 1)[0][0].__str__()
+                            shift_hr = list(map(float, shift_hr.split(':')))
+                            end_time = str(data.end_time).split(':')
+
+                            for i in range(len(end_time)):
+                                shift_hr[i]= str(int(shift_hr[i]) + int(float(end_time[i])))
+
+                            delta = datetime.timedelta(hours=int(shift_hr[0]), minutes=int(shift_hr[1]), seconds=int(shift_hr[2]))
+                            shift_hours = delta.total_seconds()/ (60*60) 
+                            shift_hr = delta
+
+                        
+                        if shift_hours > 0:
+                            if(not data.get('shif_hours')):
+                                data.shift_hours = shift_hours
+
+                            doc.total_shift_hr += shift_hr / datetime.timedelta(minutes=1)
+
+                        else:
+                            diff_time = (to_timedelta(str(data.end_time)) - to_timedelta(str(data.start_time)))
+                            
+                            if not data.get('shif_hours'):
+                                data.shift_hours = diff_time/ datetime.timedelta(hours=1)
+
+                            doc.total_shift_hr +=  diff_time / datetime.timedelta(minutes=1)
+
+                        doc.total_shift_count += data.shift_count
+                        doc.total_shift_amount += data.shift_salary
+
+                if doc.total_shift_hr:
+                        doc.total_shift_hr -= get_total_break_time(doc.employee)
+                        temp = doc.total_shift_hr
+                        doc.total_shift_hr = round(temp)
+            
 
 def update_time_field(doc,event):
     if not doc.time1:

@@ -146,6 +146,7 @@ doc_events = {
 	},
 	"Leave Application":{
 		"validate":"united_knitting_mills.ukm.utils.python.leave_application.validating_pay_leave",
+		"on_submit":"united_knitting_mills.ukm.utils.python.leave_application.attendance_updation"
 	},
 	"Salary Structure Assignment":{
 		"on_submit":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.salary_updation"

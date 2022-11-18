@@ -503,20 +503,27 @@ def scheduler_for_employee_shift():
    
 def leave_application_to_attendance():
     # leave application proccessed to attendance
-    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<=", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
+    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
         application_doc = frappe.get_doc('Leave Application',data)
-        if frappe.db.exists('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee}):
-            existing_doc = frappe.get_doc('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee})
+
+        if frappe.db.exists('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee,"docstatus":["!=", 2]}):
+            existing_doc = frappe.get_doc('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee,"docstatus":["!=", 2]})
+            
             if existing_doc.docstatus:
+
+                new_doc = frappe.copy_doc(existing_doc)
+                new_doc.workflow_state = "Draft"
+                existing_doc.workflow_state = "Cancelled"
                 existing_doc.cancel()
-                new_doc = frappe.copy_doc(existing_doc) 
+                
                 new_doc.amended_from = existing_doc.name
-                new_doc.status = "On Leave" 
+                
                 new_doc.update({
-                    'leave_application':application_doc.name,
-                    'leave_type':application_doc.leave_type
+                    'leave_application': application_doc.name,
+                    'leave_type': application_doc.leave_type
                     })
                 new_doc.insert()
+
             else:
                 existing_doc.update({
                     'leave_application':application_doc.name,
@@ -529,10 +536,10 @@ def leave_application_to_attendance():
             attendance = frappe.new_doc('Attendance')
             attendance.employee = application_doc.employee
             attendance.attendance_date = application_doc.attendance_date
-            attendance.status = "On Leave"
             attendance.leave_application = application_doc.name
             attendance.leave_type = application_doc.leave_type
             attendance.save()
-        application_doc.attendance_marked=1
+
+        application_doc.attendance_marked = 1
         application_doc.save()
 
