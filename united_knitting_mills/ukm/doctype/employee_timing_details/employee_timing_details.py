@@ -503,7 +503,7 @@ def scheduler_for_employee_shift():
    
 def leave_application_to_attendance():
     # leave application proccessed to attendance
-    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<=", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
+    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
         application_doc = frappe.get_doc('Leave Application',data)
 
         if frappe.db.exists('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee,"docstatus":["!=", 2]}):
