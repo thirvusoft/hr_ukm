@@ -71,7 +71,6 @@ def get_columns(filters):
             "fieldname": "salary",
             "width": 80
         },
-      
         ]
     from_date = filters["from_date"]
     to_date = filters["to_date"]
@@ -163,25 +162,35 @@ def get_columns(filters):
 def get_data(filters):
     data=[]
 
-    # filter={'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']],'docstatus':1}
-    filter={'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']]}
+    filter = {'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']],'docstatus':1}
+    
     keys = list(filters.keys())
+
     from_date = filters["from_date"]
     to_date = filters["to_date"]
+
     from_d = tuple(map(int, from_date.split('-')))
     to_d = tuple(map(int, to_date.split('-')))
+
     between_dates = list(map(str, list(daterange(date(from_d[0], from_d[1], from_d[2]),date(to_d[0], to_d[1], to_d[2])))))
+   
     if ("designation" in keys):
         filter["designation"] = filters["designation"]
+
     if ("department" in keys):
         filter["department"] = filters["department"]
+
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
+
     ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation"],group_by="employee", order_by="designation")
+    
     for j in ss:
         f=frappe._dict()
         emp_doc = frappe.get_doc("Employee",j.employee)
+        
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
+        
         f.update(
             {
                 "designation" : j.designation,
@@ -201,14 +210,17 @@ def get_data(filters):
             f.update({k:get_attendance})
 
         salary_slip_detail=frappe.get_doc("Salary Slip",j.name)
+
         food_expence_count = 0
         pf_count = 0
         esi_count = 0
         advance_count = 0
+
         advance = "" 
         food_expence = ""
         esi = ""
         pf = ""
+
         for x in range(0,len(salary_slip_detail.deductions),1):
             if food_expence_count == 0:
                 if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Food Expense":
@@ -236,6 +248,7 @@ def get_data(filters):
     d = [list(i.values()) for i in data]
 
     check =''
+
     for i in range (0,len(d),1):
         if d[i][0] != check:
             check = d[i][0] 
