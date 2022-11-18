@@ -8,9 +8,11 @@ def salary_updation(doc, event):
     for att_doc in att_docs:
         att = frappe.get_doc("Attendance", att_doc)
         
-        if att.total_shift_amount == 0:
-            att.total_shift_amount = att.total_shift_count * doc.base
-            att.save()
+        if not att.staff:
+
+            if att.total_shift_amount == 0:
+                att.total_shift_amount = att.total_shift_count * doc.base
+                att.save()
 
 def salary_updation_old():
 
@@ -23,10 +25,13 @@ def salary_updation_old():
 
             for att_doc in att_docs:
                 att = frappe.get_doc("Attendance", att_doc)
-                
-                if att.total_shift_amount == 0:
-                    att.total_shift_amount = att.total_shift_count * ssa_base.base
-                    att.save()
+
+                if not att.staff:
+                    
+                    if att.total_shift_count == 1.250:
+                        att.total_shift_count += 0.250
+                        att.total_shift_amount = att.total_shift_count * ssa_base.base
+                        att.save()
 
 
 
