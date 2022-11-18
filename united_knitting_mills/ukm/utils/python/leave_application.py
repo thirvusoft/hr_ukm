@@ -54,26 +54,19 @@ class TsLeaveApplication(LeaveApplication):
 
 
 @frappe.whitelist()
-def leave_type_filter(department = None):
+def employee_staff_filter():
 
-    filtered_leave_type = []
+    filtered_staff_employees = []
     
-    if department:
-        is_staff_department = frappe.get_value("Department",department,"is_staff")
+    is_staff_department = frappe.get_all("Department", {"is_staff": 1})
 
-        if not is_staff_department:
-            leave_type_name = frappe.get_all("Leave Type",{"is_pay_leave":0})
+    for staff_department in is_staff_department:
+        staff_employees = frappe.get_all("Employee", {"department":staff_department.name,"status": "Active"})
+    
+        for employee in staff_employees:
+            filtered_staff_employees.append(employee.name)
 
-            for name in leave_type_name:
-                filtered_leave_type.append(name["name"])
-
-    if not filtered_leave_type:
-        leave_type_name = frappe.get_all("Leave Type")
-
-        for name in leave_type_name:
-            filtered_leave_type.append(name["name"])
-
-    return filtered_leave_type
+    return filtered_staff_employees
 
 @frappe.whitelist()
 def validating_pay_leave(doc, event):
