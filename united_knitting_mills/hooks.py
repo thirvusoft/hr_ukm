@@ -116,38 +116,43 @@ override_doctype_class = {
 doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
-		# "validate":"united_knitting_mills.ukm.utils.python.salary_slip.staff_salary_calculation"
-		# "on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
-		
 	},
+
 	'Employee':{
 		"validate":"united_knitting_mills.ukm.utils.python.employee.address_html",
 		"after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
 		"united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
 	},
+
 	'Attendance':{
 		"validate":"united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
 		"on_update":"united_knitting_mills.ukm.utils.python.attendance.update_time_field",
 		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
+
 	# 'Employee Advance':{
 	# 	"validate":"united_knitting_mills.ukm.utils.python.employee_advance.validate",
 	# },
+
 	'Additional Salary':{
 		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
 	},
+
 	'Payroll Entry':{
 		"validate":"united_knitting_mills.ukm.utils.python.payroll_entry.validate_to_date",
 	},
+
  	"Employee Bonus Tool":{
 		"validate":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.total_bonus_amt_total",
 		"on_submit":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.create_bonus"
 	},
+
 	"Leave Application":{
 		"validate":"united_knitting_mills.ukm.utils.python.leave_application.validating_pay_leave",
 		"on_submit":"united_knitting_mills.ukm.utils.python.leave_application.attendance_updation"
 	},
+
 	"Salary Structure Assignment":{
 		"on_submit":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.salary_updation"
 	}
