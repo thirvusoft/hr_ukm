@@ -36,8 +36,8 @@ doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
 		 "Holiday List":"ukm/utils/javascript/holiday_list.js",
 		 "Leave Application":"ukm/utils/javascript/leave_application.js",
 		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js",
-   		 "Employee Advance":"ukm/utils/javascript/employee_advance.js",
-		 "Salary Slip":"ukm/utils/javascript/salary_slip.js"}
+   		 "Employee Advance":"ukm/utils/javascript/employee_advance.js"
+		}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",

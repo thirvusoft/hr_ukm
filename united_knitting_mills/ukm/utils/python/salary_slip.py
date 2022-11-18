@@ -87,7 +87,20 @@ def staff_salary_calculation(doc,event):
                 doc.append("earnings",{"salary_component":"Basic",
                     "amount":salary_for_persent_days})
 
-                doc.gross_pay = salary_for_persent_days
+                gross_salary = salary_for_persent_days
+
+                #  Pay Leave Adding in Salary Slip
+                pay_leave_details = add_pay_leave(doc.start_date, doc.end_date, doc.employee, doc.per_day_salary_for_staff)
+                
+                if pay_leave_details[1] != 0:
+                    
+                    doc.leave_with_pay = pay_leave_details[1]
+                    doc.append("earnings",{"salary_component":"Pay Leave",
+                        "amount":pay_leave_details[0]})
+
+                    gross_salary += pay_leave_details[0]
+
+                doc.gross_pay = gross_salary
                 doc.net_pay = doc.gross_pay - doc.total_deduction
                 doc.rounded_total = round(doc.net_pay)
 
@@ -126,20 +139,14 @@ def staff_salary_calculation(doc,event):
                 
         
 @frappe.whitelist()
-def add_pay_leave(start_date = None, to_date = None, employee = None, per_day_salary_for_staff = None):
-
-    if not start_date:
-        frappe.throw("Please Select The Start Date.",title=_("Message"))
-    
-    if not to_date:
-        frappe.throw("Please Select The To Date.",title=_("Message"))
-
+def add_pay_leave(start_date, end_date, employee, per_day_salary_for_staff = None):
 
     pay_leave = frappe.get_all("Leave Application",{
-                    "employee":employee,
-                    "is_pay_leave_application":1,
-                    "status":"Approved",
-                    "from_date":["between", (start_date, to_date)]
+                    "employee": employee,
+                    "is_pay_leave_application": 1,
+                    "status": "Approved",
+                    "docstatus": 1,
+                    "from_date": ["between", (start_date, end_date)]
                     },
                 "name")
 
