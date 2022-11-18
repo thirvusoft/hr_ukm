@@ -85,13 +85,6 @@ def shift_hours(doc,event):
                         temp = doc.total_shift_hr
                         doc.total_shift_hr = round(temp)
             
-        if doc.action_taken_by_hr:      
-            doc.total_shift_hr = doc.req_total_shift_hr
-            doc.total_shift_count = doc.req_total_shift_count
-            doc.total_shift_amount = doc.req_total_shift_amount
-
-        
-
 
 def update_time_field(doc,event):
     if not doc.time1:
