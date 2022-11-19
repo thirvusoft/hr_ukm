@@ -69,7 +69,7 @@ def employee_staff_filter():
     return filtered_staff_employees
 
 @frappe.whitelist()
-def validating_pay_leave(doc, event):
+def validating_leave(doc, event):
 
     if frappe.get_value("Leave Type",doc.leave_type,"is_pay_leave"):
 
@@ -83,27 +83,61 @@ def validating_pay_leave(doc, event):
                 last_date_of_month = getdate(doc.from_date) + relativedelta(day=1, months=+1, days=-1)
                 first_date_of_month = getdate(doc.from_date) + relativedelta(day=1)
 
-                leave_type = frappe.get_value("Leave Type",doc.leave_type,"name")
-
                 leave_application = frappe.get_all("Leave Application",{
                     "employee":doc.employee,
-                    "leave_type":leave_type,
+                    "leave_type":doc.leave_type,
                     "status":"Approved",
                     "docstatus":1,
                     "from_date":["between", (first_date_of_month, last_date_of_month)]
                     },
                 "name")
 
-                if leave_application:
-                    allocated_leave = frappe.db.get_single_value("United Knitting Mills Settings","pay_leave")
-
-                    if allocated_leave <= len(leave_application):
-                        frappe.throw("Already You Consumed Pay Leave For This Month.",title=_("Message"))
+                
+                allocated_leave = frappe.db.get_single_value("United Knitting Mills Settings","pay_leave")
+                
+                if allocated_leave == 0:
+                    frappe.throw("Not Allowed For Pay Leave, Please Contact Your Administrator.",title=_("Message"))
+                
+                elif allocated_leave <= len(leave_application):
+                    frappe.throw("Already You Consumed Pay Leave For This Month, Please Contact Your Administrator.",title=_("Message"))
+                
                 else:
                     doc.is_pay_leave_application = 1
         else:
             frappe.throw("For Pay Leave, From Date And To Date Should Be Same Date.",title=_("Message"))
-            
+
+    elif doc.leave_type == "Permission":
+
+        last_date_of_month = getdate(doc.attendance_date) + relativedelta(day=1, months=+1, days=-1)
+        first_date_of_month = getdate(doc.attendance_date) + relativedelta(day=1)
+
+        leave_application = frappe.get_all("Leave Application",{
+                    "employee":doc.employee,
+                    "leave_type":doc.leave_type,
+                    "status":"Approved",
+                    "docstatus":1,
+                    "attendance_date":["between", (first_date_of_month, last_date_of_month)]
+                    },
+                "name")
+
+        
+        allocated_permission = frappe.db.get_single_value("United Knitting Mills Settings","permission_leave")
+        allocated_time = frappe.db.get_single_value("United Knitting Mills Settings","time_in_minutes")
+        
+        actual_time = datetime.datetime.strptime(doc.to_time, "%H:%M:%S") - datetime.datetime.strptime(doc.from_time, "%H:%M:%S")
+        
+        if doc.from_time >= doc.to_time:
+            frappe.throw("To Time Is Less than or Equal to From Time, Please check it.",title=_("Message"))
+        
+        elif allocated_permission == 0 or allocated_time == 0:
+            frappe.throw("Not Allowed For Permission, Please Contact Your Administrator.",title=_("Message"))
+        
+        elif allocated_permission <= len(leave_application):
+            frappe.throw("Already You Consumed Permission For This Month, Please Contact Your Administrator.",title=_("Message"))
+
+        elif allocated_time < actual_time.total_seconds() / 60:
+            frappe.throw(f"Permission Time Is Greater Than The Allocated Permission Time : {allocated_time}.",title=_("Message"))
+
 @frappe.whitelist()
 def attendance_updation(doc, event):
     
