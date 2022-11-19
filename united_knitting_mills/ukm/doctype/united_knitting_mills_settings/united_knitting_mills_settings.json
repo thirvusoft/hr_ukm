@@ -10,7 +10,7 @@
   "bonus",
   "bonus_percentage",
   "advance_section",
-  "advance_percentage",
+  "advance_amount",
   "biometric_settings_section",
   "buffer_time",
   "column_break_4",
@@ -67,12 +67,6 @@
    "label": "Pay Leave"
   },
   {
-   "fieldname": "advance_percentage",
-   "fieldtype": "Percent",
-   "label": "Advance Percentage",
-   "reqd": 1
-  },
-  {
    "collapsible": 1,
    "fieldname": "leave_section",
    "fieldtype": "Section Break",
@@ -110,12 +104,17 @@
    "fieldname": "time_in_minutes",
    "fieldtype": "Float",
    "label": "Time In Minutes"
+  },
+  {
+   "fieldname": "advance_amount",
+   "fieldtype": "Table",
+   "options": "TS Advance Validation"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-11-19 10:02:53.527446",
+ "modified": "2022-11-19 11:12:34.126555",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
