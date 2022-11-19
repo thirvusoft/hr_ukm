@@ -32,4 +32,3 @@ def salary_updation_old():
                         att.save()
 
 
-

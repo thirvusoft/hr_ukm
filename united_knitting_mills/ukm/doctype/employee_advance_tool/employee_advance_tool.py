@@ -14,10 +14,10 @@ class EmployeeAdvanceTool(Document):
 
 	def on_submit(doc):
 		frappe.enqueue(create_employee_advance, doc = doc)
-		frappe.msgprint("Advance Will Be Creating In Backgroud Within 5 Mins")
+		frappe.msgprint("Advance Will Be Creating In Backgroud Within 10 Minutes.")
 
 @frappe.whitelist()
-def employee_finder(location,from_date,to_date,designation=None,department=None):
+def employee_finder(location, from_date, to_date, designation=None, department=None):
 
 	settings = frappe.get_doc("United Knitting Mills Settings", "United Knitting Mills Settings")
 	
@@ -44,22 +44,23 @@ def employee_finder(location,from_date,to_date,designation=None,department=None)
 		order_by = "name")
 	
 	for name in emp_list:
-		total_eligible_amount = advance_validation(name['name'], from_date, to_date)
+		total_eligible_amount_shift = list(advance_validation(name['name'], from_date, to_date))
 		
-		if not total_eligible_amount:
-			total_eligible_amount = 0
+		if not total_eligible_amount_shift[0]:
+			total_eligible_amount_shift[0] = 0
 
 		actual_advance = 0
 		for allocated_advance in settings.advance_amount:
 			
-			if allocated_advance.maximum_salary <= total_eligible_amount:
+			if allocated_advance.maximum_salary <= total_eligible_amount_shift[0]:
 				actual_advance = allocated_advance.advance_amount
 
 		total_advance += actual_advance
 		
 		name.update({
-			"eligible_amount": total_eligible_amount,
-			"current_advance":actual_advance
+			"eligible_amount": total_eligible_amount_shift[0],
+			"current_advance": actual_advance,
+			"total_shift": total_eligible_amount_shift[1]
 		})
 		employee_names.append(name)
 
@@ -82,11 +83,14 @@ def create_employee_advance(doc):
 				advance_doc = frappe.new_doc('Employee Advance')
 
 				advance_doc.employee = advance.employee
+				advance_doc.from_date = doc.from_date
+				advance_doc.to_date = doc.to_date
 				advance_doc.advance_amount = advance.current_advance
 				advance_doc.posting_date = nowdate()
 				advance_doc.purpose = "Weekly Advance"
 				advance_doc.exchange_rate = 1.0
 				advance_doc.eligible_amount = advance.eligible_amount
+				advance_doc.total_shift = advance.total_shift
 				advance_doc.reference_document = doc.name
 
 				if advance.payment_method == "Deduct from Salary":

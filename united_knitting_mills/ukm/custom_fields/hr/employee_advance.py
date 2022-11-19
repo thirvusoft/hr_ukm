@@ -30,11 +30,50 @@ def employee_advance_custom_fields():
 
             dict(fieldname = 'reference_document', 
                 label = 'Reference Document',
-				fieldtype='Link', 
+				fieldtype = 'Link', 
                 insert_after = 'purpose', 
                 read_only = 1,
                 options = "Employee Advance Tool"
-            )
+            ),
+
+            dict(fieldname = 'from_date', 
+                label = 'From Date',
+				fieldtype = 'Date', 
+                insert_after = 'posting_date', 
+                read_only = 1
+            ),
+
+            dict(fieldname = 'to_date', 
+                label = 'To Date',
+				fieldtype = 'Date', 
+                insert_after = 'from_date', 
+                read_only = 1
+            ),
+
+            dict(fieldname = 'total_shift', 
+                label = 'Total Shift',
+				fieldtype = 'Float', 
+                insert_after = 'advance_amount', 
+                read_only = 1
+            ),
+
+            dict(fieldname = 'designation', 
+                label = 'Designation',
+				fieldtype = 'Link', 
+                insert_after = 'department', 
+                read_only = 1,
+                options = "Designation",
+                fetch_from = "employee.designation"
+            ),
+
+            dict(fieldname = 'location', 
+                label = 'Location',
+				fieldtype = 'Link', 
+                insert_after = 'designation', 
+                read_only = 1,
+                options = "Location",
+                fetch_from = "employee.location"
+            ),
         ]
     }
     create_custom_fields(custom_fields)

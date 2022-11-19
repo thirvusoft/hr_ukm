@@ -15,20 +15,21 @@ frappe.ui.form.on("Employee Advance Tool",{
 		var to_date = advance.to_date
 
 		frappe.call({
-			method:"united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.employee_finder",
+			method: "united_knitting_mills.ukm.doctype.employee_advance_tool.employee_advance_tool.employee_finder",
 			args:{location, from_date, to_date, designation, department},
 			
 			callback(r){
 
-				for(let i=0;i<r.message[0].length;i++){
+				for(let i = 0; i < r.message[0].length; i++){
 					var child = cur_frm.add_child("employee_advance_details");
 
 					frappe.model.set_value(child.doctype, child.name, "employee", r.message[0][i]["name"])
 					frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[0][i]["employee_name"])
 					frappe.model.set_value(child.doctype, child.name, "designation", r.message[0][i]["designation"])
-					frappe.model.set_value(child.doctype, child.name, "payment_method",'Deduct from Salary')
-					frappe.model.set_value(child.doctype, child.name, "eligible_amount",r.message[0][i]["eligible_amount"] || 0)
-					frappe.model.set_value(child.doctype, child.name, "current_advance",r.message[0][i]["current_advance"] || 0)
+					frappe.model.set_value(child.doctype, child.name, "payment_method", 'Deduct from Salary')
+					frappe.model.set_value(child.doctype, child.name, "eligible_amount", r.message[0][i]["eligible_amount"] || 0)
+					frappe.model.set_value(child.doctype, child.name, "current_advance", r.message[0][i]["current_advance"] || 0)
+					frappe.model.set_value(child.doctype, child.name, "total_shift", r.message[0][i]["total_shift"] || 0)
 
 				}
 				cur_frm.refresh_field("employee_advance_details")
