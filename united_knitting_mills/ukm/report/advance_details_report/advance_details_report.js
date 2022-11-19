@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Salary Details Report"] = {
+frappe.query_reports["Advance Details Report"] = {
 	"filters": [
 		{
 			"fieldname":"from_date",
@@ -38,6 +38,6 @@ frappe.query_reports["Salary Details Report"] = {
 			"fieldtype": "Link",
 			"options": "Location",
 			"width": "100"
-		},
+		}
 	]
 };

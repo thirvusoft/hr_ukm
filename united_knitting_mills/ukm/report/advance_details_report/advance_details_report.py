@@ -1,0 +1,206 @@
+# Copyright (c) 2022, UKM and contributors
+# For license information, please see license.txt
+
+import frappe
+
+from erpnext.education.report.student_monthly_attendance_sheet.student_monthly_attendance_sheet import daterange
+from frappe import _
+
+from datetime import date
+
+def execute(filters = None):
+
+	from_date = filters.get("from_date")
+	to_date = filters.get("to_date")
+
+	start_date = tuple(map(int, from_date.split('-')))
+	end_date = tuple(map(int, to_date.split('-')))
+
+	between_dates = list(map(str, list(daterange(date(start_date[0], start_date[1], start_date[2]),date(end_date[0], end_date[1], end_date[2])))))
+	
+	columns = get_columns(between_dates)
+
+	doc_filters = {'from_date': ["=", from_date], "to_date": ["=", to_date], 'docstatus':1}
+	
+	if filters.get("designation"):
+		doc_filters["designation"] = filters.get("designation")
+
+	if filters.get("department"):
+		doc_filters["department"] = filters.get("designation")
+
+	if filters.get("unit"):
+		doc_filters["unit"] = filters.get("designation")
+
+	data = get_data(from_date, to_date, between_dates, doc_filters)
+
+	return columns, data
+
+
+def get_columns(between_dates):
+
+	columns = [
+		{
+			"label": _("Designation"),
+			"fieldtype": "Data",
+			"fieldname": "designation",
+			"width": 100
+		},
+		{
+			"label": _("Employee ID"),
+			"fieldtype": "Link",
+			"fieldname": "code",
+			"options":"Employee",
+			"width": 110
+		},
+		{
+			"label": _("Name of Employee"),
+			"fieldtype": "Data",
+			"fieldname": "worker_name",
+			"width": 100
+		},
+		{
+			"label": _("Account Number"),
+			"fieldtype": "Data",
+			"fieldname": "account_number",
+			"width": 150
+		},
+		{
+			"label": _("IFSC"),
+			"fieldtype": "Data",
+			"fieldname": "ifsc",
+			"width": 100
+		},
+		{
+			"label": _("Bank"),
+			"fieldtype": "Data",
+			"fieldname": "bank",
+			"width": 100
+		},
+		{
+			"label": _("Branch Name"),
+			"fieldtype": "Data",
+			"fieldname": "branch_name",
+			"width": 120
+		},
+		{
+			"label": _("Mode"),
+			"fieldtype": "Data",
+			"fieldname": "mode",
+			"width": 80
+		},
+		{
+			"label": _("Salary"),
+			"fieldtype": "Currency",
+			"fieldname": "salary",
+			"width": 80
+		}
+	]
+
+	for i in between_dates:
+
+		columns.append(
+			{
+				"label": i[len(i)-2:],
+				"fieldtype": "Float",
+				"fieldname": i,
+				"print_width": 10
+			}
+		)
+
+	columns += [
+		{
+			"label": _("Total Shift"),
+			"fieldtype": "Float",
+			"fieldname": "total_shift",
+			"width": 100
+		},
+		{
+			"label": _("Total Amount"),
+			"fieldtype": "Currency",
+			"fieldname": "total_amount",
+			"width": 100
+		},
+		{
+			"label": _("Total Advance"),
+			"fieldtype": "Currency",
+			"fieldname": "total_advance",
+			"width": 100
+		},
+		{
+			"label": _("Signature"),
+			"fieldtype": "Data",
+			"fieldname": "signature",
+			"width": 200
+		}
+	]
+
+	return columns
+
+def get_data(from_date, to_date, between_dates, doc_filters):
+
+	data = []
+
+	emp_advance_list = frappe.db.get_all("Employee Advance", 
+	 	filters = doc_filters, 
+		fields = ["name", "employee", "employee_name", "total_shift", "eligible_amount", "advance_amount", "designation"],
+		group_by = "employee",
+		order_by = "designation"
+	)
+
+	for emp_advance in emp_advance_list:
+
+		sub_data = frappe._dict()
+
+		emp_doc = frappe.get_doc("Employee",emp_advance.employee)
+
+		salary_structure_assignment_base = frappe.db.get_value("Salary Structure Assignment", {'employee':emp_advance.employee, 'docstatus':1}, 'base')
+		
+		sub_data.update(
+			{
+				"designation" : emp_advance.designation,
+				"code" : emp_advance.employee,
+				"worker_name":emp_advance.employee_name,
+				"account_number" : emp_doc.bank_ac_no,
+				"ifsc" : emp_doc.ifsc_code,
+				"bank" : emp_doc.bank_name,
+				"branch_name" : emp_doc.ts_bank_branch_name,
+				"mode" : emp_doc.salary_mode,
+				"salary": salary_structure_assignment_base
+			}
+		)
+
+		for date in between_dates:
+			get_attendance = frappe.db.get_value("Attendance", {'employee':emp_advance.employee, 'docstatus':1, 'attendance_date':date}, 'total_shift_count')
+			
+			sub_data.update(
+				{
+					date: get_attendance
+				}
+			)
+
+		sub_data.update(
+				{
+					"total_shift": emp_advance.total_shift,
+					"total_amount": emp_advance.eligible_amount,
+					"total_advance": emp_advance.advance_amount,
+					"signature": None
+					
+				}
+			)
+
+		data.append(sub_data)
+
+	d = [list(i.values()) for i in data]
+
+	check =''
+
+	for i in range (0,len(d),1):
+		if d[i][0] != check:
+			check = d[i][0] 
+			d[i][0] = f'<b>{d[i][0]}</b>'
+		   
+		else:
+			d[i][0]=''
+
+	return d
+	return data

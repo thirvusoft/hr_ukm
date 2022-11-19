@@ -11,6 +11,7 @@
   "designation",
   "eligible_amount",
   "current_advance",
+  "total_shift",
   "payment_method"
  ],
  "fields": [
@@ -58,12 +59,18 @@
    "in_list_view": 1,
    "label": "Eligible Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "total_shift",
+   "fieldtype": "Float",
+   "label": "Total Shift",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-11-19 11:21:05.297053",
+ "modified": "2022-11-19 15:28:41.092924",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Advance Details",

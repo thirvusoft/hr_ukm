@@ -162,7 +162,7 @@ def get_columns(filters):
 def get_data(filters):
     data=[]
 
-    filter = {'start_date':["<=", filters['from_date']],"end_date":[">=", filters['to_date']],'docstatus':1}
+    filter = {'start_date':["=", filters['from_date']],"end_date":["=", filters['to_date']],'docstatus':1}
     
     keys = list(filters.keys())
 
@@ -245,17 +245,17 @@ def get_data(filters):
         f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         data.append(f)
 
-    d = [list(i.values()) for i in data]
+    data = [list(i.values()) for i in data]
 
-    check =''
+    designation_check = ''
 
-    for i in range (0,len(d),1):
-        if d[i][0] != check:
-            check = d[i][0] 
-            d[i][0] = f'<b>{d[i][0]}</b>'
+    for i in range (0, len(data), 1):
+        if data[i][0] != designation_check:
+            designation_check = data[i][0] 
+            data[i][0] = f'<b>{data[i][0]}</b>'
            
         else:
-            d[i][0]=''
+            data[i][0] = ''
    
-    return d
+    return data
 
