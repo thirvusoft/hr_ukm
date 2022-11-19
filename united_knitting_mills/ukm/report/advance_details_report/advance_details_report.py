@@ -26,10 +26,10 @@ def execute(filters = None):
 		doc_filters["designation"] = filters.get("designation")
 
 	if filters.get("department"):
-		doc_filters["department"] = filters.get("designation")
+		doc_filters["department"] = filters.get("department")
 
 	if filters.get("unit"):
-		doc_filters["unit"] = filters.get("designation")
+		doc_filters["unit"] = filters.get("unit")
 
 	data = get_data(from_date, to_date, between_dates, doc_filters)
 
