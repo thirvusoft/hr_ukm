@@ -4,27 +4,29 @@ frappe.ui.form.on("Leave Application",{
             frm.dashboard.hide();
         }, 1);
     },
-    employee:function(frm){
+
+    setup:function(frm){
         frappe.call({
-            method:"united_knitting_mills.ukm.utils.python.leave_application.leave_type_filter",
-            args:{department:frm.doc.department},
+            method:"united_knitting_mills.ukm.utils.python.leave_application.employee_staff_filter",
+            
             callback: function(r){
                 if ((r.message).length !=0){
 
-                    var leave_type_list = r.message
-                    frm.set_query("leave_type",function(){
+                    var staff_employee = r.message
+
+                    frm.set_query("employee",function(){
                         return {
+
                             filters: [
-                                ['Leave Type', 'name', 'in', leave_type_list],
+                                ['Employee', 'name', 'in', staff_employee],
                             ]
                         };
                     });
                 }
             }
         })
-           
-
     },
+
     after_save:function(frm){
         if(frm.doc.docstatus != 1){
             if(frm.doc.status == "Rejected" || frm.doc.status == "Approved"){

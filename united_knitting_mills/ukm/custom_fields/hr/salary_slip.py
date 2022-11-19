@@ -36,8 +36,6 @@ def salary_slip_custom_fields():
          fieldtype='Float', insert_after='is_staff_calulation',hidden=1),
          dict(fieldname='ts_column_break',
          fieldtype='Column Break',insert_after='employee'),
-         dict(fieldname="add_pay_leave", label='<p style="color:DodgerBlue;"><b>Add Pay Leave</b></p>',
-         fieldtype='Button', insert_after='earnings',depends_on="eval:doc.is_staff_calulation"),
          dict(fieldname='leave_with_pay', label='Leave With Pay',
          fieldtype='Int', insert_after='leave_without_pay',read_only=1),
         ]

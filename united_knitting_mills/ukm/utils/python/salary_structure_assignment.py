@@ -28,8 +28,6 @@ def salary_updation_old():
 
                 if not att.staff:
                     
-                    if att.total_shift_count == 1.250:
-                        att.total_shift_count += 0.250
                         att.total_shift_amount = att.total_shift_count * ssa_base.base
                         att.save()
 
