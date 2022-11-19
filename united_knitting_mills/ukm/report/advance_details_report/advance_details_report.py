@@ -190,17 +190,16 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 
 		data.append(sub_data)
 
-	d = [list(i.values()) for i in data]
+	data = [list(i.values()) for i in data]
 
-	check =''
+	designation_check =''
 
-	for i in range (0,len(d),1):
-		if d[i][0] != check:
-			check = d[i][0] 
-			d[i][0] = f'<b>{d[i][0]}</b>'
+	for i in range (0,len(data),1):
+		if data[i][0] != designation_check:
+			designation_check = data[i][0] 
+			data[i][0] = f'<b>{data[i][0]}</b>'
 		   
 		else:
-			d[i][0]=''
+			data[i][0]=''
 
-	return d
 	return data
