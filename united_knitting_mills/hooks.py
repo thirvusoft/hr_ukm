@@ -131,10 +131,6 @@ doc_events = {
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
 
-	# 'Employee Advance':{
-	# 	"validate":"united_knitting_mills.ukm.utils.python.employee_advance.validate",
-	# },
-
 	'Additional Salary':{
 		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
 	},

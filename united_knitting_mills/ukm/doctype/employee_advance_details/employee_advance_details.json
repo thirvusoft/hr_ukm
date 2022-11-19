@@ -19,7 +19,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Employee",
-   "options": "Employee"
+   "options": "Employee",
+   "read_only": 1
   },
   {
    "fetch_from": "employee.employee_name",
@@ -41,7 +42,8 @@
    "fieldname": "current_advance",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Current Advance"
+   "label": "Current Advance",
+   "read_only": 1
   },
   {
    "fieldname": "payment_method",
@@ -61,7 +63,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-11-09 15:05:25.932988",
+ "modified": "2022-11-19 11:21:05.297053",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Advance Details",
