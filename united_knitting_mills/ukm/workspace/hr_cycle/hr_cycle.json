@@ -196,7 +196,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-11-10 17:44:16.923312",
+ "modified": "2022-11-20 19:39:26.895836",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -214,6 +214,12 @@
    "doc_view": "",
    "label": "Employee Checkin Report",
    "link_to": "Employee Checkin Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Advance Details Report",
+   "link_to": "Advance Details Report",
    "type": "Report"
   },
   {

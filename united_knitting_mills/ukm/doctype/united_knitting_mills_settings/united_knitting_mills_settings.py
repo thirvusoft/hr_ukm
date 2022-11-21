@@ -3,9 +3,23 @@
 
 import frappe
 from frappe.model.document import Document
-
+from frappe import _
 class UnitedKnittingMillsSettings(Document):
-	pass
+	
+	def validate(doc):
+
+		for row in doc.advance_amount:
+
+			if row.idx == 1:
+				child_table = doc.advance_amount[row.idx - 1].__dict__
+
+			else:
+				child_table = doc.advance_amount[row.idx - 2].__dict__
+			
+			if row.maximum_salary < child_table["maximum_salary"]:
+
+				frappe.throw(f"In Advance, Maximum Salary of Row {row.idx} is Less than Row {row.idx - 1}.",title=_("Message"))
+
 
 @frappe.whitelist()
 def creating_hr_permission():
