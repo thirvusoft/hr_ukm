@@ -6,5 +6,11 @@ frappe.ui.form.on('United Knitting Mills Settings', {
 		frappe.call({
 			method:"united_knitting_mills.ukm.doctype.united_knitting_mills_settings.united_knitting_mills_settings.creating_hr_permission"
 		})
+	},
+	attendance_update: function(frm){
+		frappe.call({
+			method: "united_knitting_mills.ukm.doctype.united_knitting_mills_settings.united_knitting_mills_settings.re_create_attendance",
+			args: { attendance_date : frm.doc.attendance_date }
+		})
 	}
 });
