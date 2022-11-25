@@ -28,3 +28,4 @@ def create_property_setter():
     make_property_setter("Salary Structure Assignment", "income_tax_slab", "hidden", 1, "Check")
     make_property_setter("Salary Structure Assignment", "employee", "unique", 0, "Check")
     make_property_setter("Salary Structure Assignment", "base", "label", "Wages", "Data")
+    make_property_setter("Salary Structure Assignment", "from_date", "fetch_from", "employee.date_of_joining", "Data")

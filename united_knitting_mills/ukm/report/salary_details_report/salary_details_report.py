@@ -162,7 +162,7 @@ def get_columns(filters):
 def get_data(filters):
     data=[]
 
-    filter = {'start_date':["=", filters['from_date']],"end_date":["=", filters['to_date']],'docstatus':1}
+    filter = {'start_date':["=", filters['from_date']],"end_date":["=", filters['to_date']],'docstatus':0}
     
     keys = list(filters.keys())
 
