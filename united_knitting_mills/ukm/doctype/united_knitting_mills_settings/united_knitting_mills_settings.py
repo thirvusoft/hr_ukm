@@ -63,7 +63,9 @@ def re_create_attendance(attendance_date):
 	attendance_date = getdate(attendance_date)
 
 	if attendance_date < getdate(nowdate()):
-		# attendance_update(attendance_date)
+
+		frappe.msgprint("Within 30 Minutes Attendance Will Be Re-Created.")
+
 		frappe.enqueue(attendance_update, attendance_date = attendance_date, queue = "long")
 
 	else:
