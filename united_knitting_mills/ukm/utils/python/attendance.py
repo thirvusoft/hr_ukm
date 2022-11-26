@@ -6,7 +6,7 @@ from erpnext.hr.doctype.attendance.attendance import Attendance
 from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
 
 def validate_shift_details(doc, event):
-    
+
     shift_hours(doc, event)
 
     if not doc.action_taken_by_hr:
@@ -27,12 +27,12 @@ def shift_hours(doc,event):
     labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
     if labour and (event == 'after_insert') or (event == 'validate' and not doc.is_new()):
         
-        if doc.thirvu_shift_details:      
+        if doc.thirvu_shift_details: 
             doc.total_shift_hr = 0
             doc.total_shift_count = 0
             doc.total_shift_amount = 0
 
-            if doc.action_taken_by_hr:    
+            if doc.action_taken_by_hr:
                 doc.total_shift_hr = doc.req_total_shift_hr
                 doc.total_shift_count = doc.req_total_shift_count
                 doc.total_shift_amount = doc.req_total_shift_amount

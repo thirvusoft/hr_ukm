@@ -20,7 +20,11 @@
   "pay_leave",
   "column_break_13",
   "permission_leave",
-  "time_in_minutes"
+  "time_in_minutes",
+  "attendance",
+  "attendance_date",
+  "column_break_18",
+  "attendance_update"
  ],
  "fields": [
   {
@@ -109,12 +113,34 @@
    "fieldname": "advance_amount",
    "fieldtype": "Table",
    "options": "TS Advance Validation"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "attendance",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Orange;\"><b>Attendance</b></p>"
+  },
+  {
+   "description": "Enter the Attendance Date, that you want to Re-create",
+   "fieldname": "attendance_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "depends_on": "eval:doc.attendance_date",
+   "fieldname": "attendance_update",
+   "fieldtype": "Button",
+   "label": "<p style=\"color: Red;\"><b>Re-Create</b></p>"
+  },
+  {
+   "fieldname": "column_break_18",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-11-19 11:12:34.126555",
+ "modified": "2022-11-25 16:52:05.066301",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

@@ -4,6 +4,9 @@
 import frappe
 from frappe.model.document import Document
 from frappe import _
+from frappe.utils import getdate, nowdate
+
+from united_knitting_mills.ukm.utils.python.employee__checkin import create_employee_checkin
 class UnitedKnittingMillsSettings(Document):
 	
 	def validate(doc):
@@ -54,6 +57,39 @@ def creating_hr_permission():
 	else:
 		frappe.throw("Thirvu HR User role not assigned for any User")
 
+@frappe.whitelist()
+def re_create_attendance(attendance_date):
 
+	attendance_date = getdate(attendance_date)
 
+	if attendance_date < getdate(nowdate()):
 
+		frappe.msgprint("Within 30 Minutes Attendance Will Be Re-Created.")
+
+		frappe.enqueue(attendance_update, attendance_date = attendance_date, queue = "long")
+
+	else:
+		frappe.throw("Date Should Not Be Greater Than Yesterday",title=_("Message"))
+
+def attendance_update(attendance_date):
+
+	attendance_list = frappe.get_all("Attendance",{"attendance_date":attendance_date})
+
+	for attendance in attendance_list:
+
+		attendance_doc = frappe.get_doc("Attendance",attendance)
+
+		if attendance_doc.docstatus:
+			attendance_doc.cancel()
+
+		frappe.delete_doc('Attendance', attendance_doc.name)
+
+	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(attendance_date, attendance_date)]})
+
+	for employee_checkin in employee_checkin_list:
+
+		employee_checkin_doc = frappe.get_doc("Employee Checkin",employee_checkin)
+
+		frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
+
+	create_employee_checkin(attendance_date, attendance_date)
