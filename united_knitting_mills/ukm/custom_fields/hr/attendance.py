@@ -152,8 +152,9 @@ def create_attendance_custom_fields():
 
         dict(fieldname='reason', label='Reason for Draft',
         fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),
-
-      
-         ]
+        
+        dict(fieldname='house_keeping', label='',
+            fieldtype='Check',insert_after='staff',hidden=1),
+        ]
     }
     create_custom_fields(custom_fields)
