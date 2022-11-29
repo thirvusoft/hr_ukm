@@ -3,16 +3,14 @@ import frappe
 @frappe.whitelist()
 def salary_updation(doc, event):
 
-    att_docs = frappe.get_all("Attendance", {"employee" : doc.employee,"docstatus" : 1})
+    att_docs = frappe.get_all("Attendance", {"employee" : doc.employee, "workflow_state": ["!=", "Draft", "Cancelled", "Absent"], "staff": 0, "total_shift_amount": 0})
 
     for att_doc in att_docs:
+
         att = frappe.get_doc("Attendance", att_doc)
         
-        if not att.staff:
-
-            if att.total_shift_amount == 0:
-                att.total_shift_amount = att.total_shift_count * doc.base
-                att.save()
+        att.total_shift_amount = att.total_shift_count * doc.base
+        att.save()
 
 def salary_updation_old():
 

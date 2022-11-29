@@ -40,7 +40,7 @@ def create_workflow_doc():
     workflow.insert(ignore_permissions=True)
     return workflow
 def create_state():
-    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by Owner','Rejected by Owner','Pending Approval for Absent','Pending Approval for Present','Approval for Present','Approval for Absent','Present','Absent']
+    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by Owner','Rejected by Owner','Pending Approval for Absent','Pending Approval for Present','Approval for Present','Approval for Absent','Present','Absent','Cancelled']
     for row in list:
         if not frappe.db.exists('Workflow State', row):
             new_doc = frappe.new_doc('Workflow State')
@@ -68,7 +68,7 @@ def create_state():
             new_doc.save()
 
 def create_action():
-    list=["Reject", "Submit", "Draft",'Approve', 'Action','Send Approval for Present','Send Approval for Absent','Approval for Present','Approval for Absent']
+    list=["Reject", "Submit", "Draft",'Approve', 'Action','Send Approval for Present','Send Approval for Absent','Approval for Present','Approval for Absent','Cancelled']
     for row in list:
         if not frappe.db.exists('Workflow Action Master', row):
             new_doc = frappe.new_doc('Workflow Action Master')
@@ -115,6 +115,9 @@ def workflow_attendance():
     workflow.append('states', dict(
         state = 'Absent',doc_status=1, allow_edit = 'Thirvu Owner'
     ))
+    workflow.append('states', dict(
+        state = 'Cancelled',doc_status=2, allow_edit = 'Thirvu Owner'
+    ))
   
 
     workflow.append('transitions', dict(
@@ -140,6 +143,14 @@ def workflow_attendance():
     ))
     workflow.append('transitions', dict(
         state = 'Pending Approval for Absent', action='Approval for Present', next_state = 'Present',
+        allowed='Thirvu Owner', allow_self_approval= 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Present', action='Cancelled', next_state = 'Cancelled',
+        allowed='Thirvu Owner', allow_self_approval= 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Absent', action='Cancelled', next_state = 'Cancelled',
         allowed='Thirvu Owner', allow_self_approval= 1
     ))
 
