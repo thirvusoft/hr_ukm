@@ -469,10 +469,17 @@ def create_staff_attendance(docname):
                     attendance.mismatched_checkin = 1
                     attendance.no_of_checkin = f"{len(date_wise_checkin[data])} / { doc.total_no_of_checkins_per_day}"
                 attendance.staff = 1
+
                 # if doc.staff:
                 #     attendance.staff = 1
                 # elif doc.house_keeping:
                 #     attendance.house_keeping = 1
+
+               # if doc.staff:
+                   # attendance.staff = 1
+                #elif doc.house_keeping:
+                    #attendance.house_keeping = 1
+
                 submit_doc, reason = create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, data, date_wise_checkin[data])
                 submit_doc, reason, late_entry, early_exit = validate_total_working_hours(reason, doc, submit_doc, date_wise_checkin[data], attendance, doc.start_time, doc.end_time)
                 attendance.flags.ignore_validate = True
