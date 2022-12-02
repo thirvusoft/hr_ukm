@@ -15,7 +15,6 @@ def employee_finder(designation,location,from_date,to_date):
     working_days = []
     table=[]
     emp_list=frappe.get_all("Employee",filters={"designation" : designation,'location' : location},fields=["name", "employee_name","designation"],order_by="name")
-    print(emp_list)
     thirvu_shift=frappe.get_value("Employee Timing Details", designation, 'staff')
     for name in emp_list:
         attendance_status=0
@@ -41,7 +40,6 @@ def employee_finder(designation,location,from_date,to_date):
                 FROM `tabSalary Structure Assignment` as ssa
                 WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
                 ORDER BY ssa.from_date DESC LIMIT 1 """.format(name['name'],to_date),as_list=1)
-        print(emp_base_amount, name['name'], attendance_status)
         calc=0
         if emp_base_amount:
             calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
