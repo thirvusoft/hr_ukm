@@ -468,7 +468,7 @@ def create_staff_attendance(docname):
                     reason += f"\n-> Insufficient Checkins({doc.total_no_of_checkins_per_day} required but only {len(date_wise_checkin[data])} is available)."
                     attendance.mismatched_checkin = 1
                     attendance.no_of_checkin = f"{len(date_wise_checkin[data])} / { doc.total_no_of_checkins_per_day}"
-               attendance.staff = 1
+                    attendance.staff = 1
                # if doc.staff:
                    # attendance.staff = 1
                 #elif doc.house_keeping:
