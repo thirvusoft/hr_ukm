@@ -9,6 +9,9 @@
   "ts_create",
   "bonus",
   "bonus_percentage",
+  "bonus_table",
+  "from_time",
+  "to_time",
   "advance_section",
   "advance_amount",
   "biometric_settings_section",
@@ -135,12 +138,28 @@
   {
    "fieldname": "column_break_18",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time"
+  },
+  {
+   "fieldname": "bonus_table",
+   "fieldtype": "Table",
+   "label": "Bonus Table",
+   "options": "TS Bonus Validation"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-11-25 16:52:05.066301",
+ "modified": "2022-12-01 15:42:40.930910",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
