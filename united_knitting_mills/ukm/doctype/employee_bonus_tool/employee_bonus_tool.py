@@ -8,18 +8,19 @@ class EmployeeBonusTool(Document):
 
 
 @frappe.whitelist()
-def employee_finder(designation,location,from_date,to_date):
+def employee_finder(emp_department,location,from_date,to_date):
     settings = frappe.get_single("United Knitting Mills Settings")
     employee_names=[]
     amount=[]
     working_days = []
     table=[]
-    emp_list=frappe.get_all("Employee",filters={"designation" : designation,'location' : location},fields=["name", "employee_name","designation"],order_by="name")
-    thirvu_shift=frappe.get_value("Employee Timing Details", designation, 'staff')
+    emp_list=frappe.get_all("Employee",filters={"department" : emp_department,'location' : location},fields=["name", "employee_name","department",'designation'],order_by="name")
+    department_list=frappe.get_value("Department", emp_department, 'is_staff')
     for name in emp_list:
         attendance_status=0
         bonus_percent= bonus_on_days(name['name'])
-        if thirvu_shift==1:
+        frappe.errprint(bonus_percent)
+        if department_list==1:
             attendance_status = frappe.db.sql("""
                     SELECT count(att.name)
                     FROM `tabAttendance` as att
@@ -34,7 +35,7 @@ def employee_finder(designation,location,from_date,to_date):
                     att.checkout_time >= '{settings.to_time}' and
                     att.workflow_state = 'Present' and att.docstatus = 1
                     """,as_list=1)[0][0]
-            
+        frappe.errprint(attendance_status)
       
         emp_base_amount=frappe.db.sql("""select ssa.base
                 FROM `tabSalary Structure Assignment` as ssa
@@ -43,10 +44,13 @@ def employee_finder(designation,location,from_date,to_date):
         calc=0
         if emp_base_amount:
             calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
+            print(name['name'], attendance_status, calc )
             amount.append(calc)
             working_days.append(attendance_status)
             employee_names.append(name)
-        table.append({'employee':name['name'],'employee_name':name['employee_name'],'designation':designation,'working_days':attendance_status,'current_bonus':calc})
+        print(name['name'], attendance_status, calc )
+        table.append({'employee':name['name'],'employee_name':name['employee_name'],'designation':name['designation'],'working_days':attendance_status,'current_bonus':calc})
+    frappe.errprint(table)
     return employee_names, amount, working_days, table
 
 @frappe.whitelist()
@@ -77,11 +81,22 @@ def create_bonus(doc,event):
 def bonus_on_days(name):
     count=0
     settings = frappe.get_single("United Knitting Mills Settings")
-    attedance=frappe.db.get_all("Attendance", filters={'employee':name, 'status':'Present'}, fields=['employee'])
+    days=[i.days_allowed_for_bonus for i in settings.bonus_table]
+    days.sort()
+    matched_day=days[-1] if len(days) else 0
+    attedance=frappe.db.get_all("Attendance", filters={'employee':name, 'workflow_state':'Present'}, fields=['employee'])
     count=len(attedance)
-    for j in range(0, len(settings.bonus_table), 1):
-        for k in range(j, len(settings.bonus_table), 1):
-            if settings.bonus_table[j].days_allowed_for_bonus <= count >= settings.bonus_table[k].days_allowed_for_bonus :
-               return settings.bonus_table[k].bonus_percentage
-                 
+    for i in range(len(days)):
+        if count>days[i]:
+            continue
+        else:
+            if i==0:
+                matched_day=days[i]
+            else:
+                matched_day=days[i-1]
+            break
+   
+    for j in settings.bonus_table:
+        if j.days_allowed_for_bonus== matched_day:
+            return j.bonus_percentage
     return 0            
