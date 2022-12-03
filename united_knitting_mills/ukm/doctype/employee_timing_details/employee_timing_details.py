@@ -64,7 +64,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
         if emp_base_amount:
             emp_base_amount = emp_base_amount[0][0]
         else:
-            emp_ase_amount = 0
+            emp_base_amount = 0
 
         #  To Separate The Checkin Date-wise and Getting That Checkin Name
         if shift_list.thirvu_shift_details:
