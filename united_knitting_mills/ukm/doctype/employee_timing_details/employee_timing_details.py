@@ -54,7 +54,6 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
         employee_checkin = frappe.db.get_list('Employee Checkin',fields=["time",'log_type','name'],filters={"employee": employee,'attendance':('is', 'not set')},order_by="time")
         # To Get Shift Details
         shift_list = frappe.get_doc('Employee Timing Details',doc)
-
         # Shift Salary
         employee_name = employee
         emp_base_amount=frappe.db.sql("""select ssa.base
