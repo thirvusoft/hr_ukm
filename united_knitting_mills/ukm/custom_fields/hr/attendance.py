@@ -155,6 +155,9 @@ def create_attendance_custom_fields():
         
         dict(fieldname='house_keeping', label='',
             fieldtype='Check',insert_after='staff',hidden=1),
+
+        dict(fieldname='labour', label='',
+            fieldtype='Check',insert_after='house_keeping',hidden=1),
         ]
     }
     create_custom_fields(custom_fields)

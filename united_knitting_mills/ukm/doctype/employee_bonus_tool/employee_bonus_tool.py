@@ -19,7 +19,6 @@ def employee_finder(emp_department,location,from_date,to_date):
     for name in emp_list:
         attendance_status=0
         bonus_percent= bonus_on_days(name['name'])
-        frappe.errprint(bonus_percent)
         if department_list==1:
             attendance_status = frappe.db.sql("""
                     SELECT count(att.name)
@@ -35,7 +34,6 @@ def employee_finder(emp_department,location,from_date,to_date):
                     att.checkout_time >= '{settings.to_time}' and
                     att.workflow_state = 'Present' and att.docstatus = 1
                     """,as_list=1)[0][0]
-        frappe.errprint(attendance_status)
       
         emp_base_amount=frappe.db.sql("""select ssa.base
                 FROM `tabSalary Structure Assignment` as ssa
@@ -44,13 +42,11 @@ def employee_finder(emp_department,location,from_date,to_date):
         calc=0
         if emp_base_amount:
             calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
-            print(name['name'], attendance_status, calc )
             amount.append(calc)
             working_days.append(attendance_status)
             employee_names.append(name)
-        print(name['name'], attendance_status, calc )
+    
         table.append({'employee':name['name'],'employee_name':name['employee_name'],'designation':name['designation'],'working_days':attendance_status,'current_bonus':calc})
-    frappe.errprint(table)
     return employee_names, amount, working_days, table
 
 @frappe.whitelist()
