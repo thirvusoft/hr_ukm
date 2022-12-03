@@ -196,7 +196,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-11-20 19:39:26.895836",
+ "modified": "2022-12-03 15:10:27.368354",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -260,6 +260,18 @@
   },
   {
    "doc_view": "",
+   "label": "Decision Making (Labour) - Breaktime Overconsumed",
+   "link_to": "Decision Making (Labour) - Breaktime Overconsumed",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (Labour) - Insufficient Working hours",
+   "link_to": "Decision Making (Labour) - Insufficient Working hours",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
    "label": "Decision Making (Staff) - Breaktime Overconsumed",
    "link_to": "Decision Making (Staff) - Breaktime Overconsumed",
    "type": "Report"
@@ -292,6 +304,36 @@
    "doc_view": "",
    "label": "Decision Making (Staff) - Leave Applied",
    "link_to": "Decision Making (Staff) - Leave Applied",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (House Keeping) - Breaktime Overconsumed",
+   "link_to": "Decision Making (House Keeping) - Breaktime Overconsumed",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (House Keeping) - Checkin Missing",
+   "link_to": "Decision Making (House Keeping) - Checkin Missing",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (House Keeping) - Insufficient Working Hours",
+   "link_to": "Decision Making (House Keeping) - Insufficient Working Hours",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (House Keeping) - Late Entry",
+   "link_to": "Decision Making (House Keeping) - Late Entry",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making (House Keeping) - Early Exit",
+   "link_to": "Decision Making (House Keeping) - Early Exit",
    "type": "Report"
   },
   {
