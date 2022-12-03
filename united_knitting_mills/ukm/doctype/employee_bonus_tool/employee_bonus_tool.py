@@ -14,7 +14,7 @@ def employee_finder(emp_department,location,from_date,to_date):
     amount=[]
     working_days = []
     table=[]
-    emp_list=frappe.get_all("Employee",filters={"department" : emp_department,'location' : location},fields=["name", "employee_name","department",'designation'],order_by="name")
+    emp_list=frappe.get_all("Employee",filters={"department" : emp_department,'location' : location, 'status':'Active'},fields=["name", "employee_name","department",'designation'],order_by="name")
     department_list=frappe.get_value("Department", emp_department, 'is_staff')
     for name in emp_list:
         attendance_status=0
@@ -34,7 +34,7 @@ def employee_finder(emp_department,location,from_date,to_date):
                     att.checkout_time >= '{settings.to_time}' and
                     att.workflow_state = 'Present' and att.docstatus = 1
                     """,as_list=1)[0][0]
-      
+
         emp_base_amount=frappe.db.sql("""select ssa.base
                 FROM `tabSalary Structure Assignment` as ssa
                 WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
@@ -48,6 +48,7 @@ def employee_finder(emp_department,location,from_date,to_date):
     
         table.append({'employee':name['name'],'employee_name':name['employee_name'],'designation':name['designation'],'working_days':attendance_status,'current_bonus':calc})
     return employee_names, amount, working_days, table
+
 
 @frappe.whitelist()
 def total_bonus_amt_total(doc,event):
