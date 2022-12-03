@@ -54,7 +54,6 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
         employee_checkin = frappe.db.get_list('Employee Checkin',fields=["time",'log_type','name'],filters={"employee": employee,'attendance':('is', 'not set')},order_by="time")
         # To Get Shift Details
         shift_list = frappe.get_doc('Employee Timing Details',doc)
-        
         # Shift Salary
         employee_name = employee
         emp_base_amount=frappe.db.sql("""select ssa.base
@@ -95,7 +94,10 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                 new_attendance_doc.employee = employee
                 new_attendance_doc.attendance_date = date
                 # finalattendance = frappe._dict()
-                
+                if shift_list.labour == 1:
+                    new_attendance_doc.labour = 1
+                elif shift_list.house_keeping ==1:
+                    new_attendance_doc.house_keeping = 1
                 # To check missing log
                 if len(date_wise_checkin[date])%2 ==0 and len(date_wise_checkin[date]) :
                     shift_wise_details = frappe._dict()
@@ -468,10 +470,7 @@ def create_staff_attendance(docname):
                     reason += f"\n-> Insufficient Checkins({doc.total_no_of_checkins_per_day} required but only {len(date_wise_checkin[data])} is available)."
                     attendance.mismatched_checkin = 1
                     attendance.no_of_checkin = f"{len(date_wise_checkin[data])} / { doc.total_no_of_checkins_per_day}"
-                #if doc.staff:
-                    #attendance.staff = 1
-                #elif doc.house_keeping:
-                    #attendance.house_keeping = 1
+                attendance.staff = 1
                 submit_doc, reason = create_datewise_attendance_for_staff(reason, submit_doc, employee, attendance, data, date_wise_checkin[data])
                 submit_doc, reason, late_entry, early_exit = validate_total_working_hours(reason, doc, submit_doc, date_wise_checkin[data], attendance, doc.start_time, doc.end_time)
                 attendance.flags.ignore_validate = True
@@ -497,9 +496,9 @@ def scheduler_for_employee_shift():
     employee_timing_details = frappe.get_all('Employee Timing Details')
     for data in employee_timing_details:
         timing_doc = frappe.get_doc('Employee Timing Details',data['name'])
-        if timing_doc.staff == 1 or timing_doc.house_keeping == 1:
+        if timing_doc.staff == 1:
             create_staff_attendance(timing_doc.name)
-        elif timing_doc.labour ==1:
+        elif timing_doc.labour ==1 or timing_doc.house_keeping == 1:
             create_labour_attendance(timing_doc.department, timing_doc.name, timing_doc.unit, str(timing_doc.entry_period) ,str(timing_doc.exit_period))
     
     leave_application_to_attendance()
