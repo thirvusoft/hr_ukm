@@ -88,6 +88,8 @@ def staff_salary_calculation(doc,event):
                     "amount":salary_for_persent_days})
 
                 gross_salary = salary_for_persent_days
+                atte=sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)]}, pluck='total_shift_count'))
+                doc.total_shift_worked=atte
 
                 #  Pay Leave Adding in Salary Slip
                 pay_leave_details = add_pay_leave(doc.start_date, doc.end_date, doc.employee, doc.per_day_salary_for_staff)

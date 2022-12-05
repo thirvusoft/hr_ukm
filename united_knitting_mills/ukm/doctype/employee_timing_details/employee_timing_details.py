@@ -43,6 +43,7 @@ def get_employees_for_shift(doc, location):
 
     # To get employee only foe the particular department
     total_employees=frappe.db.get_all('Employee', filters={"designation":['in', designation],'location':location,'status':'Active'}, pluck='name')
+    print(total_employees)
     return total_employees
 
 
