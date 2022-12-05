@@ -208,7 +208,6 @@ def get_data(filters):
         for k in between_dates:
             get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'docstatus':1,'attendance_date':k}, 'total_shift_count')
             f.update({k:get_attendance})
-
         salary_slip_detail=frappe.get_doc("Salary Slip",j.name)
 
         food_expence_count = 0
@@ -256,6 +255,5 @@ def get_data(filters):
            
         else:
             data[i][0] = ''
-   
     return data
 
