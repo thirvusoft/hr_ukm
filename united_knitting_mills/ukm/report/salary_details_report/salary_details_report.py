@@ -16,6 +16,12 @@ def execute(filters=None):
 
 def get_columns(filters):
     columns = [
+         {
+            "label": _("S.No"),
+            "fieldtype": "Data",
+            "fieldname": "sno",
+            "width": 50
+        },
         {
             "label": _("Designation"),
             "fieldtype": "Data",
@@ -184,7 +190,7 @@ def get_data(filters):
         filter["unit"] = filters["unit"]
 
     ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation"],group_by="employee", order_by="designation")
-    
+    no=1
     for j in ss:
         f=frappe._dict()
         emp_doc = frappe.get_doc("Employee",j.employee)
@@ -192,7 +198,7 @@ def get_data(filters):
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
         
         f.update(
-            {
+            {   "sno":str(no),
                 "designation" : j.designation,
                 "code" : j['employee'],
                 "worker_name":j.employee_name,
@@ -243,6 +249,7 @@ def get_data(filters):
 
         f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         data.append(f)
+        no+=1
 
     data = [list(i.values()) for i in data]
 

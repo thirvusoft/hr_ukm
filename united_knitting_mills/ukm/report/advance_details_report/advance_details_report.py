@@ -39,6 +39,12 @@ def execute(filters = None):
 def get_columns(between_dates):
 
 	columns = [
+		 {
+            "label": _("S.No"),
+            "fieldtype": "Data",
+            "fieldname": "sno",
+            "width": 50
+        },
 		{
 			"label": _("Designation"),
 			"fieldtype": "Data",
@@ -146,7 +152,7 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 		group_by = "employee",
 		order_by = "designation"
 	)
-
+	no=1
 	for emp_advance in emp_advance_list:
 
 		sub_data = frappe._dict()
@@ -156,7 +162,7 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 		salary_structure_assignment_base = frappe.db.get_value("Salary Structure Assignment", {'employee':emp_advance.employee, 'docstatus':1}, 'base')
 		
 		sub_data.update(
-			{
+			{	"sno":str(no),
 				"designation" : emp_advance.designation,
 				"code" : emp_advance.employee,
 				"worker_name":emp_advance.employee_name,
@@ -189,6 +195,8 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 			)
 
 		data.append(sub_data)
+		no+=1
+
 
 	data = [list(i.values()) for i in data]
 
