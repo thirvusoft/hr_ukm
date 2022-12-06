@@ -8,7 +8,7 @@ frappe.query_reports["Daily Attendance Report"] = {
 			"fieldname":"attendance_date",
 			"label": __("Attendance Date"),
 			"fieldtype": "Date",
-			"default": frappe.datetime.get_today(),
+			"default":  frappe.datetime.add_days(frappe.datetime.nowdate(),-1),
 			"width": "80"
 		},
 		{
