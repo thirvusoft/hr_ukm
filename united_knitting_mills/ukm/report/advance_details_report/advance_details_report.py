@@ -192,14 +192,14 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 
 	data = [list(i.values()) for i in data]
 
-	designation_check =''
+	# designation_check =''
 
-	for i in range (0,len(data),1):
-		if data[i][0] != designation_check:
-			designation_check = data[i][0] 
-			data[i][0] = f'<b>{data[i][0]}</b>'
+	# for i in range (0,len(data),1):
+	# 	if data[i][0] != designation_check:
+	# 		designation_check = data[i][0] 
+	# 		data[i][0] = f'<b>{data[i][0]}</b>'
 		   
-		else:
-			data[i][0]=''
+	# 	else:
+	# 		data[i][0]=''
 
 	return data
