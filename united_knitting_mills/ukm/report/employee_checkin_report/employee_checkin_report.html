@@ -7,8 +7,8 @@
 		<tr>
 			<th style="width: 12%">{%= __("Employee Code") %}</th>
 			<th style="width: 18%">{%= __("Employee Name") %}</th>
-			<th style="width: 15%">{%= __("Designation") %}</th>
 			<th style="width: 18%">{%= __("Department") %}</th>
+			<th style="width: 15%">{%= __("Designation") %}</th>
 			<th style="width: 8%">{%= __("Logs") %}</th>
 		</tr>
 	</thead>
@@ -17,8 +17,8 @@
 			<tr>
 				<td><b>{%= frappe.format(data[i].employee_code, {fieldtype: "Link"}) || "&nbsp;" %}</b></td>
 				<td>{%= frappe.format(data[i].employee_name, {fieldtype: "Data"}) || "&nbsp;" %}</td>
-				<td>{%= frappe.format(data[i].designation, {fieldtype: "Data"}) || "&nbsp;" %}</td>
 				<td>{%= frappe.format(data[i].department, {fieldtype: "Data"}) || "&nbsp;" %}</td>
+				<td>{%= frappe.format(data[i].designation, {fieldtype: "Data"}) || "&nbsp;" %}</td>
 				<td>{%= frappe.format(data[i].logs, {fieldtype: "Time"}) || "&nbsp;" %}</td>
 			</tr>
 		{% } %}
