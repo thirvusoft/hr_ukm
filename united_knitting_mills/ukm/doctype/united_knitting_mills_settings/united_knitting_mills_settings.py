@@ -78,18 +78,17 @@ def attendance_update(attendance_date):
 	for attendance in attendance_list:
 
 		attendance_doc = frappe.get_doc("Attendance",attendance)
+		if attendance_doc.designation=="SWEEPER":
+			if attendance_doc.docstatus:
+				attendance_doc.cancel()
 
-		if attendance_doc.docstatus:
-			attendance_doc.cancel()
-
-		frappe.delete_doc('Attendance', attendance_doc.name)
-
+			frappe.delete_doc('Attendance', attendance_doc.name)
 	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(attendance_date, attendance_date)]})
 
 	for employee_checkin in employee_checkin_list:
 
 		employee_checkin_doc = frappe.get_doc("Employee Checkin",employee_checkin)
 
-		frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
+		# frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
 
 	create_employee_checkin(attendance_date, attendance_date)
