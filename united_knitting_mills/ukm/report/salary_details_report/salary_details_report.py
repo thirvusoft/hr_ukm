@@ -130,6 +130,18 @@ def get_columns(filters):
             "width": 100
         },
         {
+            "label": _("Medical Expense"),
+            "fieldtype": "Currency",
+            "fieldname": "medical_expense",
+            "width": 100
+        },
+        {
+            "label": _("Maintenance Expense"),
+            "fieldtype": "Currency",
+            "fieldname": "maintenance_expense",
+            "width": 100
+        },
+        {
             "label": _("Total Deduction"),
             "fieldtype": "Currency",
             "fieldname": "total_deduction",
@@ -189,7 +201,7 @@ def get_data(filters):
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
 
-    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation"],group_by="employee", order_by="designation")
+    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay"],group_by="employee", order_by="designation")
     no=1
     for j in ss:
         f=frappe._dict()
@@ -220,17 +232,31 @@ def get_data(filters):
         pf_count = 0
         esi_count = 0
         advance_count = 0
+        medical_expense_count=0
+        maintenance_expense_count=0
 
         advance = "" 
         food_expence = ""
         esi = ""
         pf = ""
+        medical_expense=""
+        maintenance_expense=""
 
         for x in range(0,len(salary_slip_detail.deductions),1):
             if food_expence_count == 0:
                 if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Food Expense":
                     food_expence = salary_slip_detail.deductions[x].__dict__["amount"]
                     food_expence_count = 1
+            
+            if medical_expense_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Medical Expense":
+                    medical_expense = salary_slip_detail.deductions[x].__dict__["amount"]
+                    medical_expense_count = 1
+            
+            if maintenance_expense_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Maintenance Expense":
+                    maintenance_expense = salary_slip_detail.deductions[x].__dict__["amount"]
+                    maintenance_expense_count = 1
 
             if esi_count == 0:
                 if salary_slip_detail.deductions[x].__dict__["salary_component"] == "ESI":
@@ -247,7 +273,7 @@ def get_data(filters):
                     advance = salary_slip_detail.deductions[x].__dict__["amount"]
                     advance_count = 1
 
-        f.update({"total_shift":j.total_shift_worked,"total_amount":j.net_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+        f.update({"total_shift":j.total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         data.append(f)
         no+=1
 

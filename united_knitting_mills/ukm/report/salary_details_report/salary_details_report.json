@@ -1,5 +1,5 @@
 {
- "add_total_row": 0,
+ "add_total_row": 1,
  "columns": [],
  "creation": "2022-09-30 14:42:47.597472",
  "disable_prepared_report": 0,
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2022-09-30 14:43:50.186566",
+ "modified": "2022-12-06 17:08:32.307273",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Salary Details Report",
@@ -20,9 +20,6 @@
  "report_name": "Salary Details Report",
  "report_type": "Script Report",
  "roles": [
-  {
-   "role": "HR User"
-  },
   {
    "role": "Employee"
   },
