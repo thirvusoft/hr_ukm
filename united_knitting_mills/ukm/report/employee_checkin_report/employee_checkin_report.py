@@ -21,9 +21,7 @@ def execute(filters=None):
 	data = [list(i) for i in employees]
 	result_data = []
 	settings = frappe.get_single("United Knitting Mills Settings")
-	print(settings.checkin_type_resetting_time)
 	date_time= attendance_date+" "+settings.checkin_type_resetting_time
-	print(date_time)
 	for i in range (0,len(data),1):
 		# first_row = 1
 		for logs in frappe.get_list("Employee Checkin Without Log Type",fields=["time"],filters={"employee": data[i][0],'time':['between',(attendance_date,attendance_date)], 'time':['>',date_time]},pluck='time'):
