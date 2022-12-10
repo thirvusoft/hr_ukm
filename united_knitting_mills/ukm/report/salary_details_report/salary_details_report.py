@@ -277,7 +277,7 @@ def get_data(filters):
         data.append(f)
         no+=1
 
-    data = [list(i.values()) for i in data]
+    # data = [list(i.values()) for i in data]
 
     # designation_check = ''
 
