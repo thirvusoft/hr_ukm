@@ -126,8 +126,8 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                             shift_wise_details.update({'start_time':in_time})
                             start_idx = shift_details.idx
                         else:
-                            # if shift_details.start_time < to_timedelta(str(in_time)) and shift_list.thirvu_shift_details[0].start_time <= shift_details.start_time: 
-                            #     late_entry_time =to_timedelta(str(in_time)) - shift_details.start_time
+                            if shift_details.start_time < to_timedelta(str(in_time)) and shift_list.thirvu_shift_details[0].start_time <= shift_details.start_time: 
+                                late_entry_time =to_timedelta(str(in_time)) - shift_details.start_time
                             approval_start_time = in_time
 
                         # Buffer calculation for end time
