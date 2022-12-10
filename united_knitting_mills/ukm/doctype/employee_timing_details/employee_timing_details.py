@@ -11,7 +11,7 @@ import datetime
 from frappe import _
 from datetime import datetime as dt, date, timedelta, time as t
 
-from frappe.utils.data import today
+from frappe.utils.data import today,add_days
 
 class EmployeeTimingDetails(Document):
     def validate(self):
@@ -141,59 +141,56 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
 
                     # Calculation of shift salary and shift count
                     try:
-                        frappe.log_error(date_wise_checkin,title='111')
                         for i in date_wise_checkin:
-                            frappe.log_error(date_wise_checkin,title='2222')
+                            
                             if start_idx and end_idx:
-                                frappe.log_error(date_wise_checkin,title='333')
                                 shift_count = 0
                                 shift_salary = 0
                                 for x in range(0,len(date_wise_checkin[i]),2):
-                                    frappe.log_error(date_wise_checkin,title='4444')
+                                    check = 0
+                                    break_var = 0
                                     for shift_row in shift_list.thirvu_shift_details:
-                                        
-                                        start_time=(datetime.datetime.min + shift_row.start_time).time()
-                                        end_time=(datetime.datetime.min + shift_row.end_time).time()
-                                        if True:
-                                        # if(((date_wise_checkin[i][x]['time'].time())< (start_time) - ) and x ==0 ) or ((date_wise_checkin[i][x]['time'].time())< (start_time) and x!=0) :
-                                            
-                                            # frappe.log_error((date_wise_checkin[i][x+1]['time'].time()) > (end_times),title='eee')
-                                            
-                                            
-                                            
-                                        
-                                            frappe.log_error(f"{date_wise_checkin[i][x]['time'].time()}",title='cccccccc')
-                                            frappe.log_error(timedelta(minutes=int(late_entry)),title='ppppppp')
-                                            intime=date_wise_checkin[i][x]['time']
-                                            outtime= date_wise_checkin[i][x+1]['time']
-                                            try:
-                                                if x==0:
-                                                    intime= date_wise_checkin[i][x]['time'] - timedelta(minutes=int(late_entry))
-                                                if x==(len(date_wise_checkin[i]) -2):
-                                                    outtime= date_wise_checkin[i][x+1]['time'] + timedelta(minutes=int(early_exit))
-                                            except:
-                                                frappe.log_error(frappe.get_traceback())
-                                            
-                                            frappe.log_error(x,title='x')
-                                            if intime.time()< (start_time) and  outtime.time() > (end_time):
-                                                frappe.log_error(f"{shift_row.shift_count}   {shift_count}",title='56456456454')
-                                                frappe.log_error(f"{intime}   {start_time}",title='intime')
-                                                frappe.log_error(f"{outtime}   {end_time}",title='outtime')
-                                            
-                                            
-                                            
-                                            # if  ((date_wise_checkin[i][x]['time'].time()) > (start) and len(date_wise_checkin[i] -1 ==x)) or (date_wise_checkin[i][x+1]['time'].time())< (end_time) and len(date_wise_checkin[i] -1 ==x) :
-                                            
-                                                
-                                                frappe.log_error("ooooooooooooooooooooooo",title='wwwwwwwwwwwwww')
-                                                if shift_row.idx >= start_idx and shift_row.idx <= end_idx:
-                                                    shift_count += shift_row.shift_count
-                                                    if frappe.db.get_value('Thirvu Shift Status',shift_row.shift_status,'double_salary'):
-                                                        shift_salary += emp_base_amount * ( shift_row.shift_count * 2 )
 
-                                                    else:
-                                                        shift_salary += emp_base_amount * ( shift_row.shift_count )
-                                            
+                                        test_start_time=(datetime.datetime.min + shift_row.start_time).time()
+                                        test_end_time=(datetime.datetime.min + shift_row.end_time).time()
+
+                                        if shift_row.start_time > frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time"):
+                                            start_time = datetime.datetime.combine(date, test_start_time)
+                                        else:
+                                            start_time = datetime.datetime.combine(add_days(date,1),test_start_time )
+
+                                        if shift_row.end_time > frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time"):
+                                            end_time = datetime.datetime.combine(date, test_end_time)
+                                        else:
+                                            end_time = datetime.datetime.combine(add_days(date,1), test_end_time)
+
+
+                                        intime=date_wise_checkin[i][x]['time']
+                                        outtime= date_wise_checkin[i][x+1]['time']
+                                        try:
+                                            if x==0:
+                                                intime= date_wise_checkin[i][x]['time'] - timedelta(minutes=int(late_entry))
+                                            if x==(len(date_wise_checkin[i]) -2):
+                                                outtime= date_wise_checkin[i][x+1]['time'] + timedelta(minutes=int(early_exit))
+                                        except:
+                                            frappe.log_error(frappe.get_traceback())
+
+                                        
+                                        if intime < (start_time) and  outtime  > (end_time):
+                                            check = 1
+                                            shift_count += shift_row.shift_count
+                                            if frappe.db.get_value('Thirvu Shift Status',shift_row.shift_status,'double_salary'):
+                                                shift_salary += emp_base_amount * ( shift_row.shift_count * 2 )
+
+                                            else:
+                                                shift_salary += emp_base_amount * ( shift_row.shift_count )
+                                        else:
+
+                                            if check:
+                                                break_var = 1
+    
+                                        if check and break_var:
+                                            break
 
                                 shift_wise_details.update({'shift_count':shift_count,'shift_salary':shift_salary})
                                 correct_shift_details.append(shift_wise_details)
@@ -202,7 +199,6 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                     
                                     'checkout_time':shift_wise_details['end_time']
                                 })
-                                frappe.log_error(title="4567890976",  message=f"{shift_count}   {shift_salary}")
 
                     except:
 
