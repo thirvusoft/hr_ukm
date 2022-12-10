@@ -101,6 +101,6 @@ def create_employee_checkin(from_date = None, to_date = None):
         date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
         date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
         # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
-        # create_employee_checkins(date_wise_checkin, employee, buffer_time)
+        create_employee_checkins(date_wise_checkin, employee, buffer_time)
 
     scheduler_for_employee_shift()
