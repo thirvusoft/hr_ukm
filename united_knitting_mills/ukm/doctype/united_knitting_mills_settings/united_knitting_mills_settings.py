@@ -78,6 +78,7 @@ def attendance_update(attendance_date):
 	for attendance in attendance_list:
 
 		attendance_doc = frappe.get_doc("Attendance",attendance)
+
 		if attendance_doc.docstatus:
 			attendance_doc.cancel()
 

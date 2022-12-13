@@ -37,7 +37,7 @@ def salary_slip_for_labours(doc,event):
     emp_shift_amount = frappe.db.sql("""
             select sum(total_shift_amount),sum(total_shift_count),sum(total_shift_hr)
             from `tabAttendance`
-            where employee=%s and attendance_date>=%s and attendance_date<=%s and docstatus = 1
+            where employee=%s and attendance_date>=%s and attendance_date<=%s and workflow_state='Present'
         """, (doc.employee, doc.start_date, doc.end_date), as_list = 1)
 
     if emp_shift_amount[0][1]:
@@ -88,7 +88,7 @@ def staff_salary_calculation(doc,event):
                     "amount":salary_for_persent_days})
 
                 gross_salary = salary_for_persent_days
-                atte=sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)]}, pluck='total_shift_count'))
+                atte=sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)],'workflow_state':"Present"}, pluck='total_shift_count'))
                 doc.total_shift_worked=atte
 
                 #  Pay Leave Adding in Salary Slip
