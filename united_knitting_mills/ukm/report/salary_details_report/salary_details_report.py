@@ -80,6 +80,7 @@ def get_columns(filters):
         ]
     from_date = filters["from_date"]
     to_date = filters["to_date"]
+    staff_labour = filters['staff_labour']
     from_d = tuple(map(int, from_date.split('-')))
     to_d = tuple(map(int, to_date.split('-')))
     between_dates = list(map(str, list(daterange(date(from_d[0], from_d[1], from_d[2]),date(to_d[0], to_d[1], to_d[2])))))
@@ -92,13 +93,36 @@ def get_columns(filters):
             "fieldname": i,
             "print_width": 10
         })
-    columns+=[
+    if staff_labour == "Labour":
+            columns+=[
         {
             "label": _("Total Shift"),
             "fieldtype": "Float",
             "fieldname": "total_shift",
             "width": 100
+        }]
+    elif staff_labour == "Staff":
+            columns+=[
+        {
+            "label": _("Total Working Days"),
+            "fieldtype": "Int",
+            "fieldname": "total_working_days",
+            "width": 100
         },
+         {
+            "label": _("Total Paid Leave"),
+            "fieldtype": "Int",
+            "fieldname": "total_paid_leave",
+            "width": 100
+        },
+         {
+            "label": _("Total Present Days"),
+            "fieldtype": "Int",
+            "fieldname": "total_present_days",
+            "width": 100
+        }]
+
+    columns+=[
         {
             "label": _("Total Amount"),
             "fieldtype": "Currency",
@@ -186,6 +210,7 @@ def get_data(filters):
 
     from_date = filters["from_date"]
     to_date = filters["to_date"]
+    staff_labour = filters['staff_labour']
 
     from_d = tuple(map(int, from_date.split('-')))
     to_d = tuple(map(int, to_date.split('-')))
@@ -200,8 +225,14 @@ def get_data(filters):
 
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
+    
+    if staff_labour == "Staff":
+        filter["is_staff_calulation"] = 1
+        
+    elif staff_labour == "Labour":
+        filter["is_staff_calulation"] = 0
 
-    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay"],group_by="employee", order_by="designation")
+    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay"],group_by="employee", order_by="designation")
     no=1
     for j in ss:
         f=frappe._dict()
@@ -273,7 +304,11 @@ def get_data(filters):
                     advance = salary_slip_detail.deductions[x].__dict__["amount"]
                     advance_count = 1
 
-        f.update({"total_shift":j.total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+        if staff_labour == "Labour":
+            f.update({"total_shift":j.total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+        elif staff_labour == "Staff":
+            f.update({"total_working_days":int(j.payment_days)-int(j.leave_with_pay),"total_paid_leave":j.leave_with_pay,"total_present_days":j.payment_days,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+
         data.append(f)
         no+=1
 

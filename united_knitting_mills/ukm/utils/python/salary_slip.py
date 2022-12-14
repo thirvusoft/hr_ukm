@@ -16,7 +16,7 @@ def set_salary_for_labour(doc,event):
 
     emp_base_amount=frappe.db.sql("""select ssa.base
                     FROM `tabSalary Structure Assignment` as ssa
-                    WHERE ssa.employee = '{0}' and ssa.from_date >='{1}'
+                    WHERE ssa.employee = '{0}' and ssa.from_date >='{1}' and ssa.docstatus = 1
                     ORDER BY ssa.from_date DESC LIMIT 1 """.format(doc.employee,doc.start_date),as_list=1)
     
     if emp_base_amount:
@@ -80,7 +80,7 @@ def staff_salary_calculation(doc,event):
             department_doc = frappe.get_doc("Department",department)
 
             if department_doc.is_staff:
-                salary_structure_assignment = frappe.get_value("Salary Structure Assignment",{"employee":doc.employee},["base"])
+                salary_structure_assignment = frappe.get_value("Salary Structure Assignment",{"employee":doc.employee,"docstatus":1},["base"])
                 
                 doc.per_day_salary_for_staff = salary_structure_assignment/doc.total_working_days
                 salary_for_persent_days = doc.per_day_salary_for_staff * doc.payment_days

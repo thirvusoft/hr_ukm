@@ -37,7 +37,7 @@ def employee_finder(emp_department,location,from_date,to_date):
 
         emp_base_amount=frappe.db.sql("""select ssa.base
                 FROM `tabSalary Structure Assignment` as ssa
-                WHERE ssa.employee = '{0}' and ssa.from_date <='{1}'
+                WHERE ssa.employee = '{0}' and ssa.from_date <='{1}' and ssa.docstatus = 1
                 ORDER BY ssa.from_date DESC LIMIT 1 """.format(name['name'],to_date),as_list=1)
         calc=0
         if emp_base_amount:

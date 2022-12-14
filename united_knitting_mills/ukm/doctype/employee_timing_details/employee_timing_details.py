@@ -9,6 +9,7 @@ from frappe.model.document import Document
 from frappe.utils import cint, get_datetime, getdate, to_timedelta, time_diff_in_hours
 import datetime
 from frappe import _
+import calendar
 from datetime import datetime as dt, date, timedelta, time as t
 
 from frappe.utils.data import today,add_days
@@ -532,10 +533,13 @@ def create_staff_attendance(docname):
                     attendance.reason = reason[1::]
                 attendance.flags.ignore_validate = True
                 attendance.save()
-                if(submit_doc):
+                at_date = getdate(attendance.attendance_date)
+                if(submit_doc and calendar.day_name[at_date.weekday()] != "Sunday"):
                     attendance.reload()
                     attendance.submit()
                 else:
+                    if calendar.day_name[at_date.weekday()] == "Sunday":
+                        attendance.sunday_attendance = 1
                     attendance.total_shift_count = 0
                     attendance.save()
 
