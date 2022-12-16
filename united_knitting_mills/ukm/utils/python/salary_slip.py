@@ -81,15 +81,17 @@ def staff_salary_calculation(doc,event):
 
             if department_doc.is_staff:
                 salary_structure_assignment = frappe.get_value("Salary Structure Assignment",{"employee":doc.employee,"docstatus":1},["base"])
+
+                atte = sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)],'workflow_state':"Present"}, pluck='total_shift_count'))
+                doc.total_shift_worked = atte
                 
                 doc.per_day_salary_for_staff = salary_structure_assignment/doc.total_working_days
-                salary_for_persent_days = doc.per_day_salary_for_staff * doc.payment_days
+                salary_for_persent_days = doc.per_day_salary_for_staff * doc.total_shift_worked
+                
                 doc.append("earnings",{"salary_component":"Basic",
                     "amount":salary_for_persent_days})
 
                 gross_salary = salary_for_persent_days
-                atte=sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)],'workflow_state':"Present"}, pluck='total_shift_count'))
-                doc.total_shift_worked=atte
 
                 #  Pay Leave Adding in Salary Slip
                 pay_leave_details = add_pay_leave(doc.start_date, doc.end_date, doc.employee, doc.per_day_salary_for_staff)
