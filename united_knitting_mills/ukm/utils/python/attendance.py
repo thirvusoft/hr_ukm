@@ -17,10 +17,8 @@ def validate_shift_details(doc, event):
             doc.total_shift_amount = 0
     else:
         if doc.staff:
-            doc.total_shift_count = 1
+            doc.total_shift_count = doc.req_total_shift_count
 
- 
-  
 def shift_hours(doc,event):
 
     shift = get_employee_shift(doc.employee)

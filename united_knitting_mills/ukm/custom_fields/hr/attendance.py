@@ -109,7 +109,7 @@ def create_attendance_custom_fields():
         fieldtype='Column Break',insert_after='total_shift_hr'),       
 
         dict(fieldname='total_shift_count', label='Total Shift Count',
-        fieldtype='Float',insert_after='column_break24',depends_on='eval:!doc.staff',read_only=1),
+        fieldtype='Float',insert_after='column_break24',read_only=1),
 
         dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Minutes',
         fieldtype='Float',insert_after='total_shift_count',hidden=1,read_only=1), 
@@ -137,7 +137,7 @@ def create_attendance_custom_fields():
         fieldtype='Float',insert_after='req_column_break24',depends_on='eval:doc.staff'), 
         
         dict(fieldname='req_total_shift_count', label='Requested Shift Count',
-        fieldtype='Float',insert_after='req_ts_ot_hrs',depends_on='eval:!doc.staff'),
+        fieldtype='Float',insert_after='req_ts_ot_hrs'),
         
         dict(fieldname='req_checkout_time', label='Requested Checkout Time',
         fieldtype='Time',insert_after='req_total_shift_count',depends_on='eval:!doc.checkout_time',description="For reference only"), 
