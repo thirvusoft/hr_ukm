@@ -16,6 +16,15 @@ class EmployeeAdvanceTool(Document):
 		frappe.enqueue(create_employee_advance, doc = doc)
 		frappe.msgprint("Advance Will Be Creating In Backgroud Within 10 Minutes.")
 
+	def validate(doc):
+		total_advance_amount = 0
+
+		for row in doc.employee_advance_details:
+			total_advance_amount += row.current_advance
+			
+		doc.total_advance_amount = total_advance_amount
+			
+
 @frappe.whitelist()
 def employee_finder(location, from_date, to_date, designation=None, department=None):
 
@@ -74,7 +83,7 @@ def create_employee_advance(doc):
 
 		for advance in doc.employee_advance_details:
 			
-			if advance.current_advance:
+			if advance.eligible_amount:
 
 				make_property_setter(
 						'Employee Advance', "advance_account", "reqd", 0, "Link", validate_fields_for_doctype=False

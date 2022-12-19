@@ -83,6 +83,7 @@ def attendance_update(attendance_date):
 			attendance_doc.cancel()
 
 		frappe.delete_doc('Attendance', attendance_doc.name)
+		
 	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(attendance_date, attendance_date)]})
 
 	for employee_checkin in employee_checkin_list:

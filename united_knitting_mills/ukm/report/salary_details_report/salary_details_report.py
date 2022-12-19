@@ -23,12 +23,6 @@ def get_columns(filters):
             "width": 50
         },
         {
-            "label": _("Designation"),
-            "fieldtype": "Data",
-            "fieldname": "designation",
-            "width": 100
-        },
-        {
             "label": _("Employee ID"),
             "fieldtype": "Link",
             "fieldname": "code",
@@ -39,6 +33,12 @@ def get_columns(filters):
             "label": _("Name of Employee"),
             "fieldtype": "Data",
             "fieldname": "worker_name",
+            "width": 100
+        },
+        {
+            "label": _("Designation"),
+            "fieldtype": "Data",
+            "fieldname": "designation",
             "width": 100
         },
         {
