@@ -137,6 +137,10 @@ def validating_leave(doc, event):
 
         elif allocated_time < actual_time.total_seconds() / 60:
             frappe.throw(f"Permission Time Is Greater Than The Allocated Permission Time : {allocated_time}.",title=_("Message"))
+            
+    # To Change the Leave Application State as same as Workflow State
+    if doc.workflow_state in ["Approved", "Rejected"]:
+        doc.status = doc.workflow_state
 
 @frappe.whitelist()
 def attendance_updation(doc, event):
