@@ -74,7 +74,7 @@ def create_state():
             new_doc.save()
 
 def create_action():
-    list=["Reject", "Submit", "Draft",'Approve', 'Action','Send Approval for Present','Send Approval for Absent','Approval for Present','Approval for Absent','Cancelled', 'Send Approval']
+    list=["Reject", "Submit", "Draft",'Approve', 'Action','Send Approval for Present','Send Approval for Absent','Approval for Present','Approval for Absent','Cancelled', 'Send Approval', "Cancel"]
     
     for row in list:
         if not frappe.db.exists('Workflow Action Master', row):
@@ -182,10 +182,10 @@ def workflow_leave_application():
         state = 'Approval Pending', doc_status = 0, allow_edit = 'Thirvu Owner'
     ))
     workflow.append('states', dict(
-        state = 'Approved', doc_status = 0, allow_edit = 'Thirvu Owner'
+        state = 'Approved', doc_status = 1, allow_edit = 'Thirvu Owner'
     ))
     workflow.append('states', dict(
-        state = 'Rejected', doc_status = 0, allow_edit = 'Thirvu Owner'
+        state = 'Rejected', doc_status = 1, allow_edit = 'Thirvu Owner'
     ))
 
     workflow.append('transitions', dict(
