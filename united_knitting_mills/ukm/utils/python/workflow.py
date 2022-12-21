@@ -3,18 +3,20 @@ def workflow_document_creation():
     create_roles()
     create_state()
     create_action()
-    create_workflow_doc()
+    workflow_salary_structure()
     workflow_attendance()
+    workflow_leave_application()
 
-def create_workflow_doc():
+def workflow_salary_structure():
     if frappe.db.exists('Workflow', 'Salary Structure'):
         frappe.delete_doc('Workflow', 'Salary Structure')
+    
     workflow = frappe.new_doc('Workflow')
     workflow.workflow_name = 'Salary Structure'
     workflow.document_type = 'Salary Structure'
     workflow.workflow_state_field = 'workflow_state'
     workflow.is_active = 1
-    workflow.send_email_alert = 1
+    workflow.send_email_alert = 0
 
     workflow.append('states', dict(
         state = 'Approval Pending',doc_status=0, allow_edit = 'Thirvu HR User'
@@ -39,8 +41,10 @@ def create_workflow_doc():
     ))
     workflow.insert(ignore_permissions=True)
     return workflow
+
 def create_state():
-    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by Owner','Rejected by Owner','Pending Approval for Absent','Pending Approval for Present','Approval for Present','Approval for Absent','Present','Absent','Cancelled']
+    list=["Draft","Submitted","Rejected",'Approval Pending','Approved by Owner','Rejected by Owner','Pending Approval for Absent','Pending Approval for Present','Approval for Present','Approval for Absent','Present','Absent','Cancel',"Approved"]
+    
     for row in list:
         if not frappe.db.exists('Workflow State', row):
             new_doc = frappe.new_doc('Workflow State')
@@ -65,10 +69,13 @@ def create_state():
                 new_doc.style="Warning"
             if(row=="Pending Approval for Present"):
                 new_doc.style="Primary"
+            if(row=="Approved"):
+                new_doc.style="Success"
             new_doc.save()
 
 def create_action():
-    list=["Reject", "Submit", "Draft",'Approve', 'Action','Send Approval for Present','Send Approval for Absent','Approval for Present','Approval for Absent','Cancelled']
+    list=["Reject", "Submit", "Draft",'Approve', 'Action','Send Approval for Present','Send Approval for Absent','Approval for Present','Approval for Absent','Cancelled', 'Send Approval']
+    
     for row in list:
         if not frappe.db.exists('Workflow Action Master', row):
             new_doc = frappe.new_doc('Workflow Action Master')
@@ -77,22 +84,22 @@ def create_action():
 
 def create_roles():
     role_list = ['Thirvu Owner','Thirvu HR User','Thirvu HR Manager']
+    
     for role in role_list:
         if not frappe.db.exists("Role",role):
             role = frappe.get_doc({'doctype':'Role', 'role_name':role}).insert()
         
-   
-
 
 def workflow_attendance():
     if frappe.db.exists('Workflow', 'Attendance'):
         frappe.delete_doc('Workflow', 'Attendance ')
+    
     workflow = frappe.new_doc('Workflow')
     workflow.workflow_name = 'Attendance '
     workflow.document_type = 'Attendance '
     workflow.workflow_state_field = 'workflow_state'
     workflow.is_active = 1
-    workflow.send_email_alert = 1
+    workflow.send_email_alert = 0
 
     workflow.append('states', dict(
         state = 'Draft',doc_status=0, allow_edit = 'Thirvu HR User'
@@ -146,14 +153,53 @@ def workflow_attendance():
         allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.append('transitions', dict(
-        state = 'Present', action='Cancelled', next_state = 'Cancelled',
+        state = 'Present', action='Cancel', next_state = 'Cancelled',
         allowed='Thirvu Owner', allow_self_approval= 1
     ))
     workflow.append('transitions', dict(
-        state = 'Absent', action='Cancelled', next_state = 'Cancelled',
+        state = 'Absent', action='Cancel', next_state = 'Cancelled',
         allowed='Thirvu Owner', allow_self_approval= 1
     ))
 
     workflow.insert(ignore_permissions=True)
     return workflow
 
+def workflow_leave_application():
+    if frappe.db.exists('Workflow', 'Leave Application'):
+        frappe.delete_doc('Workflow', 'Leave Application ')
+   
+    workflow = frappe.new_doc('Workflow')
+    workflow.workflow_name = 'Leave Application '
+    workflow.document_type = 'Leave Application '
+    workflow.workflow_state_field = 'workflow_state'
+    workflow.is_active = 1
+    workflow.send_email_alert = 0
+
+    workflow.append('states', dict(
+        state = 'Draft', doc_status =  0, allow_edit = 'Thirvu HR User'
+    ))
+    workflow.append('states', dict(
+        state = 'Approval Pending', doc_status = 0, allow_edit = 'Thirvu Owner'
+    ))
+    workflow.append('states', dict(
+        state = 'Approved', doc_status = 0, allow_edit = 'Thirvu Owner'
+    ))
+    workflow.append('states', dict(
+        state = 'Rejected', doc_status = 0, allow_edit = 'Thirvu Owner'
+    ))
+
+    workflow.append('transitions', dict(
+        state = 'Draft', action = 'Send Approval', next_state = 'Approval Pending',
+        allowed = 'Thirvu HR User', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Approval Pending', action = 'Approve', next_state = 'Approved',
+        allowed = 'Thirvu Owner', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Approval Pending', action = 'Reject', next_state = 'Rejected',
+        allowed ='Thirvu Owner', allow_self_approval = 1
+    ))
+
+    workflow.insert(ignore_permissions=True)
+    return workflow
