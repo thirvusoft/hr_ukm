@@ -38,6 +38,10 @@ def salary_updation_old():
                         if att.total_shift_amount != 0:
                             att.save()
 
+def validation(doc,event):
+    old_doc = frappe.get_list("Salary Structure Assignment",{"docstatus":['!=',2],"employee":doc.employee})
+    if len(old_doc) > 0:
+        frappe.throw(f"Salary Structure already exists for {doc.employee}")
 # def salary_updation_old():
 
 #         ssa_docs = frappe.get_all("Salary Structure Assignment",{"docstatus" : 1})

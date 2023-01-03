@@ -150,7 +150,8 @@ doc_events = {
 	},
 
 	"Salary Structure Assignment":{
-		"on_submit":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.salary_updation"
+		"on_submit":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.salary_updation",
+		"validate":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.validation"
 	}
 
 	# "Location":{
