@@ -216,7 +216,7 @@ def employee_bank_details():
     workflow.send_email_alert = 0
 
     workflow.append('states', dict(
-        state = 'Draft', doc_status =  0, allow_edit = 'Thirvu HR Manager'
+        state = 'Draft', doc_status =  0, allow_edit = 'Thirvu HR User'
     ))
     workflow.append('states', dict(
         state = 'Approval Pending', doc_status = 0, allow_edit = 'Thirvu Accountant'
@@ -230,7 +230,7 @@ def employee_bank_details():
 
     workflow.append('transitions', dict(
         state = 'Draft', action = 'Send Approval', next_state = 'Approval Pending',
-        allowed = 'Thirvu HR Manager', allow_self_approval = 1
+        allowed = 'Thirvu HR User', allow_self_approval = 1
     ))
     workflow.append('transitions', dict(
         state = 'Approval Pending', action = 'Approve', next_state = 'Approved',
