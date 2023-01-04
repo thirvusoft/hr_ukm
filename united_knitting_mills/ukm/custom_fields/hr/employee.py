@@ -33,7 +33,7 @@ def create_employee_fields_and_property_setter():
             dict(fieldname='add_html',
                 fieldtype='Small Text', insert_after='current_address'),
             dict(fieldname='ts_bank_branch_name', label='Branch Name',
-                fieldtype='Link', insert_after='bank_name', options='Territory', depends_on = "eval:doc.salary_mode == 'Bank'")
+                fieldtype='Link', insert_after='bank_name', options='Territory', depends_on = "eval:doc.salary_mode == 'Bank'", read_only_depends_on ="eval:!doc.__islocal")
         ]
     }
 
@@ -210,6 +210,51 @@ def create_employee_fields_and_property_setter():
         'property_type':"Check",
         'field_name':"health_details",
         "value":1
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"default",
+        'property_type':"text",
+        'field_name':"salary_mode",
+        "value":"Bank"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"bank_name",
+        "value":"eval:!doc.__islocal"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"bank_ac_no",
+        "value":"eval:!doc.__islocal"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"ifsc_code",
+        "value":"eval:!doc.__islocal"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"micr_code",
+        "value":"eval:!doc.__islocal"
     })
     employee.save(ignore_permissions=True)
     create_custom_fields(custom_fields)
