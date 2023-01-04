@@ -6,6 +6,7 @@ def workflow_document_creation():
     workflow_salary_structure()
     workflow_attendance()
     workflow_leave_application()
+    employee_bank_details()
 
 def workflow_salary_structure():
     if frappe.db.exists('Workflow', 'Salary Structure'):
@@ -199,6 +200,45 @@ def workflow_leave_application():
     workflow.append('transitions', dict(
         state = 'Approval Pending', action = 'Reject', next_state = 'Rejected',
         allowed ='Thirvu Owner', allow_self_approval = 1
+    ))
+
+    workflow.insert(ignore_permissions=True)
+    return workflow
+
+def employee_bank_details():
+    if frappe.db.exists('Workflow', 'Employee Bank Details'):
+        frappe.delete_doc('Workflow', 'Employee Bank Details')
+    workflow = frappe.new_doc('Workflow')
+    workflow.workflow_name = 'Employee Bank Details'
+    workflow.document_type = 'Employee Bank Details'
+    workflow.workflow_state_field = 'workflow_state'
+    workflow.is_active = 1
+    workflow.send_email_alert = 0
+
+    workflow.append('states', dict(
+        state = 'Draft', doc_status =  0, allow_edit = 'Thirvu HR Manager'
+    ))
+    workflow.append('states', dict(
+        state = 'Approval Pending', doc_status = 0, allow_edit = 'Thirvu Accountant'
+    ))
+    workflow.append('states', dict(
+        state = 'Approved', doc_status = 1, allow_edit = 'Thirvu Accountant'
+    ))
+    workflow.append('states', dict(
+        state = 'Rejected', doc_status = 1, allow_edit = 'Thirvu Accountant'
+    ))
+
+    workflow.append('transitions', dict(
+        state = 'Draft', action = 'Send Approval', next_state = 'Approval Pending',
+        allowed = 'Thirvu HR Manager', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Approval Pending', action = 'Approve', next_state = 'Approved',
+        allowed = 'Thirvu Accountant', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Approval Pending', action = 'Reject', next_state = 'Rejected',
+        allowed ='Thirvu Accountant', allow_self_approval = 1
     ))
 
     workflow.insert(ignore_permissions=True)
