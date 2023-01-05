@@ -77,7 +77,7 @@ doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
 
 # before_install = "united_knitting_mills.install.before_install"
 after_install = "united_knitting_mills.after_install.create_custom_fields"
-after_migrate = "united_knitting_mills.ukm.utils.python.workflow.employee_bank_details"
+after_migrate = "united_knitting_mills.ukm.utils.python.workflow.attendance_shift_changes"
 
 # Uninstallation
 # ------------
