@@ -7,6 +7,7 @@ def workflow_document_creation():
     workflow_attendance()
     workflow_leave_application()
     employee_bank_details()
+    attendance_shift_changes()
 
 def workflow_salary_structure():
     if frappe.db.exists('Workflow', 'Salary Structure'):
@@ -243,3 +244,51 @@ def employee_bank_details():
 
     workflow.insert(ignore_permissions=True)
     return workflow
+
+def attendance_shift_changes():
+    if frappe.db.exists('Workflow', 'Attendance Shift Count Changes'):
+        frappe.delete_doc('Workflow', 'Attendance Shift Count Changes')
+    workflow = frappe.new_doc('Workflow')
+    workflow.workflow_name = 'Attendance Shift Count Changes'
+    workflow.document_type = 'Attendance Shift Changes'
+    workflow.workflow_state_field = 'workflow_state'
+    workflow.is_active = 1
+    workflow.send_email_alert = 0
+
+    workflow.append('states', dict(
+        state = 'Draft', doc_status =  0, allow_edit = 'Thirvu HR Manager'
+    ))
+    workflow.append('states', dict(
+        state = 'Draft', doc_status =  0, allow_edit = 'Thirvu HR User'
+    ))
+    workflow.append('states', dict(
+        state = 'Approval Pending', doc_status = 0, allow_edit = 'Thirvu Accountant'
+    ))
+    workflow.append('states', dict(
+        state = 'Approved', doc_status = 1, allow_edit = 'Thirvu Accountant'
+    ))
+    workflow.append('states', dict(
+        state = 'Rejected', doc_status = 1, allow_edit = 'Thirvu Accountant'
+    ))
+
+    workflow.append('transitions', dict(
+        state = 'Draft', action = 'Send Approval', next_state = 'Approval Pending',
+        allowed = 'Thirvu HR Manager', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Draft', action = 'Send Approval', next_state = 'Approval Pending',
+        allowed = 'Thirvu HR User', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Approval Pending', action = 'Approve', next_state = 'Approved',
+        allowed = 'Thirvu Accountant', allow_self_approval = 1
+    ))
+    workflow.append('transitions', dict(
+        state = 'Approval Pending', action = 'Reject', next_state = 'Rejected',
+        allowed ='Thirvu Accountant', allow_self_approval = 1
+    ))
+
+    workflow.insert(ignore_permissions=True)
+    return workflow
+
+
