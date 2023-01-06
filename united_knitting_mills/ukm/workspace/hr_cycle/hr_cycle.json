@@ -69,6 +69,17 @@
    "link_to": "User",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Bank Details",
+   "link_to": "Employee Bank Details",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
    "type": "Link"
   },
   {
@@ -142,6 +153,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Attendance Shift Changes",
+   "link_to": "Attendance Shift Changes",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Payroll",
    "link_type": "DocType",
    "onboard": 0,
@@ -194,9 +214,18 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Advance",
+   "link_to": "Employee Advance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2022-12-03 15:10:27.368354",
+ "modified": "2023-01-06 11:29:48.582934",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
