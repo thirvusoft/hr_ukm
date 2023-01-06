@@ -108,8 +108,10 @@ after_install = "united_knitting_mills.after_install.create_custom_fields"
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Leave Application": "united_knitting_mills.ukm.utils.python.leave_application.TsLeaveApplication"
+	"Leave Application": "united_knitting_mills.ukm.utils.python.leave_application.TsLeaveApplication",
+	"Payroll Entry":"united_knitting_mills.ukm.utils.python.payroll_entry.FoodExpense"
 }
+
 
 # Document Events
 # ---------------
@@ -117,6 +119,7 @@ override_doctype_class = {
 doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
+		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.food_expens_amount"
 	},
 
 	'Employee':{

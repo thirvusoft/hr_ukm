@@ -27,7 +27,10 @@
   "attendance",
   "attendance_date",
   "column_break_18",
-  "attendance_update"
+  "attendance_update",
+  "food_expense",
+  "amount_for_male_employee",
+  "amount_for_female_employee"
  ],
  "fields": [
   {
@@ -154,12 +157,28 @@
    "fieldtype": "Table",
    "label": "Bonus Table",
    "options": "TS Bonus Validation"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "food_expense",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Blue;\"><b>Food Expense</b></p>"
+  },
+  {
+   "fieldname": "amount_for_male_employee",
+   "fieldtype": "Currency",
+   "label": "Amount for Male Employee"
+  },
+  {
+   "fieldname": "amount_for_female_employee",
+   "fieldtype": "Currency",
+   "label": "Amount For Female Employee"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-12-01 15:42:40.930910",
+ "modified": "2023-01-05 14:22:49.842478",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
