@@ -84,7 +84,9 @@ def staff_salary_calculation(doc,event):
             if department_doc.is_staff:
                 salary_structure_assignment = frappe.get_value("Salary Structure Assignment",{"employee":doc.employee,"docstatus":1},["base"])
 
-                atte = sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)],'workflow_state':"Present"}, pluck='total_shift_count'))
+                atte = sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)],'workflow_state':"Present", "sunday_attendance": 0}, pluck='total_shift_count'))
+                atte = atte + sum(frappe.db.get_all("Attendance", filters={'employee':doc.employee,'attendance_date':['between',(doc.start_date, doc.end_date)],'workflow_state':"Present", "sunday_attendance": 1, "sunday_approval":1}, pluck='total_shift_count'))
+                
                 doc.total_shift_worked = atte
                 
                 doc.per_day_salary_for_staff = salary_structure_assignment/doc.total_working_days
