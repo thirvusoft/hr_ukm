@@ -119,7 +119,6 @@ override_doctype_class = {
 doc_events = {
 	"Salary Slip":{
 		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
-		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.food_expens_amount"
 	},
 
 	'Employee':{

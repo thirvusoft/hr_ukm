@@ -24,9 +24,11 @@ def set_salary_for_labour(doc,event):
 
     if(shift_doc.labour or shift_doc.house_keeping):
         salary_slip_for_labours(doc, event)
+        food_expens_amount(doc)
 
     elif(shift_doc.staff):
         staff_salary_calculation(doc,event)
+        food_expens_amount(doc)
 
 @frappe.whitelist()
 def salary_slip_for_labours(doc,event):
@@ -159,20 +161,34 @@ def add_pay_leave(start_date, end_date, employee, per_day_salary_for_staff = Non
 
     return len(pay_leave) * per_day_salary_for_staff, len(pay_leave)
 
-def food_expens_amount(doc, event):
-    settings = frappe.get_single("United Knitting Mills Settings")
-    employee_doc=frappe.db.get_all("Employee", filters={"name":doc.employee, "status":"Active"}, fields=["gender"])
-    if doc.food_expense_days:
-        if employee_doc and employee_doc[0]["gender"] == "Male":
-            doc.food_expense_amount=settings.amount_for_male_employee
-            print(settings.amount_for_male_employee)
-        elif employee_doc and employee_doc[0]["gender"] == "Female":
-            doc.food_expense_amount=settings.amount_for_female_employee
-            print(settings.amount_for_male_employee)
-        else:
-            doc.food_expense_amount=0
-    doc.update({'deductions':[{'salary_component':"Food Expense", 'amount':(doc.food_expense_days or 0)*(doc.food_expense_amount or 0)},
-                                {'salary_component':"Maintenance Expense", 'amount':doc.maintenance_expense},
-                                {'salary_component':"Medical Expense", 'amount':doc.medical_expense},
-                                {'salary_component':"Rent Expense", 'amount':doc.rent_expense }]})
-    SalarySlip.calculate_net_pay(doc)
+def food_expens_amount(doc):
+
+    if not doc.expense_updated:
+
+        settings = frappe.get_single("United Knitting Mills Settings")
+
+        employee_doc=frappe.db.get_all("Employee", filters={"name":doc.employee, "status":"Active"}, fields=["gender"])
+        
+        if doc.food_expense_days:
+
+            if employee_doc and employee_doc[0]["gender"] == "Male":
+                doc.food_expense_amount=settings.amount_for_male_employee
+
+            elif employee_doc and employee_doc[0]["gender"] == "Female":
+                doc.food_expense_amount=settings.amount_for_female_employee
+
+            else:
+                doc.food_expense_amount=0
+
+        doc.update({'deductions':
+            [
+                {'salary_component':"Food Expense", 'amount':(doc.food_expense_days or 0)*(doc.food_expense_amount or 0)},
+                {'salary_component':"Medical Expense", 'amount':doc.medical_expense},
+                {'salary_component':"Maintenance Expense", 'amount':doc.maintenance_expense},
+                {'salary_component':"Rent Expense", 'amount':doc.rent_expense },
+                {'salary_component':"Late Deduction", 'amount': doc.late_deduction}
+            ]
+        })
+
+        doc.expense_updated = 1
+        SalarySlip.calculate_net_pay(doc)

@@ -27,6 +27,8 @@ class FoodExpense(PayrollEntry):
 		medical_exp=[emp.medical_expense for emp in self.employees]
 		maintenance_exp=[emp.maintenance_expense for emp in self.employees]
 		rent_exp=[emp.rent_expense for emp in self.employees]
+		late_ded=[emp.late_deduction for emp in self.employees]
+		is_hold=[emp.is_hold for emp in self.employees]
 		if employees:
 			args = frappe._dict(
 				{
@@ -44,9 +46,9 @@ class FoodExpense(PayrollEntry):
 				}
 			)
 			if len(employees) > 30:
-				frappe.enqueue(create_salary_slips_for_employees, timeout=600, posting_date=self.posting_date,employees=employees,args=args,food_count=food_count, medical_exp=medical_exp, maintenance_exp=maintenance_exp, rent_exp=rent_exp)
+				frappe.enqueue(create_salary_slips_for_employees, timeout=600, posting_date=self.posting_date,employees=employees,args=args,food_count=food_count, medical_exp=medical_exp, maintenance_exp=maintenance_exp, rent_exp=rent_exp, late_ded=late_ded,is_hold=is_hold)
 			else:
-				create_salary_slips_for_employees(self.posting_date,self.start_date,self.end_date,employees, args,food_count, medical_exp, maintenance_exp,rent_exp, publish_progress=False)
+				create_salary_slips_for_employees(self.posting_date,self.start_date,self.end_date,employees, args,food_count, medical_exp, maintenance_exp,rent_exp,late_ded,is_hold, publish_progress=False)
 				# since this method is called via frm.call this doc needs to be updated manually
 				self.reload()
 	@frappe.whitelist()
@@ -60,14 +62,14 @@ class FoodExpense(PayrollEntry):
 		else:
 			submit_salary_slips_for_employees(self, ss_list, publish_progress=False)
 
-def create_salary_slips_for_employees(posting_date,start_date,end_date,employees, args,food_count,medical_exp, maintenance_exp, rent_exp, publish_progress=True):
+def create_salary_slips_for_employees(posting_date,start_date,end_date,employees, args,food_count,medical_exp, maintenance_exp, rent_exp,late_ded,is_hold, publish_progress=True):
 	salary_slips_exists_for = get_existing_salary_slips(employees, args)
 	count = 0
 	salary_slips_not_created = []
 	index = 0
 	for emp in employees:
 		if emp not in salary_slips_exists_for:
-			args.update({"doctype": "Salary Slip", "food_expense_days": food_count[index], "medical_expense":medical_exp[index], "maintenance_expense":maintenance_exp[index], "rent_expense":rent_exp[index]}) 
+			args.update({"doctype": "Salary Slip", "food_expense_days": food_count[index], "medical_expense":medical_exp[index], "maintenance_expense":maintenance_exp[index], "rent_expense":rent_exp[index], "late_deduction": late_ded[index], "is_hold":is_hold[index]}) 
 			args.update({"doctype": "Salary Slip", "employee": emp})
 			ss = frappe.get_doc(args)
 			ss.insert()

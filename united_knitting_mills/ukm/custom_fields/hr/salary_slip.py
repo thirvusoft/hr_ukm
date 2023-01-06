@@ -22,7 +22,7 @@ def salary_slip_property_setter():
 def salary_slip_custom_fields():
     custom_fields = {
 		"Salary Slip": [
-			dict(fieldname='total_shift_worked', label='Total Shift Worked',
+		 dict(fieldname='total_shift_worked', label='Total Shift Worked',
          fieldtype='Data', insert_after='total_working_days',read_only=1),
          dict(fieldname='total_shift_minutes', label='Total Shift in Minutes',
          fieldtype='Data', insert_after='total_shift_worked',read_only=1),
@@ -42,16 +42,18 @@ def salary_slip_custom_fields():
          fieldtype='Float', insert_after='section_break_20',hidden=1),
          dict(fieldname='food_expense_amount', label='Food Expense Amount',
          fieldtype='Currency', insert_after='food_expense_days',hidden=1),
-         dict(fieldname='column_break_26', 
-         fieldtype='Coloumn Break', insert_after='food_expense_amount',hidden=1),
          dict(fieldname='medical_expense', lable='Medical Expense',
-         fieldtype='Currency', insert_after='column_break_26',hidden=1),
+         fieldtype='Currency', insert_after='food_expense_amount',hidden=1),
          dict(fieldname='maintenance_expense', lable='Maintenance Expense',
          fieldtype='Currency', insert_after='medical_expense',hidden=1),
          dict(fieldname='rent_expense', lable='Rent Expense',
          fieldtype='Currency', insert_after='maintenance_expense',hidden=1),
-        dict(fieldname='section_break_29', 
-         fieldtype='Section Break', insert_after='rent_expense',hidden=1)
+         dict(fieldname='late_deduction', lable='Late Deduction',
+         fieldtype='Currency', insert_after='rent_expense',hidden=1),
+         dict(fieldname='expense_updated',label = "Expense Updated",
+         fieldtype='Check', insert_after='late_deduction',hidden=1),
+         dict(fieldname='is_hold',label = "Is Hold",
+         fieldtype='Check', insert_after='payroll_entry',read_only = 1)
         ]
     }
     create_custom_fields(custom_fields)

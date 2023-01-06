@@ -105,19 +105,19 @@ def get_columns(filters):
             columns+=[
         {
             "label": _("Total Working Days"),
-            "fieldtype": "Int",
+            "fieldtype": "Float",
             "fieldname": "total_working_days",
             "width": 100
         },
          {
             "label": _("Total Paid Leave"),
-            "fieldtype": "Int",
+            "fieldtype": "Float",
             "fieldname": "total_paid_leave",
             "width": 100
         },
          {
             "label": _("Total Present Days"),
-            "fieldtype": "Int",
+            "fieldtype": "Float",
             "fieldname": "total_present_days",
             "width": 100
         }]
@@ -136,12 +136,6 @@ def get_columns(filters):
             "width": 100
         },
         {
-            "label": _("Food Expense"),
-            "fieldtype": "Currency",
-            "fieldname": "tiffen",
-            "width": 100
-        },
-        {
             "label": _("PF Deduction"),
             "fieldtype": "Currency",
             "fieldname": "pf_deduction",
@@ -154,6 +148,12 @@ def get_columns(filters):
             "width": 100
         },
         {
+            "label": _("Food Expense"),
+            "fieldtype": "Currency",
+            "fieldname": "tiffen",
+            "width": 100
+        },
+        {
             "label": _("Medical Expense"),
             "fieldtype": "Currency",
             "fieldname": "medical_expense",
@@ -163,6 +163,18 @@ def get_columns(filters):
             "label": _("Maintenance Expense"),
             "fieldtype": "Currency",
             "fieldname": "maintenance_expense",
+            "width": 100
+        },
+        {
+            "label": _("Rent Expense"),
+            "fieldtype": "Currency",
+            "fieldname": "rent_expense",
+            "width": 100
+        },
+        {
+            "label": _("Late Deduction"),
+            "fieldtype": "Currency",
+            "fieldname": "late_deduction",
             "width": 100
         },
         {
@@ -263,15 +275,20 @@ def get_data(filters):
         pf_count = 0
         esi_count = 0
         advance_count = 0
-        medical_expense_count=0
-        maintenance_expense_count=0
+        medical_expense_count = 0
+        maintenance_expense_count = 0
+        rent_expense_count = 0
+        late_deduction_count = 0
 
-        advance = "" 
-        food_expence = ""
-        esi = ""
-        pf = ""
-        medical_expense=""
-        maintenance_expense=""
+        advance = 0
+        food_expence = 0
+        esi = 0
+        pf = 0
+        medical_expense = 0
+        maintenance_expense = 0
+        rent_expense = 0
+        late_deduction = 0
+
 
         for x in range(0,len(salary_slip_detail.deductions),1):
             if food_expence_count == 0:
@@ -289,6 +306,16 @@ def get_data(filters):
                     maintenance_expense = salary_slip_detail.deductions[x].__dict__["amount"]
                     maintenance_expense_count = 1
 
+            if rent_expense_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Rent Expense":
+                    rent_expense = salary_slip_detail.deductions[x].__dict__["amount"]
+                    rent_expense_count = 1
+
+            if late_deduction_count == 0:
+                if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Late Deduction":
+                    late_deduction = salary_slip_detail.deductions[x].__dict__["amount"]
+                    late_deduction_count = 1
+
             if esi_count == 0:
                 if salary_slip_detail.deductions[x].__dict__["salary_component"] == "ESI":
                     esi = salary_slip_detail.deductions[x].__dict__["amount"]
@@ -305,14 +332,14 @@ def get_data(filters):
                     advance_count = 1
 
         if staff_labour == "Labour":
-            f.update({"total_shift":j.total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+            f.update({"total_shift":j.total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         elif staff_labour == "Staff":
-            f.update({"total_working_days":int(j.payment_days)-int(j.leave_with_pay),"total_paid_leave":j.leave_with_pay,"total_present_days":j.payment_days,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+            f.update({"total_working_days":j.total_shift_worked,"total_paid_leave":j.leave_with_pay,"total_present_days":float(j.total_shift_worked) + j.leave_with_pay,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
 
         data.append(f)
         no+=1
 
-    data = [list(i.values()) for i in data]
+    # data = [list(i.values()) for i in data]
 
     # designation_check = ''
 
