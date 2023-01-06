@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"early_exit\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"labour\",\"=\",1,false]],\"fields\":[[\"workflow_state\",\"Attendance\"],[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"no_of_checkin\",\"Attendance\"],[\"ts_ot_hrs\",\"Attendance\"],[\"total_shift_amount\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"workflow_state\":120,\"name\":120,\"attendance_date\":120,\"employee\":120,\"employee_name\":120,\"no_of_checkin\":120,\"ts_ot_hrs\":120,\"total_shift_amount\":120},\"group_by\":null}",
  "letter_head": "UKM UNIT II",
- "modified": "2022-12-03 14:45:08.679087",
+ "modified": "2023-01-05 12:54:01.224943",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making (Labour) - Early Exit",
@@ -21,15 +21,6 @@
  "report_name": "Decision Making (Labour) - Early Exit",
  "report_type": "Report Builder",
  "roles": [
-  {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "System Manager"
-  },
   {
    "role": "Thirvu Owner"
   },

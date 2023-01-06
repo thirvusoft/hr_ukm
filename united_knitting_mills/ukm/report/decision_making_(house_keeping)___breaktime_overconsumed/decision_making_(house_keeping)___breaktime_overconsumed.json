@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"break_time_overconsumed\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"house_keeping\",\"=\",1,false]],\"fields\":[[\"workflow_state\",\"Attendance\"],[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"over_consumed_time\",\"Attendance\"],[\"ts_ot_hrs\",\"Attendance\"],[\"total_shift_amount\",\"Attendance\"],[\"action_taken_by_hr\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"workflow_state\":120,\"name\":120,\"attendance_date\":120,\"employee\":193,\"employee_name\":199,\"over_consumed_time\":120,\"ts_ot_hrs\":170,\"total_shift_amount\":226,\"action_taken_by_hr\":120},\"group_by\":null}",
  "letter_head": "UKM UNIT II",
- "modified": "2022-11-29 18:37:35.001666",
+ "modified": "2023-01-05 12:55:13.629447",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making (House Keeping) - Breaktime Overconsumed",
@@ -21,15 +21,6 @@
  "report_name": "Decision Making (House Keeping) - Breaktime Overconsumed",
  "report_type": "Report Builder",
  "roles": [
-  {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "System Manager"
-  },
   {
    "role": "Thirvu Owner"
   },

@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2022-12-06 17:08:32.307273",
+ "modified": "2023-01-05 12:37:33.101794",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Salary Details Report",
@@ -34,6 +34,9 @@
   },
   {
    "role": "Thirvu HR Manager"
+  },
+  {
+   "role": "Thirvu Accountant"
   },
   {
    "role": "Thirvu HR User"

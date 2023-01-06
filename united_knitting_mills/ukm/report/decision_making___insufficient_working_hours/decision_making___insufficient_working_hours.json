@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"insufficient_working_minutes\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"insufficient_working_hrs\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":159,\"attendance_date\":153,\"employee\":235,\"employee_name\":187,\"insufficient_working_hrs\":208},\"group_by\":null}",
- "modified": "2022-09-06 14:32:51.684939",
+ "modified": "2023-01-05 12:57:55.351077",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making - Insufficient Working Hours",
@@ -20,15 +20,6 @@
  "report_name": "Decision Making - Insufficient Working Hours",
  "report_type": "Report Builder",
  "roles": [
-  {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "System Manager"
-  },
   {
    "role": "Thirvu Owner"
   },
