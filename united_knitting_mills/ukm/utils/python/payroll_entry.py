@@ -46,9 +46,9 @@ class FoodExpense(PayrollEntry):
 				}
 			)
 			if len(employees) > 30:
-				frappe.enqueue(create_salary_slips_for_employees, timeout=600, posting_date=self.posting_date,employees=employees,args=args,food_count=food_count, medical_exp=medical_exp, maintenance_exp=maintenance_exp, rent_exp=rent_exp, late_ded=late_ded,is_hold=is_hold)
+				frappe.enqueue(create_salary_slips_for_employees, timeout=600, employees=employees,args=args,food_count=food_count, medical_exp=medical_exp, maintenance_exp=maintenance_exp, rent_exp=rent_exp, late_ded=late_ded,is_hold=is_hold)
 			else:
-				create_salary_slips_for_employees(self.posting_date,self.start_date,self.end_date,employees, args,food_count, medical_exp, maintenance_exp,rent_exp,late_ded,is_hold, publish_progress=False)
+				create_salary_slips_for_employees(employees, args,food_count, medical_exp, maintenance_exp,rent_exp,late_ded,is_hold, publish_progress=False)
 				# since this method is called via frm.call this doc needs to be updated manually
 				self.reload()
 	@frappe.whitelist()
@@ -62,7 +62,7 @@ class FoodExpense(PayrollEntry):
 		else:
 			submit_salary_slips_for_employees(self, ss_list, publish_progress=False)
 
-def create_salary_slips_for_employees(posting_date,start_date,end_date,employees, args,food_count,medical_exp, maintenance_exp, rent_exp,late_ded,is_hold, publish_progress=True):
+def create_salary_slips_for_employees(employees, args,food_count,medical_exp, maintenance_exp, rent_exp,late_ded,is_hold, publish_progress=True):
 	salary_slips_exists_for = get_existing_salary_slips(employees, args)
 	count = 0
 	salary_slips_not_created = []

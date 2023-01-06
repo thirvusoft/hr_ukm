@@ -72,6 +72,12 @@ def get_columns(filters):
             "width": 80
         },
         {
+            "label": _("Status"),
+            "fieldtype": "Data",
+            "fieldname": "status",
+            "width": 80
+        },
+        {
             "label": _("Salary"),
             "fieldtype": "Currency",
             "fieldname": "salary",
@@ -237,20 +243,33 @@ def get_data(filters):
 
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
-    
+
+    if ("status" in keys):
+
+        if filters["status"] == "Yes":
+            filter["is_hold"] = 1
+
+        else:
+            filter["is_hold"] = 1
+
     if staff_labour == "Staff":
         filter["is_staff_calulation"] = 1
         
     elif staff_labour == "Labour":
         filter["is_staff_calulation"] = 0
 
-    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay"],group_by="employee", order_by="designation")
+    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay", "is_hold"],group_by="employee", order_by="designation")
     no=1
     for j in ss:
         f=frappe._dict()
         emp_doc = frappe.get_doc("Employee",j.employee)
         
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
+
+        if j["is_hold"]:
+            hold = "Hold"
+        else:
+            hold = ""
         
         f.update(
             {   "sno":str(no),
@@ -262,6 +281,7 @@ def get_data(filters):
                 "bank" : emp_doc.bank_name,
                 "branch_name" : emp_doc.ts_bank_branch_name,
                 "mode" : emp_doc.salary_mode,
+                "status": hold,
                 "salary":get_ssa
             }
         )

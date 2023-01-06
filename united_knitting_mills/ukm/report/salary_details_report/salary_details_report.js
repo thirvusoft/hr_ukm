@@ -27,6 +27,13 @@ frappe.query_reports["Salary Details Report"] = {
 			"reqd":1
 		},
 		{
+			"fieldname":"status",
+			"label": __("Is Hold"),
+			"fieldtype": "Select",
+			"options": "\nYes\nNo",
+			"width": "100"
+		},
+		{
 			"fieldname":"department",
 			"label": __("Department"),
 			"fieldtype": "Link",
