@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Leave Application\",\"docstatus\",\"=\",\"0\",false],[\"Leave Application\",\"leave_type\",\"=\",\"Permission\"]],\"fields\":[[\"name\",\"Leave Application\"],[\"docstatus\",\"Leave Application\"],[\"employee\",\"Leave Application\"],[\"employee_name\",\"Leave Application\"],[\"attendance_date\",\"Leave Application\"],[\"from_time\",\"Leave Application\"],[\"to_time\",\"Leave Application\"],[\"status\",\"Leave Application\"]],\"order_by\":\"`tabLeave Application`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":152,\"employee\":154,\"employee_name\":158,\"attendance_date\":130,\"from_time\":120,\"to_time\":120,\"status\":120},\"group_by\":null}",
- "modified": "2022-09-07 17:00:37.858788",
+ "modified": "2023-01-05 12:59:24.230782",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Leave Application - Permission",
@@ -20,18 +20,6 @@
  "report_name": "Leave Application - Permission",
  "report_type": "Report Builder",
  "roles": [
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "Leave Approver"
-  },
-  {
-   "role": "Employee"
-  },
-  {
-   "role": "Employee Self Service"
-  },
   {
    "role": "Thirvu Owner"
   },
