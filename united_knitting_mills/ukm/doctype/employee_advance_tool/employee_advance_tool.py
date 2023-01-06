@@ -106,4 +106,5 @@ def create_employee_advance(doc):
 					advance_doc.repay_unclaimed_amount_from_salary = 1
 
 				advance_doc.insert()
-				advance_doc.submit()
+				if not advance.hold:
+					advance_doc.submit()
