@@ -250,7 +250,7 @@ def get_data(filters):
             filter["is_hold"] = 1
 
         else:
-            filter["is_hold"] = 1
+            filter["is_hold"] = 0
 
     if staff_labour == "Staff":
         filter["is_staff_calulation"] = 1
