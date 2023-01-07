@@ -23,6 +23,19 @@ class EmployeeAdvanceTool(Document):
 			total_advance_amount += row.current_advance
 			
 		doc.total_advance_amount = total_advance_amount
+
+	def on_cancel(doc):
+		advance_cancel=frappe.get_all("Employee Advance", filters={"docstatus":["=", 1], "reference_document":doc.name} , pluck='name' )
+		for i in advance_cancel:
+			ea_doc=frappe.get_doc("Employee Advance", i)
+			ea_doc.cancel()
+
+	def on_trash(doc):
+		employee_advance=frappe.get_all("Employee Advance", filters={"docstatus":["!=", 1], "reference_document":doc.name}, pluck='name' )
+		for i in employee_advance:
+			frappe.delete_doc("Employee Advance", i)
+			
+
 			
 
 @frappe.whitelist()
@@ -108,3 +121,4 @@ def create_employee_advance(doc):
 				advance_doc.insert()
 				if not advance.hold:
 					advance_doc.submit()
+

@@ -7,3 +7,7 @@ def on_submit(doc,event):
             employee_advance.save()
             employee_advance.submit()
             frappe.db.commit()
+
+def payment_cancel(doc, event):
+		doc.ignore_linked_doctypes = ("Payment Entry")
+    
