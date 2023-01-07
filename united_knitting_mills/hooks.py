@@ -136,6 +136,8 @@ doc_events = {
 
 	'Additional Salary':{
 		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
+		# "on_cancel":"united_knitting_mills.ukm.utils.python.additional_salary.payment_cancel",
+
 	},
 
 	'Payroll Entry':{
@@ -155,6 +157,13 @@ doc_events = {
 	"Salary Structure Assignment":{
 		"on_submit":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.salary_updation",
 		"validate":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.validation"
+	},
+	"Employee Advance":{
+		"on_cancel":["united_knitting_mills.ukm.utils.python.employee_advance.employee_advance_cancel",
+					"united_knitting_mills.ukm.utils.python.employee_advance.additional_salary_cancel"],
+		"on_trash":["united_knitting_mills.ukm.utils.python.employee_advance.employee_advance_delete",
+					"united_knitting_mills.ukm.utils.python.employee_advance.additional_salary_delete"]
+
 	}
 
 	# "Location":{
