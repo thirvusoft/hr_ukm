@@ -74,6 +74,11 @@ def employee_advance_custom_fields():
                 options = "Location",
                 fetch_from = "employee.location"
             ),
+             dict(fieldname = 'is_hold', 
+                label = 'Is Hold',
+				fieldtype = 'Check', 
+                insert_after = 'location', 
+            ),
         ]
     }
     create_custom_fields(custom_fields)

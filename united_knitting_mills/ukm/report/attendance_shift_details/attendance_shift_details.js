@@ -1,8 +1,8 @@
-// Copyright (c) 2022, UKM and contributors
+// Copyright (c) 2023, UKM and contributors
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Advance Details Report"] = {
+frappe.query_reports["Attendance Shift Details"] = {
 	"filters": [
 		{
 			"fieldname":"from_date",
@@ -23,7 +23,8 @@ frappe.query_reports["Advance Details Report"] = {
 			"label": __("Department"),
 			"fieldtype": "Link",
 			"options": "Department",
-			"width": "100"
+			"width": "100",
+			"reqd":1
 		},
 		{
 			"fieldname":"designation",
@@ -33,18 +34,11 @@ frappe.query_reports["Advance Details Report"] = {
 			"width": "100"
 		},
 		{
-			"fieldname":"status",
-			"label": __("Is Hold"),
-			"fieldtype": "Select",
-			"options": "\nYes\nNo",
-			"width": "100"
-		},
-		{
 			"fieldname":"unit",
 			"label": __("Unit"),
 			"fieldtype": "Link",
 			"options": "Location",
 			"width": "100"
-		}
+		},
 	]
 };

@@ -121,4 +121,7 @@ def create_employee_advance(doc):
 				advance_doc.insert()
 				if not advance.hold:
 					advance_doc.submit()
+				else:
+					advance_doc.is_hold=1
+					advance_doc.save()
 
