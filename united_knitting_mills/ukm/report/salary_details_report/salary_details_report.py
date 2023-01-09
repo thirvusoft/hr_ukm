@@ -12,6 +12,7 @@ def execute(filters=None):
     columns, data = [], []
     columns = get_columns(filters)
     data = get_data(filters)
+    frappe.publish_realtime('refresh-report')
     return columns, data
 
 def get_columns(filters):
@@ -71,12 +72,7 @@ def get_columns(filters):
             "fieldname": "mode",
             "width": 80
         },
-        {
-            "label": _("Status"),
-            "fieldtype": "Data",
-            "fieldname": "status",
-            "width": 80
-        },
+        
         {
             "label": _("Salary"),
             "fieldtype": "Currency",
@@ -190,6 +186,12 @@ def get_columns(filters):
             "width": 100
         },
         {
+            "label": _("Status"),
+            "fieldtype": "Data",
+            "fieldname": "status",
+            "width": 80
+        },
+        {
             "label": _("Net Salary"),
             "fieldtype": "Currency",
             "fieldname": "net_salary",
@@ -250,7 +252,7 @@ def get_data(filters):
             filter["is_hold"] = 1
 
         else:
-            filter["is_hold"] = 1
+            filter["is_hold"] = 0
 
     if staff_labour == "Staff":
         filter["is_staff_calulation"] = 1
@@ -260,6 +262,7 @@ def get_data(filters):
 
     ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay", "is_hold"],group_by="employee", order_by="designation")
     no=1
+    non_hold=0
     for j in ss:
         f=frappe._dict()
         emp_doc = frappe.get_doc("Employee",j.employee)
@@ -268,9 +271,10 @@ def get_data(filters):
 
         if j["is_hold"]:
             hold = "Hold"
+            non_hold=non_hold+j["net_pay"]
         else:
             hold = ""
-        
+            
         f.update(
             {   "sno":str(no),
                 "code" : j['employee'],
@@ -370,5 +374,7 @@ def get_data(filters):
            
     #     else:
     #         data[i][0] = ''
+    if data :
+        data.append({"status":"Total Hold Amount","net_salary":non_hold})
     return data
 

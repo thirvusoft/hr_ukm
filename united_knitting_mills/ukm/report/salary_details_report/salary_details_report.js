@@ -56,3 +56,16 @@ frappe.query_reports["Salary Details Report"] = {
 		},
 	]
 };
+frappe.realtime.on('refresh-report', ()=>{
+	var a=document.getElementsByClassName('dt-cell')
+	console.log(a)
+	Array.from(a).forEach((d)=>{
+		console.log(d.innerText)
+		if(d.innerText == 'Total Hold Amount'){
+			console.log('ineer')
+			debugger
+		d.style.color='red'
+		d.style.fontWeight='bold'
+		}
+		}) 
+})

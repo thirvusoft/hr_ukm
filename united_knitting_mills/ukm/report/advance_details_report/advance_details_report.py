@@ -20,7 +20,7 @@ def execute(filters = None):
 	
 	columns = get_columns(between_dates)
 
-	doc_filters = {'from_date': ["=", from_date], "to_date": ["=", to_date], 'docstatus':1}
+	doc_filters = {'from_date': ["between", (from_date, to_date)], "to_date": ["between",(from_date, to_date)], 'docstatus':['!=', 2] }
 	
 	if filters.get("designation"):
 		doc_filters["designation"] = filters.get("designation")
@@ -30,6 +30,12 @@ def execute(filters = None):
 
 	if filters.get("unit"):
 		doc_filters["unit"] = filters.get("unit")
+	if filters.get("status"):
+		if filters.get("status")=="Yes":
+				doc_filters["is_hold"] = 1
+				
+		elif filters.get("status")=="No" :
+				doc_filters["is_hold"] = 0
 
 	data = get_data(from_date, to_date, between_dates, doc_filters)
 
@@ -127,6 +133,12 @@ def get_columns(between_dates):
 			"width": 100
 		},
 		{
+            "label": _("Status"),
+            "fieldtype": "Data",
+            "fieldname": "status",
+            "width": 80
+        },
+		{
 			"label": _("Total Advance"),
 			"fieldtype": "Currency",
 			"fieldname": "total_advance",
@@ -148,11 +160,11 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 
 	emp_advance_list = frappe.db.get_all("Employee Advance", 
 	 	filters = doc_filters, 
-		fields = ["name", "employee", "employee_name", "total_shift", "eligible_amount", "advance_amount", "designation"],
-		group_by = "employee",
+		fields = ["name", "employee", "employee_name", "total_shift", "eligible_amount", "advance_amount", "designation","is_hold"],		
 		order_by = "designation"
 	)
 	no=1
+	non_hold=0
 	for emp_advance in emp_advance_list:
 
 		sub_data = frappe._dict()
@@ -161,6 +173,11 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 
 		salary_structure_assignment_base = frappe.db.get_value("Salary Structure Assignment", {'employee':emp_advance.employee, 'docstatus':1}, 'base')
 		
+		if emp_advance["is_hold"]:
+			hold = "Hold"
+			non_hold=non_hold+emp_advance["advance_amount"]
+		else:
+			hold = ""
 		sub_data.update(
 			{	"sno":str(no),
 				"designation" : emp_advance.designation,
@@ -188,6 +205,7 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 				{
 					"total_shift": emp_advance.total_shift,
 					"total_amount": emp_advance.eligible_amount,
+					"status":hold,
 					"total_advance": emp_advance.advance_amount,
 					"signature": None
 					
@@ -198,7 +216,7 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 		no+=1
 
 
-	data = [list(i.values()) for i in data]
+	
 
 	# designation_check =''
 
@@ -209,5 +227,9 @@ def get_data(from_date, to_date, between_dates, doc_filters):
 		   
 	# 	else:
 	# 		data[i][0]=''
-
+	
+	if data:
+		data.append({"status":"Total Hold Amount","total_advance":non_hold})
+	# data = [list(i.values()) for i in data]
+	
 	return data
