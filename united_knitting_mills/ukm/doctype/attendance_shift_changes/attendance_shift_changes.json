@@ -41,7 +41,8 @@
    "fieldname": "reason",
    "fieldtype": "Small Text",
    "in_list_view": 1,
-   "label": "Reason"
+   "label": "Reason",
+   "reqd": 1
   },
   {
    "fieldname": "total_shift_count",
@@ -54,7 +55,8 @@
    "fieldname": "update_shift_count",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Update Shift Count"
+   "label": "Update Shift Count",
+   "reqd": 1
   },
   {
    "fieldname": "amended_from",
@@ -97,7 +99,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-10 13:16:06.019310",
+ "modified": "2023-01-10 20:55:32.695713",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Attendance Shift Changes",
