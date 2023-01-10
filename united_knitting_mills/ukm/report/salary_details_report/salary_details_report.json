@@ -1,5 +1,5 @@
 {
- "add_total_row": 1,
+ "add_total_row": 0,
  "columns": [],
  "creation": "2022-09-30 14:42:47.597472",
  "disable_prepared_report": 0,
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2023-01-05 12:37:33.101794",
+ "modified": "2023-01-10 17:40:35.629347",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Salary Details Report",

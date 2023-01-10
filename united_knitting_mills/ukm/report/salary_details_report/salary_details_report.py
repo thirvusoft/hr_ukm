@@ -189,7 +189,7 @@ def get_columns(filters):
             "label": _("Status"),
             "fieldtype": "Data",
             "fieldname": "status",
-            "width": 80
+            "width": 150
         },
         {
             "label": _("Net Salary"),
@@ -263,6 +263,7 @@ def get_data(filters):
     ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay", "is_hold"],group_by="employee", order_by="designation")
     no=1
     non_hold=0
+    hold_amount=0
     for j in ss:
         f=frappe._dict()
         emp_doc = frappe.get_doc("Employee",j.employee)
@@ -274,6 +275,7 @@ def get_data(filters):
             non_hold=non_hold+j["net_pay"]
         else:
             hold = ""
+            hold_amount=hold_amount+j["net_pay"]
             
         f.update(
             {   "sno":str(no),
@@ -354,11 +356,14 @@ def get_data(filters):
                 if salary_slip_detail.deductions[x].__dict__["salary_component"] == "Employee Advance":
                     advance = salary_slip_detail.deductions[x].__dict__["amount"]
                     advance_count = 1
-
+        if j.total_shift_worked:
+            total_shift_worked = float(j.total_shift_worked)
+        else:
+            total_shift_worked = 0
         if staff_labour == "Labour":
-            f.update({"total_shift":float(j.total_shift_worked),"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+            f.update({"total_shift":total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         elif staff_labour == "Staff":
-            f.update({"total_working_days":float(j.total_shift_worked),"total_paid_leave":j.leave_with_pay,"total_present_days":float(j.total_shift_worked) + j.leave_with_pay,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
+            f.update({"total_working_days":total_shift_worked,"total_paid_leave":j.leave_with_pay,"total_present_days":total_shift_worked + j.leave_with_pay,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"pf_deduction":pf,"esi_deduction":esi,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
 
         data.append(f)
         no+=1
@@ -375,6 +380,8 @@ def get_data(filters):
     #     else:
     #         data[i][0] = ''
     if data :
-        data.append({"status":"Total Hold Amount","net_salary":non_hold})
+        data.append({"status":"Hold Amount","net_salary":non_hold})
+        data.append({"status":"Non Hold Amount","net_salary":hold_amount})
+        data.append({"status":"Total Amount","net_salary":hold_amount + non_hold})
     return data
 
