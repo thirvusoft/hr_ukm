@@ -149,19 +149,29 @@ def staff_salary_calculation(doc,event):
 @frappe.whitelist()
 def add_pay_leave(start_date, end_date, employee, per_day_salary_for_staff = None):
 
-    pay_leave = frappe.get_all("Leave Application",{
+    pay_leaves = frappe.get_all("Leave Application",filters = {
                     "employee": employee,
                     "is_pay_leave_application": 1,
                     "status": "Approved",
                     "docstatus": 1,
                     "from_date": ["between", (start_date, end_date)]
                     },
-                "name")
+                fields =["half_day"])
 
     if not per_day_salary_for_staff:
         per_day_salary_for_staff = 0
 
-    return len(pay_leave) * per_day_salary_for_staff, len(pay_leave)
+    total_leave_application_count = 0
+
+    for pay_leave in pay_leaves:
+
+        if pay_leave["half_day"] == 1:
+            total_leave_application_count += 0.50
+
+        else:
+            total_leave_application_count += 1
+
+    return total_leave_application_count * per_day_salary_for_staff, total_leave_application_count
 
 def food_expens_amount(doc):
 
