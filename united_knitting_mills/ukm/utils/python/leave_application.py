@@ -76,33 +76,42 @@ def validating_leave(doc, event):
         if doc.from_date == doc.to_date:
 
             if doc.half_day:
-                frappe.throw("For Pay Leave, Half Day Is Not Allowed.")
+                total_leave_application_count = 0.50
 
             else:
-                
-                last_date_of_month = getdate(doc.from_date) + relativedelta(day=1, months=+1, days=-1)
-                first_date_of_month = getdate(doc.from_date) + relativedelta(day=1)
+                total_leave_application_count = 1
 
-                leave_application = frappe.get_all("Leave Application",{
-                    "employee":doc.employee,
-                    "leave_type":doc.leave_type,
-                    "status":"Approved",
-                    "docstatus":1,
-                    "from_date":["between", (first_date_of_month, last_date_of_month)]
-                    },
-                "name")
+            last_date_of_month = getdate(doc.from_date) + relativedelta(day=1, months=+1, days=-1)
+            first_date_of_month = getdate(doc.from_date) + relativedelta(day=1)
 
-                
-                allocated_leave = frappe.db.get_single_value("United Knitting Mills Settings","pay_leave")
-                
-                if allocated_leave == 0:
-                    frappe.throw("Not Allowed For Pay Leave, Please Contact Your Administrator.",title=_("Message"))
-                
-                elif allocated_leave <= len(leave_application):
-                    frappe.throw("Already You Consumed Pay Leave For This Month, Please Contact Your Administrator.",title=_("Message"))
-                
+            leave_applications = frappe.get_all("Leave Application",filters = {
+                "employee":doc.employee,
+                "leave_type":doc.leave_type,
+                "status":"Approved",
+                "docstatus":1,
+                "from_date":["between", (first_date_of_month, last_date_of_month)]
+                },
+                fields = ["half_day"])
+
+            
+            allocated_leave = frappe.db.get_single_value("United Knitting Mills Settings","pay_leave")
+
+            for leave_application in leave_applications:
+
+                if leave_application["half_day"] == 1:
+                    total_leave_application_count += 0.50
+
                 else:
-                    doc.is_pay_leave_application = 1
+                    total_leave_application_count += 1
+            
+            if allocated_leave == 0:
+                frappe.throw("Not Allowed For Pay Leave, Please Contact Your Administrator.",title=_("Message"))
+            
+            elif allocated_leave < total_leave_application_count:
+                frappe.throw("Already You Consumed Pay Leave For This Month, Please Contact Your Administrator.",title=_("Message"))
+            
+            else:
+                doc.is_pay_leave_application = 1
         else:
             frappe.throw("For Pay Leave, From Date And To Date Should Be Same Date.",title=_("Message"))
 
