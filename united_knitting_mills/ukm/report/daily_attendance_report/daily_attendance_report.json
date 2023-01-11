@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{}",
- "modified": "2023-01-05 12:42:43.476308",
+ "modified": "2023-01-11 10:58:05.547458",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Daily Attendance Report",
@@ -21,13 +21,7 @@
  "report_type": "Script Report",
  "roles": [
   {
-   "role": "System Manager"
-  },
-  {
    "role": "Thirvu Owner"
-  },
-  {
-   "role": "Thirvu Accountant"
   },
   {
    "role": "Thirvu HR Manager"

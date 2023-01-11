@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "EBDC-.#####",
  "creation": "2023-01-03 18:52:27.050858",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -9,6 +10,7 @@
   "employee",
   "bank_name",
   "branch_name",
+  "column_break_4",
   "bank_ac_no",
   "ifsc_code",
   "micr_code",
@@ -27,8 +29,10 @@
    "fetch_from": "employee.bank_name",
    "fetch_if_empty": 1,
    "fieldname": "bank_name",
-   "fieldtype": "Data",
-   "label": "Bank Name"
+   "fieldtype": "Link",
+   "label": "Bank Name",
+   "options": "Bank",
+   "reqd": 1
   },
   {
    "fetch_from": "employee.ts_bank_branch_name",
@@ -36,21 +40,24 @@
    "fieldname": "branch_name",
    "fieldtype": "Link",
    "label": "Branch Name",
-   "options": "Territory"
+   "options": "Territory",
+   "reqd": 1
   },
   {
    "fetch_from": "employee.bank_ac_no",
    "fetch_if_empty": 1,
    "fieldname": "bank_ac_no",
    "fieldtype": "Data",
-   "label": "Bank A/C No."
+   "label": "Bank A/C No.",
+   "reqd": 1
   },
   {
    "fetch_from": "employee.ifsc_code",
    "fetch_if_empty": 1,
    "fieldname": "ifsc_code",
    "fieldtype": "Data",
-   "label": "IFSC Code"
+   "label": "IFSC Code",
+   "reqd": 1
   },
   {
    "fetch_from": "employee.micr_code",
@@ -66,12 +73,16 @@
    "no_copy": 1,
    "options": "Employee Bank Details",
    "print_hide": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-03 20:11:04.003393",
+ "modified": "2023-01-11 10:38:18.697149",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bank Details",

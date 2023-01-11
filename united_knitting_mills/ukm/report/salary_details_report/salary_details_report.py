@@ -264,6 +264,18 @@ def get_data(filters):
     no=1
     non_hold=0
     hold_amount=0
+
+    total_amout = 0
+    total_advance = 0
+    total_food_expence = 0
+    total_esi = 0
+    total_pf = 0
+    total_medical_expense = 0
+    total_maintenance_expense = 0
+    total_rent_expense = 0
+    total_late_deduction = 0
+    final_total_deduction = 0
+
     for j in ss:
         f=frappe._dict()
         emp_doc = frappe.get_doc("Employee",j.employee)
@@ -358,8 +370,22 @@ def get_data(filters):
                     advance_count = 1
         if j.total_shift_worked:
             total_shift_worked = float(j.total_shift_worked)
+
         else:
             total_shift_worked = 0
+
+        total_amout += j.gross_pay
+        total_advance += advance
+        total_food_expence += food_expence
+        total_esi += esi
+        total_pf += pf
+        total_medical_expense += medical_expense
+        total_maintenance_expense += maintenance_expense
+        total_rent_expense += rent_expense
+        total_late_deduction += late_deduction
+        final_total_deduction += j.total_deduction
+        
+
         if staff_labour == "Labour":
             f.update({"total_shift":total_shift_worked,"total_amount":j.gross_pay,"advance":advance,"tiffen":food_expence,"pf_deduction":pf,"esi_deduction":esi,"medical_expense":medical_expense, "maintenance_expense":maintenance_expense,"rent_expense":rent_expense,"late_deduction":late_deduction,"total_deduction":j.total_deduction,"net_salary":j.net_pay,"signature":'',"from_date":filters["from_date"],'to_date':filters["to_date"]})
         elif staff_labour == "Staff":
@@ -380,8 +406,9 @@ def get_data(filters):
     #     else:
     #         data[i][0] = ''
     if data :
-        data.append({"status":"Hold Amount","net_salary":non_hold})
+        data.append({"status":"Hold Amount", "net_salary":non_hold})
         data.append({"status":"Non Hold Amount","net_salary":hold_amount})
-        data.append({"status":"Total Amount","net_salary":hold_amount + non_hold})
+        data.append({"status":"Total Amount","net_salary":hold_amount + non_hold, "total_amount":total_amout, "advance":total_advance,"tiffen":total_food_expence,"pf_deduction":total_pf,"esi_deduction":total_esi,"medical_expense":total_medical_expense, "maintenance_expense":total_maintenance_expense,"rent_expense":total_rent_expense,"late_deduction":total_late_deduction,"total_deduction":final_total_deduction})
+       
     return data
 

@@ -51,7 +51,9 @@ doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
 			"Salary Structure":"ukm/utils/javascript/salary_structure_list.js",
 			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js",
 			"Attendance":"ukm/utils/javascript/attendance.js",
-   			"Employee Advance":"ukm/utils/javascript/employee_advance_list.js"}
+   			"Employee Advance":"ukm/utils/javascript/employee_advance_list.js",
+			"Employee Bank Details": "ukm/utils/javascript/employee_bank_details_list.js",
+			"Employee Bonus Tool": "ukm/utils/javascript/employee_bonus_tool_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 

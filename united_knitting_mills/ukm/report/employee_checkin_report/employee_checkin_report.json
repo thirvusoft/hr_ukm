@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "",
- "modified": "2023-01-05 12:42:23.535185",
+ "modified": "2023-01-11 10:59:18.714342",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Checkin Report",
@@ -21,19 +21,10 @@
  "report_type": "Script Report",
  "roles": [
   {
-   "role": "Employee"
-  },
-  {
-   "role": "System Manager"
-  },
-  {
    "role": "Thirvu HR Manager"
   },
   {
    "role": "Thirvu Owner"
-  },
-  {
-   "role": "Thirvu Accountant"
   },
   {
    "role": "Thirvu HR User"

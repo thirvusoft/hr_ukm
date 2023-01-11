@@ -225,7 +225,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-01-06 11:29:48.582934",
+ "modified": "2023-01-11 11:39:35.504104",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -237,6 +237,12 @@
    "doc_view": "",
    "label": "Daily Attendance Report",
    "link_to": "Daily Attendance Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Costing Report",
+   "link_to": "Costing Report",
    "type": "Report"
   },
   {
@@ -255,6 +261,12 @@
    "doc_view": "",
    "label": "Salary Details Report",
    "link_to": "Salary Details Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Attendance Shift Details",
+   "link_to": "Attendance Shift Details",
    "type": "Report"
   },
   {

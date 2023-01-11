@@ -13,8 +13,8 @@
  "is_standard": 1,
  "label": "Cash Management",
  "links": [],
- "modified": "2022-08-02 13:12:33.345212",
- "modified_by": "parameshwari@gmail.com",
+ "modified": "2023-01-11 11:02:18.687284",
+ "modified_by": "Administrator",
  "module": "UKM",
  "name": "Cash Management",
  "owner": "parameshwari@gmail.com",
@@ -26,12 +26,6 @@
    "label": "Journal Entry",
    "link_to": "Journal Entry",
    "type": "DocType"
-  },
-  {
-   "doc_view": "Report Builder",
-   "label": "General Ledger",
-   "link_to": "General Ledger",
-   "type": "Report"
   }
  ]
 }

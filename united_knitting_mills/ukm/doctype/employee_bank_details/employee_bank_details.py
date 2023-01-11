@@ -10,4 +10,4 @@ class EmployeeBankDetails(Document):
 			employee=frappe.get_doc("Employee", self.employee)
 			employee.update({"bank_name":self.bank_name,"ts_bank_branch_name":self.branch_name, "bank_ac_no":self.bank_ac_no,
 			                   "ifsc_code":self.ifsc_code, "micr_code":self.micr_code})
-			employee.save()
+			employee.save(ignore_permissions = True)

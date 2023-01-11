@@ -1,5 +1,5 @@
 {
- "add_total_row": 1,
+ "add_total_row": 0,
  "columns": [],
  "creation": "2022-09-13 11:31:29.720788",
  "disable_prepared_report": 0,
@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{}",
  "letter_head": "",
- "modified": "2022-09-14 11:57:18.481942",
+ "modified": "2023-01-11 10:59:52.770961",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Wages for Monthly Paid Workers",
@@ -21,18 +21,6 @@
  "report_name": "Wages for Monthly Paid Workers",
  "report_type": "Script Report",
  "roles": [
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "Employee"
-  },
-  {
-   "role": "Employee Self Service"
-  },
-  {
-   "role": "TS Salary Slip"
-  },
   {
    "role": "Thirvu Owner"
   },

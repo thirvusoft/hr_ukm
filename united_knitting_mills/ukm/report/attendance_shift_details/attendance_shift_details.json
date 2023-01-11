@@ -1,5 +1,5 @@
 {
- "add_total_row": 0,
+ "add_total_row": 1,
  "columns": [],
  "creation": "2023-01-09 15:08:08.681223",
  "disable_prepared_report": 0,
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2023-01-09 15:08:08.681223",
+ "modified": "2023-01-11 12:05:42.457661",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Attendance Shift Details",
@@ -21,15 +21,6 @@
  "report_type": "Script Report",
  "roles": [
   {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "System Manager"
-  },
-  {
    "role": "Thirvu Owner"
   },
   {
@@ -37,6 +28,9 @@
   },
   {
    "role": "Thirvu HR User"
+  },
+  {
+   "role": "Thirvu Accountant"
   }
  ]
 }

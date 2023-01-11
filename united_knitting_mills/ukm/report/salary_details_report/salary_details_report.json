@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2023-01-10 17:40:35.629347",
+ "modified": "2023-01-11 17:23:33.996891",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Salary Details Report",
@@ -20,15 +20,6 @@
  "report_name": "Salary Details Report",
  "report_type": "Script Report",
  "roles": [
-  {
-   "role": "Employee"
-  },
-  {
-   "role": "Employee Self Service"
-  },
-  {
-   "role": "TS Salary Slip"
-  },
   {
    "role": "Thirvu Owner"
   },
