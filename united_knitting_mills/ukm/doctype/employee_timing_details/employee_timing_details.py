@@ -100,7 +100,11 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                 elif shift_list.house_keeping ==1:
                     new_attendance_doc.house_keeping = 1
                 # To check missing log
-                if len(date_wise_checkin[date])%2 ==0 and len(date_wise_checkin[date]) :
+                
+                if len(date_wise_checkin[date]):
+                    if len(date_wise_checkin[date])%2 !=0 or len(date_wise_checkin[date])%1 !=0:
+                        date_wise_checkin[date].pop(-1)
+                    
                     shift_wise_details = frappe._dict()
                     # To Separate the In and Out Time
                     if date_wise_checkin[date][0]['log_type']=='IN':
