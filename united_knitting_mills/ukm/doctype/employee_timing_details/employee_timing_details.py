@@ -101,10 +101,10 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     new_attendance_doc.house_keeping = 1
                 # To check missing log
                 
-                if len(date_wise_checkin[date]):
-                    if len(date_wise_checkin[date])%2 !=0 or len(date_wise_checkin[date])%1 !=0:
+                if len(date_wise_checkin[date]) and len(date_wise_checkin[date]) !=1:
+                    if len(date_wise_checkin[date])%2 !=0:
                         date_wise_checkin[date].pop(-1)
-                    
+
                     shift_wise_details = frappe._dict()
                     # To Separate the In and Out Time
                     if date_wise_checkin[date][0]['log_type']=='IN':
@@ -200,8 +200,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                 shift_wise_details.update({'shift_count':shift_count,'shift_salary':shift_salary})
                                 correct_shift_details.append(shift_wise_details)
                                 new_attendance_doc.update({
-                                    'checkin_time':shift_wise_details['start_time'],
-                                    
+                                    'checkin_time':shift_wise_details['start_time'],                                    
                                     'checkout_time':shift_wise_details['end_time']
                                 })
 
@@ -261,14 +260,15 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     
                 # To create approval for missing entry
                 else:
-                    approval_timing = frappe._dict()
-                    approval_timing.update({'check_in_time':date_wise_checkin[date][0]['time'].time(),'check_out_time':''})
+                    # approval_timing = frappe._dict()
+                    # approval_timing.update({'check_in_time':date_wise_checkin[date][0]['time'].time(),'check_out_time':''})
 
-                    approval_details.append(approval_timing)
+                    # approval_details.append(approval_timing)
+                    # new_attendance_doc.update({
+                    #     'employee_shift_details':approval_details
+                    # })
                     new_attendance_doc.update({
-                        'employee_shift_details':approval_details
-                    })
-                    new_attendance_doc.update({
+                                "total_shift_count":0,
                                 'mismatched_checkin':1,
                                 'no_of_checkin':f"{len(date_wise_checkin[date])}",
                                 'checkin_time':'',
@@ -282,7 +282,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     where name in %s""", (new_attendance_doc.name , checkin_name[date]))
 
                 # If all shift details are correct it will submit automatically
-                if not new_attendance_doc.employee_shift_details and new_attendance_doc.thirvu_shift_details:
+                if not new_attendance_doc.employee_shift_details:
                     new_attendance_doc.reload()
                     new_attendance_doc.submit()
 
