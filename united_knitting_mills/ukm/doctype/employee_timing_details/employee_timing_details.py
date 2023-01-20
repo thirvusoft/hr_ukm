@@ -115,10 +115,15 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     if date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['log_type'] == 'OUT':
                         out_time = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time'].time()
                         out_time_date = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time']
-
+                    
                     for shift_details in shift_list.thirvu_shift_details:
                         # Checking Buffer Time
-                        buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
+                        if shift_details.idx == 1:
+                            buffer_before_start_time = shift_list.thirvu_shift_details[0].start_time - datetime.timedelta(hours = 1)
+                        else:	
+                            buffer_before_start_time = shift_list.thirvu_shift_details[shift_details.idx -2].start_time + datetime.timedelta(minutes = json.loads(late_entry))
+                            
+                        # buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
                         buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
                         buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
                         if shift_details.idx < len(shift_list.thirvu_shift_details):
@@ -143,7 +148,6 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                             if shift_details.end_time > to_timedelta(str(out_time)) and shift_list.thirvu_shift_details[0].start_time >= shift_details.start_time:
                                 early_exit_time = shift_details.end_time - to_timedelta(str(out_time))
                             approval_end_time = out_time 
-
                     # Calculation of shift salary and shift count
                     try:
                         for i in date_wise_checkin:
