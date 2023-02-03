@@ -1,6 +1,6 @@
 # Copyright (c) 2017, Frappe Technologies Pvt. Ltd. and contributors
 # For license information, please see license.txt
-# Line Adding 608, 609, 610, 611
+
 
 import frappe
 from dateutil.relativedelta import relativedelta
@@ -76,16 +76,10 @@ class PayrollEntry(Document):
 			)
 
 	def on_cancel(self):
-		frappe.delete_doc(
-			"Salary Slip",
-			frappe.db.sql_list(
-				"""select name from `tabSalary Slip`
-			where payroll_entry=%s """,
-				(self.name),
-			),
-		)
-		self.db_set("salary_slips_created", 0)
-		self.db_set("salary_slips_submitted", 0)
+		# Customized By Thirvusoft
+		# Start
+		frappe.enqueue(salary_slip_delete, self=self,  queue="long")
+		# End
 
 	def get_emp_list(self):
 		"""
@@ -346,8 +340,6 @@ class PayrollEntry(Document):
 						"credit_in_account_currency": flt(payable_amt, precision),
 						"exchange_rate": flt(exchange_rate),
 						"cost_center": self.cost_center,
-						"reference_type": self.doctype,
-						"reference_name": self.name,
 					},
 					accounting_dimensions,
 				)
@@ -610,7 +602,7 @@ def get_emp_list(sal_struct, cond, end_date, payroll_payable_account):
 				and IFNULL(t1.bank_ac_no, "") !=""
 				and IFNULL(t1.ifsc_code, "") !=""
 
-		%s order by t2.from_date desc
+		%s order by t2.employee
 		"""
 		% cond,
 		{
@@ -727,21 +719,12 @@ def get_month_details(year, month):
 
 def get_payroll_entry_bank_entries(payroll_entry_name):
 	journal_entries = frappe.db.sql(
-		"""
-		select
-			je.name
-		from
-			`tabJournal Entry` je,
-			`tabJournal Entry Account` jea
-		where
-			je.name = jea.parent
-			and je.voucher_type = 'Bank Entry'
-			and jea.reference_type = 'Payroll Entry'
-			and jea.reference_name = %s
-	""",
+		"select name from `tabJournal Entry Account` "
+		'where reference_type="Payroll Entry" '
+		"and reference_name=%s and docstatus=1",
 		payroll_entry_name,
-		as_dict=True,
-	)  # nosemgrep
+		as_dict=1,
+	)
 
 	return journal_entries
 
@@ -940,3 +923,18 @@ def employee_query(doctype, txt, searchfield, start, page_len, filters):
 			"include_employees": include_employees,
 		},
 	)
+
+# Customized By Thirvusoft
+# Start
+def salary_slip_delete(self):
+		frappe.delete_doc(
+			"Salary Slip",
+			frappe.db.sql_list(
+				"""select name from `tabSalary Slip`
+			where payroll_entry=%s """,
+				(self.name),
+			),
+		)
+		self.db_set("salary_slips_created", 0)
+		self.db_set("salary_slips_submitted", 0)
+# End
