@@ -77,6 +77,12 @@ def get_columns(filters):
 			"fieldtype": "Data",
 			"fieldname": "worked_sundays",
 			"width": 100
+		},
+		{
+			"label": _("Total Shift Amount"),
+			"fieldtype": "Float",
+			"fieldname": "total_shift_amount",
+			"width": 100
 		}
 	   
 	]
@@ -141,12 +147,17 @@ def get_data(filters):
 				out.update({k:"-"})
 				tot.update({k:f"<span style='color:red!important;font-weight:bold'>0</span>"})
 
-			shift_amount=shift_amount+(get_amount or 0)
+		
 		payment_days = date_diff(to_date, from_date) + 1
 		holidays = get_holiday_dates_for_employee(j.employee,from_date, to_date)
 		payment_days -= len(holidays)
-			
-		tot.update({"present_days":f'<b>{shift}</b>',"absent_days":f'<b>{payment_days-shift}</b>',"worked_sundays":f'<b>{sunday}</b>'})
+		emp_base_amount = frappe.get_value("Salary Structure Assignment",{"employee":j.employee,"docstatus":1},["base"])
+		
+		if emp_base_amount:
+			shift_amount = (emp_base_amount/payment_days) * shift
+		f.update({'total_shift_amount':0})
+		out.update({'total_shift_amount':0})
+		tot.update({"present_days":f'<b>{shift}</b>',"absent_days":f'<b>{payment_days-shift}</b>',"worked_sundays":f'<b>{sunday}</b>',"total_shift_amount":shift_amount})
 
 		data.append(f)
 		data.append(out)
