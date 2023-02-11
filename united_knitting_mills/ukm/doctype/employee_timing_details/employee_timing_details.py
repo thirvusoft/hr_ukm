@@ -636,6 +636,8 @@ def leave_application_to_attendance():
             attendance.attendance_date = application_doc.attendance_date
             attendance.leave_application = application_doc.name
             attendance.leave_type = application_doc.leave_type
+            attendance.checkin_time = application_doc.from_time
+            attendance.checkout_time = application_doc.to_time
             attendance.save()
 
         application_doc.attendance_marked = 1

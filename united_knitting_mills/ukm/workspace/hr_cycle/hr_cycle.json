@@ -225,7 +225,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-01-11 11:39:35.504104",
+ "modified": "2023-02-10 13:47:38.780702",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -400,6 +400,12 @@
    "label": "Decision Making Attendance Report",
    "link_to": "Decision Making Attendance Report",
    "restrict_to_domain": "",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Monthly Attendance Report",
+   "link_to": "Monthly Attendance Report",
    "type": "Report"
   }
  ],

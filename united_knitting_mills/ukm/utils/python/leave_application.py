@@ -153,51 +153,53 @@ def validating_leave(doc, event):
 
 @frappe.whitelist()
 def attendance_updation(doc, event):
-    
-    if doc.leave_type != 'Pay Leave':
-        if frappe.db.exists('Attendance',{"attendance_date": doc.attendance_date,"employee": doc.employee, "docstatus":["!=", 2]}):
+    if doc.workflow_state == "Approved":
+        if doc.leave_type != 'Pay Leave':
+            if frappe.db.exists('Attendance',{"attendance_date": doc.attendance_date,"employee": doc.employee, "docstatus":["!=", 2]}):
 
-            existing_doc = frappe.get_doc('Attendance',{"attendance_date": doc.attendance_date,"employee":doc.employee, "docstatus":["!=", 2]})
-            
-            if existing_doc.docstatus:
-                new_doc = frappe.copy_doc(existing_doc)
-                new_doc.workflow_state = "Draft"
-                existing_doc.workflow_state = "Cancelled"
-                existing_doc.cancel()
+                existing_doc = frappe.get_doc('Attendance',{"attendance_date": doc.attendance_date,"employee":doc.employee, "docstatus":["!=", 2]})
                 
-                new_doc.amended_from = existing_doc.name
+                if existing_doc.docstatus:
+                    new_doc = frappe.copy_doc(existing_doc)
+                    new_doc.workflow_state = "Draft"
+                    existing_doc.workflow_state = "Cancelled"
+                    existing_doc.cancel()
+                    
+                    new_doc.amended_from = existing_doc.name
+                    
+                    new_doc.update({
+                        'leave_application': doc.name,
+                        'leave_type': doc.leave_type
+                        })
+                    new_doc.insert()
+
+                    doc.attendance_marked = 1
+                    doc.save()
+
+                else:
+                    existing_doc.update({
+                        'leave_application': doc.name,
+                        'leave_type': doc.leave_type
+                        })
+                    existing_doc.save()
+
+                    doc.attendance_marked = 1
+                    doc.save()
+                    
                 
-                new_doc.update({
-                    'leave_application': doc.name,
-                    'leave_type': doc.leave_type
-                    })
-                new_doc.insert()
-
-                doc.attendance_marked = 1
-                doc.save()
-
             else:
-                existing_doc.update({
-                    'leave_application': doc.name,
-                    'leave_type': doc.leave_type
-                    })
-                existing_doc.save()
-
-                doc.attendance_marked = 1
-                doc.save()
                 
-            
-        else:
-            
-            if get_datetime(doc.attendance_date) < get_datetime(today()):
+                if get_datetime(doc.attendance_date) < get_datetime(today()):
 
-                attendance = frappe.new_doc('Attendance')
-                attendance.employee = doc.employee
-                attendance.attendance_date = doc.attendance_date
-                attendance.leave_application = doc.name
-                attendance.leave_type = doc.leave_type
-                attendance.save()
+                    attendance = frappe.new_doc('Attendance')
+                    attendance.employee = doc.employee
+                    attendance.attendance_date = doc.attendance_date
+                    attendance.leave_application = doc.name
+                    attendance.leave_type = doc.leave_type
+                    attendance.checkin_time = doc.from_time
+                    attendance.checkout_time = doc.to_time
+                    attendance.save()
 
-                doc.attendance_marked = 1
-                doc.save()
-        
+                    doc.attendance_marked = 1
+                    doc.save()
+            
