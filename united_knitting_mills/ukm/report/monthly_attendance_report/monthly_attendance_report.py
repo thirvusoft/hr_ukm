@@ -60,27 +60,40 @@ def get_columns(filters):
   
 
 	columns+=[
-				{
+
+		{
+			"label": _("Gross Salary"),
+			"fieldtype": "Data",
+			"fieldname": "gross_salary",
+			"width": 110
+		},
+		{
+			"label": _("Per-Day Salary"),
+			"fieldtype": "Data",
+			"fieldname": "per_day_salary",
+			"width": 120
+		},
+		{
 			"label": _("Present Days"),
 			"fieldtype": "Data",
 			"fieldname": "present_days",
-			"width": 100
+			"width": 120
 		},
 		{
 			"label": _("Absent Days"),
 			"fieldtype": "Data",
 			"fieldname": "absent_days",
-			"width": 70
+			"width": 120
 		},
 		{
 			"label": _("Worked Sundays"),
 			"fieldtype": "Data",
 			"fieldname": "worked_sundays",
-			"width": 100
+			"width": 130
 		},
 		{
-			"label": _("Total Shift Amount"),
-			"fieldtype": "Float",
+			"label": _("Net Salary"),
+			"fieldtype": "Data",
 			"fieldname": "total_shift_amount",
 			"width": 100
 		}
@@ -155,9 +168,9 @@ def get_data(filters):
 		
 		if emp_base_amount:
 			shift_amount = (emp_base_amount/payment_days) * shift
-		f.update({'total_shift_amount':0})
-		out.update({'total_shift_amount':0})
-		tot.update({"present_days":f'<b>{shift}</b>',"absent_days":f'<b>{payment_days-shift}</b>',"worked_sundays":f'<b>{sunday}</b>',"total_shift_amount":shift_amount})
+		else:
+			emp_base_amount = 0
+		tot.update({"gross_salary":f'<b>{emp_base_amount}</b>',"per_day_salary":f'<b>{round((emp_base_amount/payment_days),2) or 0}</b>',"present_days":f'<b>{shift}</b>',"absent_days":f'<b>{payment_days-shift}</b>',"worked_sundays":f'<b>{sunday}</b>',"total_shift_amount":f'<b>{round(shift_amount,2)}</b>'})
 
 		data.append(f)
 		data.append(out)
