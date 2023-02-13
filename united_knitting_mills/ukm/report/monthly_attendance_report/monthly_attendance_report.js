@@ -40,5 +40,13 @@ frappe.query_reports["Monthly Attendance Report"] = {
 			"options": "Location",
 			"width": "100"
 		},
+		{
+			"fieldname":"company",
+			"label": __("Company"),
+			"fieldtype": "Link",
+			"options": "Company",
+			"default": frappe.defaults.get_user_default("Company"),
+		},
+
 	]
 };
