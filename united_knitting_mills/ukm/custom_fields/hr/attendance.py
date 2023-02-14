@@ -36,10 +36,10 @@ def attendance_property_setter():
 def create_attendance_custom_fields():
     custom_fields = {
 		"Attendance": [
-		dict(fieldname='sunday_attendance', label='Sunday Attendance',
+		dict(fieldname='sunday_attendance', label='Is Holiday Attendance',
 				fieldtype='Check',insert_after='department',hidden=1),
 
-        dict(fieldname='sunday_approval', label='Sunday Approval for Salary Slip',
+        dict(fieldname='sunday_approval', label='Holiday Approval for Salary Slip',
 				fieldtype='Check',insert_after='sunday_attendance',depends_on='eval:doc.sunday_attendance',mandatory_depends_on="eval:doc.sunday_attendance"),
         
         dict(fieldname='shift_details', label='',

@@ -554,6 +554,15 @@ def create_staff_attendance(docname):
             )
         #Get checkin for this employee
         get_date_wise_checkin_for_staff(emp_checkins, date_wise_checkin,logs)
+        
+        holiday_list_name = frappe.db.get_value("Employee", {"name":employee}, "holiday_list")
+        holiday_list = frappe.get_doc("Holiday List", holiday_list_name)
+        
+        holidays = []
+
+        for holiday in holiday_list.holidays:
+            holidays.append(holiday.holiday_date)
+            
         for data in date_wise_checkin:
             reason = ''
             if(not frappe.db.exists('Attendance', {'attendance_date':data, 'employee':employee})):
@@ -574,11 +583,11 @@ def create_staff_attendance(docname):
                 attendance.flags.ignore_validate = True
                 attendance.save()
                 at_date = getdate(attendance.attendance_date)
-                if(submit_doc and calendar.day_name[at_date.weekday()] != "Sunday"):
+                if submit_doc and at_date not in holidays:
                     attendance.reload()
                     attendance.submit()
                 else:
-                    if calendar.day_name[at_date.weekday()] == "Sunday":
+                    if at_date in holidays:
                         attendance.sunday_attendance = 1
                     attendance.total_shift_count = 0
                     attendance.save()
