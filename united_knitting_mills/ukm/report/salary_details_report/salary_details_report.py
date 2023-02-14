@@ -305,8 +305,11 @@ def get_data(filters):
         )
 
         for k in between_dates:
-            get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
-            f.update({k:get_attendance})
+            sunday_attendance = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_attendance')
+            sunday_approval = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_approval')
+            if not sunday_attendance or sunday_approval:
+                get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
+                f.update({k:get_attendance})
         salary_slip_detail=frappe.get_doc("Salary Slip",j.name)
 
         food_expence_count = 0

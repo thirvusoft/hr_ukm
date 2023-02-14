@@ -196,6 +196,7 @@ def attendance_updation(doc, event):
                     attendance.attendance_date = doc.attendance_date
                     attendance.leave_application = doc.name
                     attendance.leave_type = doc.leave_type
+                    attendance.staff=1
                     attendance.checkin_time = doc.from_time
                     attendance.checkout_time = doc.to_time
                     attendance.save()

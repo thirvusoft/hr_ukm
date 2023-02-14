@@ -108,7 +108,7 @@ def get_data(filters):
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
 
-    attendance=frappe.db.get_all("Attendance", filters=filter, fields=["name","employee","employee_name","designation","unit", "total_shift_count", "total_shift_amount" ], 
+    attendance=frappe.db.get_all("Attendance", filters=filter, fields=["name","employee","employee_name","designation","unit", "total_shift_count", "total_shift_amount", "sunday_attendance", "sunday_approval"], 
     group_by="employee",
     order_by="designation")
     no=1
@@ -128,11 +128,14 @@ def get_data(filters):
         shift=0
         shift_amount=0
         for k in between_dates:
-            get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
-            get_amount=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_amount')
-            f.update({k:get_attendance})
-            shift=shift+(get_attendance or 0)
-            shift_amount=shift_amount+(get_amount or 0)
+            sunday_attendance = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_attendance')
+            sunday_approval = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_approval')
+            if not sunday_attendance or sunday_approval:
+                get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
+                get_amount=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_amount')
+                f.update({k:get_attendance})
+                shift=shift+(get_attendance or 0)
+                shift_amount=shift_amount+(get_amount or 0)
         f.update({"total_shift":shift, "total_amount":shift_amount})
         data.append(f)
         no+=1   
