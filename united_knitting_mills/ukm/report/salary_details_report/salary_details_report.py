@@ -397,17 +397,7 @@ def get_data(filters):
         data.append(f)
         no+=1
 
-    # data = [list(i.values()) for i in data]
 
-    # designation_check = ''
-
-    # for i in range (0, len(data), 1):
-    #     if data[i][0] != designation_check:
-    #         designation_check = data[i][0] 
-    #         data[i][0] = f'<b>{data[i][0]}</b>'
-           
-    #     else:
-    #         data[i][0] = ''
     if data :
         data.append({"status":"Hold Amount", "net_salary":non_hold})
         data.append({"status":"Non Hold Amount","net_salary":hold_amount})

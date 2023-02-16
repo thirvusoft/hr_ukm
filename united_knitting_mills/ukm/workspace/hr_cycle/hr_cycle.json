@@ -75,16 +75,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Employee Bank Details",
-   "link_to": "Employee Bank Details",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Attendance",
    "link_type": "DocType",
    "onboard": 0,
@@ -123,16 +113,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Employee Checkin",
-   "link_to": "Employee Checkin",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Leave Application",
    "link_to": "Leave Application",
    "link_type": "DocType",
@@ -148,15 +128,6 @@
    "link_type": "DocType",
    "onboard": 0,
    "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Attendance Shift Changes",
-   "link_to": "Attendance Shift Changes",
-   "link_type": "DocType",
-   "onboard": 0,
    "type": "Link"
   },
   {
@@ -225,7 +196,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-02-10 13:47:38.780702",
+ "modified": "2023-02-16 22:25:38.067079",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -265,50 +236,14 @@
   },
   {
    "doc_view": "",
-   "label": "Attendance Shift Details",
+   "label": "Attendance Shift Details Report",
    "link_to": "Attendance Shift Details",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Wages for Monthly Paid Workers",
-   "link_to": "Wages for Monthly Paid Workers",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Labour) - Checkin Missing",
-   "link_to": "Decision Making (Labour) - Checkin Missing",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Labour) - Late Entry",
-   "link_to": "Decision Making (Labour) - Late Entry",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Labour) - Early Exit",
-   "link_to": "Decision Making (Labour) - Early Exit",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Labour) - Leave Applied",
-   "link_to": "Decision Making (Labour) - Leave Applied",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Labour) - Breaktime Overconsumed",
-   "link_to": "Decision Making (Labour) - Breaktime Overconsumed",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Labour) - Insufficient Working hours",
-   "link_to": "Decision Making (Labour) - Insufficient Working hours",
+   "label": "Monthly Attendance Report",
+   "link_to": "Monthly Attendance Report",
    "type": "Report"
   },
   {
@@ -349,36 +284,6 @@
   },
   {
    "doc_view": "",
-   "label": "Decision Making (House Keeping) - Breaktime Overconsumed",
-   "link_to": "Decision Making (House Keeping) - Breaktime Overconsumed",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (House Keeping) - Checkin Missing",
-   "link_to": "Decision Making (House Keeping) - Checkin Missing",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (House Keeping) - Insufficient Working Hours",
-   "link_to": "Decision Making (House Keeping) - Insufficient Working Hours",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (House Keeping) - Late Entry",
-   "link_to": "Decision Making (House Keeping) - Late Entry",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (House Keeping) - Early Exit",
-   "link_to": "Decision Making (House Keeping) - Early Exit",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
    "label": "Leave Application - On Duty",
    "link_to": "Leave Application - On Duty",
    "type": "Report"
@@ -397,16 +302,22 @@
   },
   {
    "doc_view": "",
-   "label": "Decision Making Attendance Report",
+   "label": "Attendance Shift Changes -> Staff",
    "link_to": "Decision Making Attendance Report",
    "restrict_to_domain": "",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Monthly Attendance Report",
-   "link_to": "Monthly Attendance Report",
-   "type": "Report"
+   "label": "Attendance Shift Changes -> Labour",
+   "link_to": "Attendance Shift Changes",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Employee Bank Details Changes",
+   "link_to": "Employee Bank Details",
+   "type": "DocType"
   }
  ],
  "shortcuts_label": "Decision Making Reports"

@@ -146,15 +146,20 @@ def get_data(filters):
 			get_attendance=frappe.db.get_list("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, ['checkin_time','checkout_time','total_shift_count'])
 			get_amount=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_amount')
 			sunday_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_attendance')
-			if sunday_attendance:
-				sunday += 1
+			sunday_approval=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_approval')
+			
 			if get_attendance:
 				checkin = get_attendance[0]['checkin_time']
 				checkout = get_attendance[0]['checkout_time']
 				f.update({k:f'{checkin or "-"}'})
 				out.update({k:f'{checkout or "-"}'})
 				tot.update({k:f"<span style='color:green!important;font-weight:bold'>{get_attendance[0]['total_shift_count']}</span>"})
-				shift=shift+(get_attendance[0]['total_shift_count'] or 0)
+				if sunday_attendance:
+					sunday += 1
+					if sunday_approval:
+						shift= shift+(get_attendance[0]['total_shift_count'] or 0)
+				else:
+					shift=shift+(get_attendance[0]['total_shift_count'] or 0)
 			else:
 				f.update({k:"-"})
 				out.update({k:"-"})
