@@ -10,8 +10,25 @@
   "biometric_settings_section",
   "buffer_time",
   "checkin_type_resetting_time",
+<<<<<<< Gokulnath_dev
   "column_break_4",
   "check_in_date"
+=======
+  "check_in_date",
+  "leave_section",
+  "pay_leave",
+  "column_break_13",
+  "permission_leave",
+  "time_in_minutes",
+  "attendance",
+  "attendance_date",
+  "employee",
+  "column_break_18",
+  "attendance_update",
+  "food_expense",
+  "amount_for_male_employee",
+  "amount_for_female_employee"
+>>>>>>> local
  ],
  "fields": [
   {
@@ -47,12 +64,129 @@
    "in_list_view": 1,
    "label": "Resetting Time For Checkin Type",
    "reqd": 1
+<<<<<<< Gokulnath_dev
+=======
+  },
+  {
+   "description": "Allowed Pay Leave for a Month.",
+   "fieldname": "pay_leave",
+   "fieldtype": "Int",
+   "label": "Pay Leave"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "leave_section",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Violet;\"><b>Leave</b></p>"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "advance_section",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: DodgerBlue;\"><b>Advance</b></p>"
+  },
+  {
+   "fieldname": "bonus_percentage",
+   "fieldtype": "Float",
+   "label": "Bonus Percentage"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "bonus",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Tomato;\"><b>Bonus</b></p>"
+  },
+  {
+   "description": "Allowed Permission for a Month.",
+   "fieldname": "permission_leave",
+   "fieldtype": "Int",
+   "label": "Permission Leave"
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "This is the Maximum time allowed for a single permission leave type.",
+   "fieldname": "time_in_minutes",
+   "fieldtype": "Float",
+   "label": "Time In Minutes"
+  },
+  {
+   "fieldname": "advance_amount",
+   "fieldtype": "Table",
+   "options": "TS Advance Validation"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "attendance",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Orange;\"><b>Attendance</b></p>"
+  },
+  {
+   "description": "Enter the Attendance Date, that you want to Re-create",
+   "fieldname": "attendance_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "depends_on": "eval:doc.attendance_date",
+   "fieldname": "attendance_update",
+   "fieldtype": "Button",
+   "label": "<p style=\"color: Red;\"><b>Re-Create</b></p>"
+  },
+  {
+   "fieldname": "column_break_18",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time"
+  },
+  {
+   "fieldname": "bonus_table",
+   "fieldtype": "Table",
+   "label": "Bonus Table",
+   "options": "TS Bonus Validation"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "food_expense",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Blue;\"><b>Food Expense</b></p>"
+  },
+  {
+   "fieldname": "amount_for_male_employee",
+   "fieldtype": "Currency",
+   "label": "Amount for Male Employee"
+  },
+  {
+   "fieldname": "amount_for_female_employee",
+   "fieldtype": "Currency",
+   "label": "Amount For Female Employee"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+>>>>>>> local
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< Gokulnath_dev
  "modified": "2022-08-02 13:02:24.458089",
+=======
+ "modified": "2023-02-17 23:16:31.108687",
+>>>>>>> local
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

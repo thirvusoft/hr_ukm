@@ -156,9 +156,22 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Checkin",
+   "link_to": "Employee Checkin",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
+<<<<<<< Gokulnath_dev
  "modified": "2022-09-06 19:49:26.899998",
+=======
+ "modified": "2023-02-17 15:46:03.988464",
+>>>>>>> local
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -210,9 +223,34 @@
   },
   {
    "doc_view": "",
+<<<<<<< Gokulnath_dev
    "label": "Leave Application - On Duty",
    "link_to": "Leave Application - On Duty",
    "type": "Report"
+=======
+   "label": "Leave Application - Pay Leave",
+   "link_to": "Leave Application - Pay Leave",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making Attendance Report (Staff)",
+   "link_to": "Decision Making Attendance Report",
+   "restrict_to_domain": "",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Attendance Shift Changes",
+   "link_to": "Attendance Shift Changes",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Employee Bank Details Changes",
+   "link_to": "Employee Bank Details",
+   "type": "DocType"
+>>>>>>> local
   }
  ],
  "shortcuts_label": "Decision Making Reports"
