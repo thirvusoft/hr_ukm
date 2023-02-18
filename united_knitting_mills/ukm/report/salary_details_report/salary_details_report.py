@@ -224,7 +224,7 @@ def get_columns(filters):
 def get_data(filters):
     data=[]
 
-    filter = {'start_date':["=", filters['from_date']],"end_date":["=", filters['to_date']],'docstatus':0}
+    filter = {'start_date':["=", filters['from_date']],"end_date":["=", filters['to_date']],'docstatus': ["!=", 2]}
     
     keys = list(filters.keys())
 
@@ -305,8 +305,11 @@ def get_data(filters):
         )
 
         for k in between_dates:
-            get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
-            f.update({k:get_attendance})
+            sunday_attendance = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_attendance')
+            sunday_approval = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_approval')
+            if not sunday_attendance or sunday_approval:
+                get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
+                f.update({k:get_attendance})
         salary_slip_detail=frappe.get_doc("Salary Slip",j.name)
 
         food_expence_count = 0
@@ -394,17 +397,7 @@ def get_data(filters):
         data.append(f)
         no+=1
 
-    # data = [list(i.values()) for i in data]
 
-    # designation_check = ''
-
-    # for i in range (0, len(data), 1):
-    #     if data[i][0] != designation_check:
-    #         designation_check = data[i][0] 
-    #         data[i][0] = f'<b>{data[i][0]}</b>'
-           
-    #     else:
-    #         data[i][0] = ''
     if data :
         data.append({"status":"Hold Amount", "net_salary":non_hold})
         data.append({"status":"Non Hold Amount","net_salary":hold_amount})
