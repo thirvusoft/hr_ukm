@@ -5,6 +5,8 @@ import frappe
 from frappe.model.document import Document
 from frappe import _
 from frappe.utils import getdate, nowdate
+from datetime import date, datetime, timedelta
+
 
 from united_knitting_mills.ukm.utils.python.employee__checkin import create_employee_checkin
 class UnitedKnittingMillsSettings(Document):
@@ -58,33 +60,49 @@ def creating_hr_permission():
 		frappe.throw("Thirvu HR User role not assigned for any User")
 
 @frappe.whitelist()
-def re_create_attendance(attendance_date):
+def re_create_attendance(attendance_date, employee = None):
 
 	attendance_date = getdate(attendance_date)
 
 	if attendance_date < getdate(nowdate()):
 
 		frappe.msgprint("Within 30 Minutes Attendance Will Be Re-Created.")
+		data = []
+		data.append(attendance_date)
+		data.append(employee)
 
-		frappe.enqueue(attendance_update, attendance_date = attendance_date, queue = "long")
+		frappe.enqueue(attendance_update, data = data, queue = "long")
 
 	else:
 		frappe.throw("Date Should Not Be Greater Than Yesterday",title=_("Message"))
 
-def attendance_update(attendance_date):
+def attendance_update(data):
 
-	attendance_list = frappe.get_all("Attendance",{"attendance_date":attendance_date})
+	attendance_list = frappe.get_all("Attendance",{"attendance_date":data[0], "employee":data[1]})
 
 	for attendance in attendance_list:
 
 		attendance_doc = frappe.get_doc("Attendance",attendance)
 
 		if attendance_doc.docstatus:
+
 			attendance_doc.cancel()
+			
+		try:
+			frappe.delete_doc("Attendance Shift Changes", attendance_doc.name)
+
+		except:
+			pass
 
 		frappe.delete_doc('Attendance', attendance_doc.name)
-		
-	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(attendance_date, attendance_date)]})
+
+	reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
+	reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
+
+	start_date = datetime.combine(data[0], reset_time.time())
+	end_date = datetime.combine(data[0] + timedelta(days = 1), reset_time.time())
+
+	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(start_date, end_date)], "employee": data[1]})
 
 	for employee_checkin in employee_checkin_list:
 
@@ -92,4 +110,4 @@ def attendance_update(attendance_date):
 
 		frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
 
-	create_employee_checkin(attendance_date, attendance_date)
+	create_employee_checkin(data[0], data[0])

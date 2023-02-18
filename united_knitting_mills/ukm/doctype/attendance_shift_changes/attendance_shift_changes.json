@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:attendance",
+ "autoname": "ASC.#####",
  "creation": "2023-01-04 15:25:22.507251",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -68,10 +68,10 @@
   },
   {
    "fieldname": "attendance",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Attendance",
-   "unique": 1
+   "options": "Attendance"
   },
   {
    "fieldname": "column_break_4",
@@ -90,6 +90,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "checkin_details",
    "fieldtype": "Table",
    "options": "Employee Checkin Details",
@@ -99,7 +100,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-10 20:55:32.695713",
+ "modified": "2023-02-17 15:15:45.426097",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Attendance Shift Changes",

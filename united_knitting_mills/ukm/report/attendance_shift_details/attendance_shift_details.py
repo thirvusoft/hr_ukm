@@ -128,11 +128,12 @@ def get_data(filters):
         shift=0
         shift_amount=0
         for k in between_dates:
-            sunday_attendance = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_attendance')
-            sunday_approval = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'sunday_approval')
+            sunday_attendance = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k, 'department':filters["department"]}, 'sunday_attendance')
+            sunday_approval = frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k, 'department':filters["department"]}, 'sunday_approval')
             if not sunday_attendance or sunday_approval:
-                get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_count')
-                get_amount=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k}, 'total_shift_amount')
+                get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k, 'department':filters["department"]}, 'total_shift_count')
+                get_amount=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k, 'department':filters["department"]}, 'total_shift_amount')
+
                 f.update({k:get_attendance})
                 shift=shift+(get_attendance or 0)
                 shift_amount=shift_amount+(get_amount or 0)

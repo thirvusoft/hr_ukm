@@ -196,6 +196,7 @@
    "type": "Link"
   }
  ],
+
  "modified": "2023-02-16 22:25:38.067079",
  "modified_by": "Administrator",
  "module": "UKM",
@@ -290,11 +291,34 @@
   },
   {
    "doc_view": "",
+   "label": "Leave Application - Pay Leave",
+   "link_to": "Leave Application - Pay Leave",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Decision Making Attendance Report (Staff)",
+   "link_to": "Decision Making Attendance Report",
+   "restrict_to_domain": ""
+  },
+  {
+   "doc_view": "",
    "label": "Leave Application - Permission",
    "link_to": "Leave Application - Permission",
    "type": "Report"
   },
   {
+   "doc_view": "",
+   "label": "Attendance Shift Changes",
+   "link_to": "Attendance Shift Changes",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Employee Bank Details Changes",
+   "link_to": "Employee Bank Details",
+   "type": "DocType"
+  },{
    "doc_view": "",
    "label": "Leave Application - Pay Leave",
    "link_to": "Leave Application - Pay Leave",

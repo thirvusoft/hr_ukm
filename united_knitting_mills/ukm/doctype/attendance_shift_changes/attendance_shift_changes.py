@@ -10,7 +10,7 @@ class AttendanceShiftChanges(Document):
 			attendance=frappe.get_doc("Attendance", self.attendance)
 			ssa=frappe.db.get_all("Salary Structure Assignment", filters={"employee":self.employee, "docstatus":1}, fields=["base"])
 			final_shift_count = self.total_shift_count + self.update_shift_count
-			if not attendance.staff:
+			if not attendance.staff and ssa:
 				attendance.update({"total_shift_count":final_shift_count, "total_shift_amount":ssa[0]['base']*final_shift_count})
 			else:
 				attendance.update({"total_shift_count":final_shift_count})
