@@ -133,6 +133,7 @@ def get_data(filters):
             if not sunday_attendance or sunday_approval:
                 get_attendance=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k, 'department':filters["department"]}, 'total_shift_count')
                 get_amount=frappe.db.get_value("Attendance", {'employee':j.employee, 'workflow_state':"Present",'attendance_date':k, 'department':filters["department"]}, 'total_shift_amount')
+
                 f.update({k:get_attendance})
                 shift=shift+(get_attendance or 0)
                 shift_amount=shift_amount+(get_amount or 0)

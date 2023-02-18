@@ -100,7 +100,11 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                 elif shift_list.house_keeping ==1:
                     new_attendance_doc.house_keeping = 1
                 # To check missing log
-                if len(date_wise_checkin[date])%2 ==0 and len(date_wise_checkin[date]) :
+                
+                if len(date_wise_checkin[date]) and len(date_wise_checkin[date]) !=1:
+                    if len(date_wise_checkin[date])%2 !=0:
+                        date_wise_checkin[date].pop(-1)
+
                     shift_wise_details = frappe._dict()
                     # To Separate the In and Out Time
                     if date_wise_checkin[date][0]['log_type']=='IN':
@@ -111,10 +115,15 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     if date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['log_type'] == 'OUT':
                         out_time = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time'].time()
                         out_time_date = date_wise_checkin[date][len(date_wise_checkin[date]) - 1]['time']
-
+                    
                     for shift_details in shift_list.thirvu_shift_details:
                         # Checking Buffer Time
-                        buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
+                        if shift_details.idx == 1:
+                            buffer_before_start_time = shift_list.thirvu_shift_details[0].start_time - datetime.timedelta(hours = 1)
+                        else:	
+                            buffer_before_start_time = shift_list.thirvu_shift_details[shift_details.idx -2].start_time + datetime.timedelta(minutes = json.loads(late_entry))
+                            
+                        # buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
                         buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
                         buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
                         if shift_details.idx < len(shift_list.thirvu_shift_details):
@@ -139,7 +148,6 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                             if shift_details.end_time > to_timedelta(str(out_time)) and shift_list.thirvu_shift_details[0].start_time >= shift_details.start_time:
                                 early_exit_time = shift_details.end_time - to_timedelta(str(out_time))
                             approval_end_time = out_time 
-
                     # Calculation of shift salary and shift count
                     try:
                         for i in date_wise_checkin:
@@ -196,8 +204,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                 shift_wise_details.update({'shift_count':shift_count,'shift_salary':shift_salary})
                                 correct_shift_details.append(shift_wise_details)
                                 new_attendance_doc.update({
-                                    'checkin_time':shift_wise_details['start_time'],
-                                    
+                                    'checkin_time':shift_wise_details['start_time'],                                    
                                     'checkout_time':shift_wise_details['end_time']
                                 })
 
@@ -257,14 +264,15 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     
                 # To create approval for missing entry
                 else:
-                    approval_timing = frappe._dict()
-                    approval_timing.update({'check_in_time':date_wise_checkin[date][0]['time'].time(),'check_out_time':''})
+                    # approval_timing = frappe._dict()
+                    # approval_timing.update({'check_in_time':date_wise_checkin[date][0]['time'].time(),'check_out_time':''})
 
-                    approval_details.append(approval_timing)
+                    # approval_details.append(approval_timing)
+                    # new_attendance_doc.update({
+                    #     'employee_shift_details':approval_details
+                    # })
                     new_attendance_doc.update({
-                        'employee_shift_details':approval_details
-                    })
-                    new_attendance_doc.update({
+                                "total_shift_count":0,
                                 'mismatched_checkin':1,
                                 'no_of_checkin':f"{len(date_wise_checkin[date])}",
                                 'checkin_time':'',
@@ -278,7 +286,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     where name in %s""", (new_attendance_doc.name , checkin_name[date]))
 
                 # If all shift details are correct it will submit automatically
-                if not new_attendance_doc.employee_shift_details and new_attendance_doc.thirvu_shift_details:
+                if not new_attendance_doc.employee_shift_details:
                     new_attendance_doc.reload()
                     new_attendance_doc.submit()
 
@@ -387,32 +395,64 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
     checkin_list = []
     late_entry, early_exit, break_consumed_min, late_entry_min, early_exit_min = 0, 0, 0, 0, 0
     if(len(times)>1):
-        for i in range(0, len(times)):
-            for brk_time in doc.break_time:
-                # Check In Logs
-                if(i != 0):
-                    if not(times[i][0] <= dt.strptime(str(brk_time.end_time), '%H:%M:%S').time()):
-                        break_consumed_min += (((dt.strptime(str(times[i][0]), '%H:%M:%S')) - (dt.strptime(str(brk_time.end_time), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
-                        submit_doc = False
-                        comment = True
-                        checkin_list.append(str(times[i][0]))
-                else:
-                    if not(times[i][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
-                        late_entry_min += (((dt.strptime(str(times[i][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
-                        submit_doc = False
-                        late_entry = 1
-                # Check Out Logs
-                if(i != (len(times)-1)):
-                    if not(times[i][1] >= dt.strptime(str(brk_time.start_time), '%H:%M:%S').time()):
-                        submit_doc = False
-                        comment = True
-                        break_consumed_min += (((dt.strptime(str(brk_time.start_time), '%H:%M:%S')) - (dt.strptime(str(times[i][1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
-                        checkin_list.append(str(times[i][1]))
-                else:
-                    if not(times[i][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
-                        submit_doc = False
-                        early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[i][1]), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
-                        early_exit= 1
+        # minutes wise breaktime calculation
+        out_in_log=[]  #Single List[12, 1, 3, 4]
+        out_in_logs=[]  #list of list without first checkin and last checkout [[12, 1], [3, 4]]  out in, out in
+        for log in times:
+            for i in log:
+                out_in_log.append(i)
+        #out_in_log = [12, 1, 3, 4]  #original: [[9, 12], [1, 3], [4, 7]]
+        temp=[]
+        for log in out_in_log[1:-1]:
+            if temp:
+                temp.append(log)
+                out_in_logs.append(temp)
+                temp=[]
+            else:
+                temp=[log]
+        #out_in_logs=[[12, 1], [3, 4]]  out in, out in
+        break_time=0
+        for log in out_in_logs:
+            # log -> out, in
+            # break_time+=(log[0]-log[1])
+                break_time+=(((dt.strptime(str(log[1]), '%H:%M:%S')) - (dt.strptime(str(log[0]), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
+        
+        # break time calculated
+        
+        if break_time > doc.total_break_time_mins:
+            break_consumed_min=break_time-doc.total_break_time_mins
+            submit_doc = False
+            comment = True
+        else:
+            break_consumed_min=0  
+            
+            # Existing Code
+            # for i in range(0, len(times)):
+            # for brk_time in doc.break_time:
+            #     # Check In Logs
+            #     if(i != 0):
+            #         if not(times[i][0] <= dt.strptime(str(brk_time.end_time), '%H:%M:%S').time()):
+            #             break_consumed_min += (((dt.strptime(str(times[i][0]), '%H:%M:%S')) - (dt.strptime(str(brk_time.end_time), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
+            #             submit_doc = False
+            #             comment = True
+            #             checkin_list.append(str(times[i][0]))
+            #     else:
+            #         if not(times[i][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
+            #             late_entry_min += (((dt.strptime(str(times[i][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
+            #             submit_doc = False
+            #             late_entry = 1
+            #     # Check Out Logs
+            #     if(i != (len(times)-1)):
+            #         if not(times[i][1] >= dt.strptime(str(brk_time.start_time), '%H:%M:%S').time()):
+            #             submit_doc = False
+            #             comment = True
+            #             break_consumed_min += (((dt.strptime(str(brk_time.start_time), '%H:%M:%S')) - (dt.strptime(str(times[i][1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+            #             checkin_list.append(str(times[i][1]))
+            #     else:
+            #         if not(times[i][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
+            #             submit_doc = False
+            #             early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[i][1]), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
+            #             early_exit= 1
     else:        
         if not(times[0][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
             submit_doc = False
@@ -605,6 +645,8 @@ def leave_application_to_attendance():
             attendance.attendance_date = application_doc.attendance_date
             attendance.leave_application = application_doc.name
             attendance.leave_type = application_doc.leave_type
+            attendance.checkin_time = application_doc.from_time
+            attendance.checkout_time = application_doc.to_time
             attendance.save()
 
         application_doc.attendance_marked = 1

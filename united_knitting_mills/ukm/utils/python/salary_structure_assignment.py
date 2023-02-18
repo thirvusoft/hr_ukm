@@ -2,9 +2,11 @@ import frappe
 
 @frappe.whitelist()
 def salary_updation(doc, event):
+    frappe.enqueue(attendance_updation, doc=doc,  queue="long")
 
-    att_docs = frappe.get_all("Attendance", {"employee" : doc.employee, "workflow_state": ["!=", "Draft", "Cancelled", "Absent"], "staff": 0, "total_shift_amount": 0})
+def attendance_updation(doc):
 
+    att_docs = frappe.get_all("Attendance", {"employee" : doc.employee, "workflow_state": ["!=", "Draft", "Cancelled", "Absent"], "staff": 0, "attendance_date": [">=", doc.from_date]})
     for att_doc in att_docs:
 
         att = frappe.get_doc("Attendance", att_doc)
@@ -39,8 +41,8 @@ def salary_updation_old():
                             att.save()
 
 def validation(doc,event):
-    old_doc = frappe.get_list("Salary Structure Assignment",{"docstatus":['!=',2],"employee":doc.employee})
-    if len(old_doc) > 1:
+    old_doc = frappe.get_list("Salary Structure Assignment",{"workflow_state":['=',"Approved by MD"],"employee":doc.employee})
+    if len(old_doc) >= 1:
         frappe.throw(f"Salary Structure already exists for {doc.employee}")
 # def salary_updation_old():
 
