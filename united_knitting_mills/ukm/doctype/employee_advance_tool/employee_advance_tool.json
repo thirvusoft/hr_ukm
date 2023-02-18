@@ -1,24 +1,24 @@
 {
  "actions": [],
- "autoname": "format:{designation}-{DD}-{MM}-{YYYY}",
+ "autoname": "HR-ADV-.#####",
  "creation": "2022-05-09 09:32:30.330568",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "date",
+  "from_date",
+  "department",
+  "ts_location",
+  "column_break_3",
+  "to_date",
   "designation",
+  "section_break_5",
+  "get_employees",
   "employee_advance_details",
   "total_advance_amount",
-  "id",
   "amended_from"
  ],
  "fields": [
-  {
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date"
-  },
   {
    "fieldname": "designation",
    "fieldtype": "Link",
@@ -29,7 +29,8 @@
    "fieldname": "employee_advance_details",
    "fieldtype": "Table",
    "label": "Employee Advance Details",
-   "options": "Employee Advance Details"
+   "options": "Employee Advance Details",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -43,20 +44,54 @@
   {
    "fieldname": "total_advance_amount",
    "fieldtype": "Currency",
-   "label": "Total Advance Amount"
+   "label": "Total Advance Amount",
+   "read_only": 1
   },
   {
-   "fieldname": "id",
+   "fieldname": "department",
    "fieldtype": "Link",
-   "hidden": 1,
-   "label": "ID",
-   "options": "Employee"
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:doc.from_date && doc.to_date && doc.ts_location",
+   "fieldname": "get_employees",
+   "fieldtype": "Button",
+   "label": "<p style=\"color: DodgerBlue;\"><b>Get Employees</b></p>"
+  },
+  {
+   "fieldname": "ts_location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-07-04 18:15:08.708756",
+ "modified": "2022-11-19 11:58:39.726304",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Advance Tool",

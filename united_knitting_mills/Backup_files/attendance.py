@@ -13,13 +13,16 @@ from erpnext.hr.utils import get_holiday_dates_for_employee, validate_active_emp
 class Attendance(Document):
 	def validate(self):
 		from erpnext.controllers.status_updater import validate_status
-#Quarter Day , Three Quarter Day, One half day, one Quarter day
-		validate_status(self.status, ["Present", "Absent", "On Leave", "Half Day", "Work From Home" , "Quarter Day", "Three Quarter Day",'One Half Day','One Quarter Day'])
+
+		validate_status(self.status, ["Present", "Absent", "On Leave", "Half Day", "Work From Home"])
 		validate_active_employee(self.employee)
 		self.validate_attendance_date()
 		self.validate_duplicate_record()
 		self.validate_employee_status()
 		self.check_leave_record()
+
+	def on_cancel(self):
+		self.unlink_attendance_from_checkins()
 
 	def validate_attendance_date(self):
 		date_of_joining = frappe.db.get_value("Employee", self.employee, "date_of_joining")
@@ -69,105 +72,34 @@ class Attendance(Document):
 			(self.employee, self.attendance_date),
 			as_dict=True,
 		)
-# #Quarter day------------------------------------
-# 		leave_record = frappe.db.sql(
-# 			"""
-# 			select leave_type, quarter_day, quarter_day_date
-# 			from `tabLeave Application`
-# 			where employee = %s
-# 				and %s between from_date and to_date
-# 				and status = 'Approved'
-# 				and docstatus = 1
-# 		""",
-# 			(self.employee, self.attendance_date),
-# 			as_dict=True,
-# 		)
-# #---------------------------------------
-# #One Quarter Shift-----------------------
-# 		leave_record = frappe.db.sql(
-# 			"""
-# 			select leave_type, one_quarter_day, one_quarter_day_date
-# 			from `tabLeave Application`
-# 			where employee = %s
-# 				and %s between from_date and to_date
-# 				and status = 'Approved'
-# 				and docstatus = 1
-# 		""",
-# 			(self.employee, self.attendance_date),
-# 			as_dict=True,
-# 		)
-# # One Half day-----------------------
-# 		eave_record = frappe.db.sql(
-# 			"""
-# 			select leave_type, one_half_day, one_half_day_date
-# 			from `tabLeave Application`
-# 			where employee = %s
-# 				and %s between from_date and to_date
-# 				and status = 'Approved'
-# 				and docstatus = 1
-# 		""",
-# 			(self.employee, self.attendance_date),
-# 			as_dict=True,
-# 		)
-# # three Quarter Shift----------------------------
-# 		leave_record = frappe.db.sql(
-# 			"""
-# 			select leave_type, three_quarter_day, three_quarter_day_date
-# 			from `tabLeave Application`
-# 			where employee = %s
-# 				and %s between from_date and to_date
-# 				and status = 'Approved'
-# 				and docstatus = 1
-# 		""",
-# 			(self.employee, self.attendance_date),
-# 			as_dict=True,
-# 		)
-#--------------------------------
 		if leave_record:
 			for d in leave_record:
 				self.leave_type = d.leave_type
 				if d.half_day_date == getdate(self.attendance_date):
 					self.status = "Half Day"
-					frappe.msgprint(_("Employee {0} on Half day on {1}")
-						.format(self.employee, formatdate(self.attendance_date)))
-# # Quarter Day
-# 				elif d.quarter_day_date ==getdate(self.attendance_date):
-# 					self.status = "Quarter Day"
-# 					frappe.msgprint(_("Employee {0} on Quarter day on {1}")
-# 						.format(self.employee, formatdate(self.attendance_date)))
-
-# #------------------------------------------------
-# # Three Quarter Day
-# 				elif d.three_quarter_day_date ==getdate(self.attendance_date):
-# 					self.status = "Three Quarter Day"
-# 					frappe.msgprint(_("Employee {0} on Three Quarter day on {1}")
-# 						.format(self.employee, formatdate(self.attendance_date)))
-# #------------------------------------------------------
-# #One Quarter Day---------------------------------------
-# 				elif d.one_quarter_day_date ==getdate(self.attendance_date):
-# 					self.status = "One Quarter Day"
-# 					frappe.msgprint(_("Employee {0} on One Quarter day on {1}")
-# 						.format(self.employee, formatdate(self.attendance_date)))
-# #-------------------------------------------------------
-# #One Half Day-------------------------------------------
-# 				elif d.one_half_day_date ==getdate(self.attendance_date):
-# 					self.status = "One Half Day"
-# 					frappe.msgprint(_("Employee {0} on One Half day on {1}")
-# 						.format(self.employee, formatdate(self.attendance_date)))
-# #--------------------------------------------------------
+					frappe.msgprint(
+						_("Employee {0} on Half day on {1}").format(self.employee, formatdate(self.attendance_date))
+					)
 				else:
 					self.status = "On Leave"
 					frappe.msgprint(
 						_("Employee {0} is on Leave on {1}").format(self.employee, formatdate(self.attendance_date))
 					)
-#Quarter Day , Three Quarter Day , One Quarter Day , One Half Day
-		if self.status in ("On Leave", "Half Day","Quarter Day", "Three Quarter Day", "One Quarter Day", "One Half Day"):
+
+		if self.status in ("On Leave", "Half Day"):
 			if not leave_record:
-				frappe.msgprint(_("No leave record found for employee {0} on {1}").format(
-						self.employee, formatdate(self.attendance_date)),alert=1)
-		elif self.leave_type:
-			self.leave_type = None
-			self.leave_application = None
+				frappe.msgprint(
+					_("No leave record found for employee {0} on {1}").format(
+						self.employee, formatdate(self.attendance_date)
+					),
+					alert=1,
+				)
+		# Customized By Thirvusoft
+		# Start
+		# elif self.leave_type:
+		# 	self.leave_type = None
+		# 	self.leave_application = None
+		# End
 
 	def validate_employee(self):
 		emp = frappe.db.sql(
@@ -175,6 +107,35 @@ class Attendance(Document):
 		)
 		if not emp:
 			frappe.throw(_("Employee {0} is not active or does not exist").format(self.employee))
+
+	def unlink_attendance_from_checkins(self):
+		from frappe.utils import get_link_to_form
+
+		EmployeeCheckin = frappe.qb.DocType("Employee Checkin")
+		linked_logs = (
+			frappe.qb.from_(EmployeeCheckin)
+			.select(EmployeeCheckin.name)
+			.where(EmployeeCheckin.attendance == self.name)
+			.for_update()
+			.run(as_dict=True)
+		)
+
+		if linked_logs:
+			(
+				frappe.qb.update(EmployeeCheckin)
+				.set("attendance", "")
+				.where(EmployeeCheckin.attendance == self.name)
+			).run()
+
+			frappe.msgprint(
+				msg=_("Unlinked Attendance record from Employee Checkins: {}").format(
+					", ".join(get_link_to_form("Employee Checkin", log.name) for log in linked_logs)
+				),
+				title=_("Unlinked logs"),
+				indicator="blue",
+				is_minimizable=True,
+				wide=True,
+			)
 
 
 @frappe.whitelist()

@@ -12,6 +12,7 @@
   "column_break_4",
   "bonus_payment_date",
   "bonus_amount",
+  "bonus_account",
   "reference",
   "base_grand_total",
   "advance_paid",
@@ -62,7 +63,8 @@
    "fieldname": "reference",
    "fieldtype": "Link",
    "label": "Reference",
-   "options": "Employee Bonus Tool"
+   "options": "Employee Bonus Tool",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -82,12 +84,20 @@
    "fieldname": "advance_paid",
    "fieldtype": "Currency",
    "hidden": 1
+  },
+  {
+   "fetch_from": "reference.bonus_account",
+   "fieldname": "bonus_account",
+   "fieldtype": "Link",
+   "label": "Bonus Account",
+   "options": "Account",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-06-10 12:08:21.133942",
+ "modified": "2022-10-14 16:00:11.578007",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus",

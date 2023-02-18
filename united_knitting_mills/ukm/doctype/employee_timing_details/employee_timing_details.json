@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:{unit} - {department}",
+ "autoname": "field:shift_name",
  "creation": "2022-07-25 19:14:35.138582",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "unit_details_section",
+  "shift_name",
   "unit",
   "column_break_3",
   "department",
@@ -109,7 +110,7 @@
   {
    "fieldname": "employee_ctaegory_section",
    "fieldtype": "Section Break",
-   "label": "Employee Ctaegory"
+   "label": "Employee Category"
   },
   {
    "default": "0",
@@ -173,11 +174,18 @@
    "fieldname": "house_keeping",
    "fieldtype": "Check",
    "label": "House Keeping"
+  },
+  {
+   "fieldname": "shift_name",
+   "fieldtype": "Data",
+   "label": "Shift Name",
+   "reqd": 1,
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-09-06 12:20:23.569405",
+ "modified": "2022-10-07 12:56:53.064008",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Timing Details",

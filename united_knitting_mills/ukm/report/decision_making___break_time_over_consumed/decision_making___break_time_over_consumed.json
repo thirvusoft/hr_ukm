@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"break_time_overconsumed\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"over_consumed_time\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":166,\"attendance_date\":166,\"employee\":242,\"employee_name\":154,\"over_consumed_time\":233},\"group_by\":null}",
- "modified": "2022-09-06 14:32:57.908614",
+ "modified": "2023-01-05 12:57:00.921993",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making - Break Time Over Consumed",
@@ -20,15 +20,6 @@
  "report_name": "Decision Making - Break Time Over Consumed",
  "report_type": "Report Builder",
  "roles": [
-  {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "System Manager"
-  },
   {
    "role": "Thirvu Owner"
   },

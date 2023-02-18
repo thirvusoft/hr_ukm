@@ -5,7 +5,6 @@ from united_knitting_mills.ukm.custom_fields.hr.shift_type import create_shift_t
 from united_knitting_mills.ukm.custom_fields.payroll.payroll_settings import create_payroll_settings_fields
 from united_knitting_mills.ukm.custom_fields.hr.attendance import attendance_customisation
 from united_knitting_mills.ukm.custom_fields.assets.location import create_location_fields
-from united_knitting_mills.ukm.custom_fields.hr.employee_bonus_tool import employee_bonus_tool_custom_fields
 from united_knitting_mills.ukm.custom_fields.hr.united_knitting_mills_settings import bonus_percentage_fields
 from united_knitting_mills.ukm.utils.python.workflow import workflow_document_creation
 from united_knitting_mills.ukm.utils.python.salary_assignment_workflow import assignment_workflow_document_creation
@@ -20,6 +19,11 @@ from united_knitting_mills.ukm.custom_fields.hr.salary_structure import salary_s
 from united_knitting_mills.ukm.custom_fields.hr.salary_structure_assignment import salary_structure_assignment_customizations
 from united_knitting_mills.ukm.custom_fields.hr.payroll_entry import payroll_entry_customizations
 from united_knitting_mills.ukm.custom_fields.hr.salary_slip import salary_slip_customizations
+from united_knitting_mills.ukm.custom_fields.hr.additional_salary import additional_salary_customizations
+from united_knitting_mills.ukm.custom_fields.hr.employee_advance import employee_advance_customisation
+from united_knitting_mills.ukm.custom_fields.hr.leave_type import leave_type_customizations
+from united_knitting_mills.ukm.custom_fields.accounts.bank import bank_customization
+
 
 def create_custom_fields():
     leave_application_customizations()
@@ -27,11 +31,11 @@ def create_custom_fields():
     attendance_customisation()
     create_company_fields()
     create_employee_fields_and_property_setter()
+    bank_customization()
     create_payroll_settings_fields()
     create_shift_type_fields()
     department_customisation()
     create_location_fields()
-    employee_bonus_tool_custom_fields()
     bonus_percentage_fields()
     workflow_document_creation()
     assignment_workflow_document_creation()
@@ -44,3 +48,6 @@ def create_custom_fields():
     salary_structure_assignment_customizations()
     payroll_entry_customizations()
     salary_slip_customizations()
+    employee_advance_customisation()
+    additional_salary_customizations()
+    leave_type_customizations()

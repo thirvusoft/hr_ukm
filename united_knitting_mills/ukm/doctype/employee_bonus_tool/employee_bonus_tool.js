@@ -2,62 +2,46 @@
 // For license information, please see license.txt
 	
 frappe.ui.form.on("Employee Bonus Tool",{
-	designation:function(frm,cdt,cdn){
-		
-		var bonus=locals[cdt][cdn]
-		var from_date=frm.doc.from_date
-		var to_date = frm.doc.to_date
-		var bonus1=bonus.designation
-		frappe.db.get_value('Employee', {'user_id':frappe.session.user},['location','name'], function(data) {
-			var location=data.location
-			if(location){
-				
-				if(!from_date || !to_date){
-					frappe.throw("Please Select From Date And To Date")
-				}
-				cur_frm.set_value('id',data.name)	
-
-				frappe.call({
-				
-					method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
-					args:{bonus1,location,from_date,to_date},
-					callback(r){
-						frm.clear_table("employee_bonus_details");
-						for(var i=0;i<r.message[0].length;i++){
-							var child = cur_frm.add_child("employee_bonus_details");
-							frappe.model.set_value(child.doctype, child.name, "employee", r.message[0][i]["name"])
-							frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[0][i]["employee_name"])
-							frappe.model.set_value(child.doctype, child.name, "designation", bonus1)
-							frappe.model.set_value(child.doctype, child.name, "current_bonus", r.message[1][i])
-						}
-						cur_frm.refresh_field("employee_bonus_details")
-					}
-				})
-			}
-			else{
-				frappe.msgprint('Location not assigned for this user')
-			}
-		});
+	from_date:function(frm){
+		frm.set_value("emp_department","")
 	},
-	on_submit:function(frm,cdt,cdn){
-		var bonus=locals[cdt][cdn]
-		for(var i=0;i<bonus.employee_bonus_details.length;i++){
+	to_date:function(frm){
+		frm.set_value("emp_department","")
+	},
+	location:function(frm){
+		frm.set_value("emp_department","")
+	},
+	emp_department:function(frm){
+		var emp_department=frm.doc.emp_department
+		if (emp_department){
+			var from_date=frm.doc.from_date
+			var to_date = frm.doc.to_date	
+			var location = frm.doc.location
 			frappe.call({
-				method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.create_bonus",
-				args:{amount:bonus.employee_bonus_details[i].current_bonus,
-					name:bonus.employee_bonus_details[i].employee,
-					date:frm.doc.date,
-					doc:frm.doc.name},
+				method:"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.employee_finder",
+				args:{emp_department,location,from_date,to_date},
+				callback(r){
+					frm.set_value('employee_bonus_details', r.message[3])
+					// frm.clear_table("employee_bonus_details");
+					// frm.set_value("total_bonus_amount",0)
+					// for(var i=0;i<r.message[0].length;i++){
+					// 	var child = cur_frm.add_child("employee_bonus_details");
+					// 	frappe.model.set_value(child.doctype, child.name, "employee", r.message[0][i]["name"])
+					// 	frappe.model.set_value(child.doctype, child.name, "employee_name", r.message[0][i]["employee_name"])
+					// 	frappe.model.set_value(child.doctype, child.name, "designation", designation)
+					// 	frappe.model.set_value(child.doctype, child.name, "working_days", r.message[2][i])
+					// 	frappe.model.set_value(child.doctype, child.name, "current_bonus", r.message[1][i])
+					// }
+					cur_frm.refresh_field("employee_bonus_details")
+				}
 			})
 		}
-	},
-	before_save:function(frm, cdt, cdn) {
-		var table = frm.doc.employee_bonus_details;
-		var total = 0;
-		for(var i in table) {
-			total = total + table[i].current_bonus;
-		 }
-		 frm.set_value("total_bonus_amount",total);
+		else{
+			frm.clear_table("employee_bonus_details");
+			cur_frm.refresh_field("employee_bonus_details")
+			frm.set_value("total_bonus_amount",0)
 		}
+
+	}
 });
 	 

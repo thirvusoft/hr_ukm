@@ -1,7 +1,7 @@
 {
  "add_total_row": 0,
  "columns": [],
- "creation": "2022-09-06 19:48:25.169006",
+ "creation": "2022-09-06 21:17:32.362966",
  "disable_prepared_report": 0,
  "disabled": 0,
  "docstatus": 0,
@@ -9,29 +9,17 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "json": "{\"filters\":[[\"Leave Application\",\"docstatus\",\"=\",\"0\",false],[\"Leave Application\",\"leave_type\",\"=\",\"On Duty\"]],\"fields\":[[\"name\",\"Leave Application\"],[\"docstatus\",\"Leave Application\"],[\"employee_name\",\"Leave Application\"],[\"employee\",\"Leave Application\"],[\"leave_type\",\"Leave Application\"],[\"from_date\",\"Leave Application\"],[\"total_leave_days\",\"Leave Application\"],[\"status\",\"Leave Application\"]],\"order_by\":\"`tabLeave Application`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{},\"group_by\":null}",
- "modified": "2022-09-06 19:48:54.924883",
+ "json": "{\"filters\":[[\"Leave Application\",\"docstatus\",\"=\",\"0\",false],[\"Leave Application\",\"leave_type\",\"=\",\"On Duty\"]],\"fields\":[[\"name\",\"Leave Application\"],[\"docstatus\",\"Leave Application\"],[\"employee\",\"Leave Application\"],[\"employee_name\",\"Leave Application\"],[\"attendance_date\",\"Leave Application\"],[\"from_time\",\"Leave Application\"],[\"to_time\",\"Leave Application\"],[\"status\",\"Leave Application\"]],\"order_by\":\"`tabLeave Application`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":152,\"employee\":154,\"employee_name\":158,\"attendance_date\":130,\"from_time\":120,\"to_time\":120,\"status\":120},\"group_by\":null}",
+ "modified": "2023-01-05 12:59:02.618142",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Leave Application - On Duty",
- "owner": "clinton@gmail.com",
+ "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "Leave Application",
  "report_name": "Leave Application - On Duty",
  "report_type": "Report Builder",
  "roles": [
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "Leave Approver"
-  },
-  {
-   "role": "Employee"
-  },
-  {
-   "role": "Employee Self Service"
-  },
   {
    "role": "Thirvu Owner"
   },

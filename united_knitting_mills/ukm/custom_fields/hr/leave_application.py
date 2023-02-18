@@ -17,8 +17,11 @@ def leave_application_property_setter():
     make_property_setter("Leave Application", "sb10", "hidden", 1, "Section Break")
     make_property_setter("Leave Application", "leave_approver", "hidden", 1, "Check")
     make_property_setter("Leave Application", "leave_approver_name", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "total_leave_days", "hidden", 1, "Check")
     make_property_setter("Leave Application", "salary_slip", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "description", "reqd", 1, "Small Text")
     make_property_setter("Leave Application", "leave_balance", "hidden", 1, "Check")
+    make_property_setter("Leave Application", "leave_type", "depends_on", "eval:doc.employee", "Small Text")
     
 def leave_application_custom_fields_():
     custom_field = {
@@ -39,11 +42,16 @@ def leave_application_custom_fields_():
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)'
             ),
             dict(
-                fieldname='attendance_marked', label='Attendance Marked', fieldtype='Check', insert_after='to_date', 
+                fieldname='attendance_marked', label='Attendance Marked', fieldtype='Check', hidden=1,insert_after='to_date', 
                 depends_on='eval: in_list(["Permission", "On Duty"], doc.leave_type)',read_only=1,allow_on_submit=1
             ),
-            dict(fieldname='unit', label='Unit',reqd=1,
-				fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location')
+            dict(fieldname='unit', label='Unit',reqd=0,read_only=1,
+				fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location'
+            ),
+            dict(fieldname='is_pay_leave_application', label='Is Pay Leave Application',
+				fieldtype='Check',insert_after='unit',hidden=1
+            ),
+
         ]
     }
     create_custom_fields(custom_field)

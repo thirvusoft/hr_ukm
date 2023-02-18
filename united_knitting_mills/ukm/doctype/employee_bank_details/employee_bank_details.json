@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "EBDC-.#####",
+ "creation": "2023-01-03 18:52:27.050858",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "bank_name",
+  "branch_name",
+  "column_break_4",
+  "bank_ac_no",
+  "ifsc_code",
+  "micr_code",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.bank_name",
+   "fetch_if_empty": 1,
+   "fieldname": "bank_name",
+   "fieldtype": "Link",
+   "label": "Bank Name",
+   "options": "Bank",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.ts_bank_branch_name",
+   "fetch_if_empty": 1,
+   "fieldname": "branch_name",
+   "fieldtype": "Link",
+   "label": "Branch Name",
+   "options": "Territory",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.bank_ac_no",
+   "fetch_if_empty": 1,
+   "fieldname": "bank_ac_no",
+   "fieldtype": "Data",
+   "label": "Bank A/C No.",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.ifsc_code",
+   "fetch_if_empty": 1,
+   "fieldname": "ifsc_code",
+   "fieldtype": "Data",
+   "label": "IFSC Code",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.micr_code",
+   "fetch_if_empty": 1,
+   "fieldname": "micr_code",
+   "fieldtype": "Data",
+   "label": "MICR Code"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Bank Details",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-01-11 10:38:18.697149",
+ "modified_by": "Administrator",
+ "module": "UKM",
+ "name": "Employee Bank Details",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

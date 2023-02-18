@@ -24,6 +24,11 @@ def attendance_property_setter():
     make_property_setter("Attendance", "company", "hidden", 1, "Check")
     make_property_setter("Attendance", "naming_series", "default", "HR-ATT-.YYYY.-", "Text")
     make_property_setter("Attendance", "naming_series", "hidden", 1, "Check")
+    make_property_setter("Attendance", "late_entry", "read_only", 1, "Check")
+    make_property_setter("Attendance", "early_exit", "read_only", 1, "Check")
+    make_property_setter("Attendance", "shift", "hidden", 1, "Link")
+    make_property_setter("Attendance", "employee", "read_only", 1, "Link")
+    make_property_setter("Attendance", "attendance_date", "read_only", 1, "Date")
 
 
 
@@ -31,11 +36,27 @@ def attendance_property_setter():
 def create_attendance_custom_fields():
     custom_fields = {
 		"Attendance": [
-			dict(fieldname='shift_details', label='',
+		dict(fieldname='sunday_attendance', label='Is Holiday Attendance',
+				fieldtype='Check',insert_after='department',hidden=1),
+
+        dict(fieldname='sunday_approval', label='Holiday Approval for Salary Slip',
+				fieldtype='Check',insert_after='sunday_attendance',depends_on='eval:doc.sunday_attendance',mandatory_depends_on="eval:doc.sunday_attendance"),
+        
+        dict(fieldname='shift_details', label='',
 				fieldtype='Section Break',insert_after='exit_period'),
+        
+        dict(fieldname='employee_shift_details', label='Shift Approval List',
+            fieldtype='Table',options='Thirvu Employee Checkin Details',insert_after='shift_details',read_only=1),
+
+        dict(fieldname='thirvu_shift_details', label='Employee Shift',
+            fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details',hidden=1),
+
         dict(fieldname='unit', label='Unit',reqd=1,
-			fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location'),
-			
+			fieldtype='Link',options='Location',insert_after='employee_name',fetch_from='employee.location',read_only=1),
+		
+        dict(fieldname='designation', label='Designation',reqd=1,
+			fieldtype='Link',options='Designation',insert_after='unit',fetch_from='employee.designation',read_only=1),
+        
         dict(fieldname='staff', label='',
             fieldtype='Check',insert_after='employee',hidden=1),
 
@@ -43,12 +64,12 @@ def create_attendance_custom_fields():
             fieldtype='Check',insert_after='reason',read_only=1),
         
         dict(fieldname='no_of_checkin', label='Checkin Count',
-            fieldtype='Float',insert_after='mismatched_checkin',depends_on='eval:doc.mismatched_checkin',read_only=1),
+            fieldtype='Data',insert_after='mismatched_checkin',depends_on='eval:doc.mismatched_checkin',read_only=1),
         
         dict(fieldname='insufficient_working_minutes', label='Insufficient Working Minutes',
             fieldtype='Check',insert_after='no_of_checkin',read_only=1),
         
-        dict(fieldname='insufficient_working_hrs', label='Insufficient Working (Minutes)',
+        dict(fieldname='insufficient_working_hrs', label='Actual Worked (Hours)',
             fieldtype='Float',insert_after='insufficient_working_minutes',depends_on='eval:doc.insufficient_working_minutes',read_only=1),
 
         dict(fieldname='break_time_overconsumed', label='Breaktime Overconsumed',
@@ -59,9 +80,12 @@ def create_attendance_custom_fields():
 
         dict(fieldname='action_taken_by_hr', label='Action Taken By HR',
             fieldtype='Small Text',insert_after='over_consumed_time',mandatory_depends_on='eval:doc.break_time_overconsumed || doc.late_entry || doc.early_exit || doc.mismatched_checkin || doc.insufficient_working_minutes'),
-
-        dict(fieldname='thirvu_shift_details', label='Employee Shift',
-            fieldtype='Table',options='Thirvu Attendance Shift Details',insert_after='employee_shift_details',hidden=1),
+       
+        dict(fieldname='late_min', label='Consumed Minutes (Late Entry)',
+            fieldtype='Float',depends_on='eval:doc.late_entry',insert_after='late_entry',read_only=1),
+        
+        dict(fieldname='exit_period', label='Early Exit (in Minutes)',
+            fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit",read_only=1),
         
         dict(fieldname='time_sc_br', label='',
             fieldtype='Section Break',insert_after='thirvu_shift_details'),
@@ -75,40 +99,70 @@ def create_attendance_custom_fields():
         dict(fieldname='checkout_time', label='Check-Out Time',
             fieldtype='Time',insert_after='time_cl_br',read_only=1),
         
-        dict(fieldname='total_shift_hr', label='Total Shift in Minutes',
-        fieldtype='Float',insert_after='section_break23',depends_on='eval:!doc.staff'), 
-                
-        dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Hrs',
-        fieldtype='Float',insert_after='total_shift_hr',depends_on='eval:doc.staff'),           
-        
-        dict(fieldname='employee_shift_details', label='Shift Approval List',
-        fieldtype='Table',options='Thirvu Employee Checkin Details',insert_after='shift_details',read_only=1),
-        
         dict(fieldname='section_break23', label='',
         fieldtype='Section Break',insert_after='checkout_time'),
+
+        dict(fieldname='total_shift_hr', label='Total Shift in Minutes',
+        fieldtype='Float',insert_after='section_break23',read_only=1,depends_on='eval:!doc.staff'),          
         
         dict(fieldname='column_break24', label='',
+        fieldtype='Column Break',insert_after='total_shift_hr'),       
+
+        dict(fieldname='total_shift_count', label='Total Shift Count',
+        fieldtype='Float',insert_after='column_break24',read_only=1),
+
+        dict(fieldname='ts_ot_hrs', label='Extra Time Taken in Minutes',
+        fieldtype='Float',insert_after='total_shift_count',hidden=1,read_only=1), 
+
+        dict(fieldname='column_break23', label='',
         fieldtype='Column Break',insert_after='ts_ot_hrs'),
 
         dict(fieldname='total_shift_amount', label='Amount to Pay',
-        fieldtype='Currency',insert_after='column_break24'),
-        
-        dict(fieldname='late_min', label='Consumed Minutes (Late Entry)',
-        fieldtype='Float',depends_on='eval:doc.late_entry',insert_after='late_entry',read_only=1),
-        
-        dict(fieldname='column_break23', label='',
-        fieldtype='Column Break',insert_after='total_shift_amount'),
+        fieldtype='Currency',insert_after='column_break23',read_only=1,depends_on='eval:!doc.staff',allow_on_submit = 1),
 
-        dict(fieldname='total_shift_count', label='Total Shift Count',
-        fieldtype='Float',insert_after='column_break23',depends_on='eval:!doc.staff'),
+        # Requested change fields
+        dict(fieldname='req_section_break23', label='',
+        fieldtype='Section Break',insert_after='total_shift_amount',depends_on='eval:doc.docstatus == 0'),
+
+        dict(fieldname='req_total_shift_hr', label='Requested Shift in Minutes',
+        fieldtype='Float',insert_after='req_section_break23'),           
+        
+        dict(fieldname='req_checkin_time', label='Requested Checkin Time',
+        fieldtype='Time',insert_after='req_total_shift_hr',depends_on='eval:!doc.checkin_time',description="For reference only"),
+
+        dict(fieldname='req_column_break24', label='',
+        fieldtype='Column Break',insert_after='req_checkin_time'),
+        
+        dict(fieldname='req_ts_ot_hrs', label='Requested Extra Time in Minutes',
+        fieldtype='Float',insert_after='req_column_break24',depends_on='eval:doc.staff'), 
+        
+        dict(fieldname='req_total_shift_count', label='Requested Shift Count',
+        fieldtype='Float',insert_after='req_ts_ot_hrs'),
+        
+        dict(fieldname='req_checkout_time', label='Requested Checkout Time',
+        fieldtype='Time',insert_after='req_total_shift_count',depends_on='eval:!doc.checkout_time',description="For reference only"), 
+
+        dict(fieldname='req_column_break23', label='',
+        fieldtype='Column Break',insert_after='req_checkout_time'),
+
+        dict(fieldname='req_total_shift_amount', label='Requested Amount to Pay',
+        fieldtype='Currency',insert_after='req_column_break23',depends_on='eval:!doc.staff',read_only_depends_on='eval:!doc.staff'),
         
 
-        dict(fieldname='exit_period', label='Early Exit (in Minutes)',
-        fieldtype='Float',insert_after='early_exit', depends_on = "eval:doc.early_exit"),
-        
+        dict(fieldname='time1', label='Time1 Check',
+        fieldtype='Check',insert_after='req_total_shift_amount',hidden=1),
+
+        dict(fieldname='time2', label='Time2 Check',
+        fieldtype='Check',insert_after='time1',hidden=1),
+
         dict(fieldname='reason', label='Reason for Draft',
         fieldtype='Small Text',insert_after='out_time', read_only=1,hidden=1),
-      
-         ]
+        
+        dict(fieldname='house_keeping', label='',
+            fieldtype='Check',insert_after='staff',hidden=1),
+
+        dict(fieldname='labour', label='',
+            fieldtype='Check',insert_after='house_keeping',hidden=1),
+        ]
     }
     create_custom_fields(custom_fields)

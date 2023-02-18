@@ -30,12 +30,14 @@ app_license = "MIT"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 doctype_js = {"Employee" : "ukm/utils/javascript/employee.js",
-		 "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
+		#  "Salary Structure Assignment" : "ukm/utils/javascript/salary_structure_assignment.js",
 		 "Journal Entry":"ukm/utils/javascript/journal_entry.js",
 		 "Location":"ukm/utils/javascript/location.js",
 		 "Holiday List":"ukm/utils/javascript/holiday_list.js",
 		 "Leave Application":"ukm/utils/javascript/leave_application.js",
-		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js"}
+		 "Payroll Entry" : "ukm/utils/javascript/payroll_entry.js",
+   		 "Employee Advance":"ukm/utils/javascript/employee_advance.js"
+		}
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
@@ -47,7 +49,11 @@ doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
 			"Salary Slip":"ukm/utils/javascript/salary_slip_list.js",
 			"Payroll Entry":"ukm/utils/javascript/payroll_entry_list.js",
 			"Salary Structure":"ukm/utils/javascript/salary_structure_list.js",
-			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js"}
+			"Salary Structure Assignment":"ukm/utils/javascript/salary_structure_assignment_list.js",
+			"Attendance":"ukm/utils/javascript/attendance.js",
+   			"Employee Advance":"ukm/utils/javascript/employee_advance_list.js",
+			"Employee Bank Details": "ukm/utils/javascript/employee_bank_details_list.js",
+			"Employee Bonus Tool": "ukm/utils/javascript/employee_bonus_tool_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -73,6 +79,7 @@ doctype_list_js = {"Department" : "ukm/utils/javascript/department_list.js",
 
 # before_install = "united_knitting_mills.install.before_install"
 after_install = "united_knitting_mills.after_install.create_custom_fields"
+# after_migrate = "united_knitting_mills.ukm.custom_fields.hr.employee.employee_fields"
 
 # Uninstallation
 # ------------
@@ -103,29 +110,68 @@ after_install = "united_knitting_mills.after_install.create_custom_fields"
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Leave Application": "united_knitting_mills.ukm.utils.python.leave_application.TsLeaveApplication"
+	"Leave Application": "united_knitting_mills.ukm.utils.python.leave_application.TsLeaveApplication",
+	"Payroll Entry":"united_knitting_mills.ukm.utils.python.payroll_entry.FoodExpense"
 }
+
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 doc_events = {
 	"Salary Slip":{
-		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour_staff",
-		"on_submit":"united_knitting_mills.ukm.utils.python.salary_slip.create_journal_entry",
-		
+		"validate":"united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
 	},
+
 	'Employee':{
-		"validate":"united_knitting_mills.ukm.utils.python.employee.sequence_user_id"
+		"validate":"united_knitting_mills.ukm.utils.python.employee.address_html",
+		"after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
+		"united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
 	},
+
 	'Attendance':{
 		"validate":"united_knitting_mills.ukm.utils.python.attendance.validate_shift_details",
+		"on_update":"united_knitting_mills.ukm.utils.python.attendance.update_time_field",
+		"on_submit":"united_knitting_mills.ukm.utils.python.attendance.requested_amount_to_total",
 		"on_trash": "united_knitting_mills.ukm.utils.python.attendance.unlink_logs",
 	},
-	"Location":{
-		"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
-					"united_knitting_mills.ukm.utils.python.location.autoname"]
+
+	'Additional Salary':{
+		"on_submit":"united_knitting_mills.ukm.utils.python.additional_salary.on_submit",
+		# "on_cancel":"united_knitting_mills.ukm.utils.python.additional_salary.payment_cancel",
+
+	},
+
+	'Payroll Entry':{
+		"validate":"united_knitting_mills.ukm.utils.python.payroll_entry.validate_to_date",
+	},
+
+ 	"Employee Bonus Tool":{
+		"validate":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.total_bonus_amt_total",
+		"on_submit":"united_knitting_mills.ukm.doctype.employee_bonus_tool.employee_bonus_tool.create_bonus"
+	},
+
+	"Leave Application":{
+		"validate":"united_knitting_mills.ukm.utils.python.leave_application.validating_leave",
+		"on_submit":"united_knitting_mills.ukm.utils.python.leave_application.attendance_updation"
+	},
+
+	"Salary Structure Assignment":{
+		"on_submit":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.salary_updation",
+		"validate":"united_knitting_mills.ukm.utils.python.salary_structure_assignment.validation"
+	},
+	"Employee Advance":{
+		"on_cancel":["united_knitting_mills.ukm.utils.python.employee_advance.employee_advance_cancel",
+					"united_knitting_mills.ukm.utils.python.employee_advance.additional_salary_cancel"],
+		"on_trash":["united_knitting_mills.ukm.utils.python.employee_advance.employee_advance_delete",
+					"united_knitting_mills.ukm.utils.python.employee_advance.additional_salary_delete"]
+
 	}
+
+	# "Location":{
+	# 	"validate":["united_knitting_mills.ukm.utils.python.location.sequence_user_id",
+	# 				"united_knitting_mills.ukm.utils.python.location.autoname"]
+	# }
 }
 
 # doc_events = {
@@ -162,7 +208,7 @@ try:
 	time = str(frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time'))
 	time = time.split(':')
 	cron_time = f'{int(time[1])} {int(time[0])} * * *'
-	scheduler_events['cron'][cron_time] = ['united_knitting_mills.ukm.utils.python.employee__checkin.create_employee_checkin','united_knitting_mills.ukm.doctype.employee_timing_details.employee_timing_details.scheduler_for_employee_shift']
+	scheduler_events['cron'][cron_time] = ['united_knitting_mills.ukm.utils.python.employee__checkin.create_employee_checkin']
 except:pass
 
 # Testing
@@ -176,6 +222,9 @@ except:pass
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "united_knitting_mills.event.get_events"
 # }
+override_whitelisted_methods = {
+	"erpnext.payroll.doctype.payroll_entry.payroll_entry.get_start_end_dates": "united_knitting_mills.ukm.utils.python.payroll_entry.get_start_end_dates"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

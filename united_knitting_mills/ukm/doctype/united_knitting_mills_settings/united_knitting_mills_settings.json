@@ -7,13 +7,17 @@
  "engine": "InnoDB",
  "field_order": [
   "ts_create",
+  "bonus",
+  "bonus_percentage",
+  "bonus_table",
+  "from_time",
+  "to_time",
+  "advance_section",
+  "advance_amount",
   "biometric_settings_section",
   "buffer_time",
-  "checkin_type_resetting_time",
-<<<<<<< Gokulnath_dev
   "column_break_4",
-  "check_in_date"
-=======
+  "checkin_type_resetting_time",
   "check_in_date",
   "leave_section",
   "pay_leave",
@@ -28,7 +32,6 @@
   "food_expense",
   "amount_for_male_employee",
   "amount_for_female_employee"
->>>>>>> local
  ],
  "fields": [
   {
@@ -36,18 +39,19 @@
    "description": "To create the permission for HR",
    "fieldname": "ts_create",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "Create"
   },
   {
    "collapsible": 1,
    "fieldname": "biometric_settings_section",
    "fieldtype": "Section Break",
-   "label": "Biometric Settings"
+   "label": "<p style=\"color: MediumSeaGreen;\"><b>Bio-Metric</b></p>"
   },
   {
    "fieldname": "buffer_time",
    "fieldtype": "Int",
-   "label": "Buffer Time"
+   "label": "Buffer Time For Checkin"
   },
   {
    "fieldname": "column_break_4",
@@ -56,16 +60,16 @@
   {
    "fieldname": "check_in_date",
    "fieldtype": "Date",
-   "label": "Check-In Date"
+   "hidden": 1,
+   "label": "Check-In Date",
+   "read_only": 1
   },
   {
    "fieldname": "checkin_type_resetting_time",
    "fieldtype": "Time",
    "in_list_view": 1,
-   "label": "Resetting Time For Checkin Type",
+   "label": "Resetting Time For A Day",
    "reqd": 1
-<<<<<<< Gokulnath_dev
-=======
   },
   {
    "description": "Allowed Pay Leave for a Month.",
@@ -170,23 +174,12 @@
    "fieldname": "amount_for_female_employee",
    "fieldtype": "Currency",
    "label": "Amount For Female Employee"
-  },
-  {
-   "fieldname": "employee",
-   "fieldtype": "Link",
-   "label": "Employee",
-   "options": "Employee"
->>>>>>> local
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
-<<<<<<< Gokulnath_dev
- "modified": "2022-08-02 13:02:24.458089",
-=======
- "modified": "2023-02-17 23:16:31.108687",
->>>>>>> local
+ "modified": "2023-01-05 14:22:49.842478",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
@@ -199,16 +192,6 @@
    "print": 1,
    "read": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "test",
    "share": 1,
    "write": 1
   }

@@ -1,0 +1,34 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2022-11-29 18:13:58.970629",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{\"filters\":[[\"Attendance\",\"late_entry\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"house_keeping\",\"=\",1,false]],\"fields\":[[\"workflow_state\",\"Attendance\"],[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"late_min\",\"Attendance\"],[\"ts_ot_hrs\",\"Attendance\"],[\"total_shift_amount\",\"Attendance\"],[\"action_taken_by_hr\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"workflow_state\":120,\"name\":120,\"attendance_date\":120,\"employee\":193,\"employee_name\":199,\"late_min\":120,\"ts_ot_hrs\":170,\"total_shift_amount\":226,\"action_taken_by_hr\":120},\"group_by\":null}",
+ "letter_head": "UKM UNIT II",
+ "modified": "2023-01-05 12:54:11.826942",
+ "modified_by": "Administrator",
+ "module": "UKM",
+ "name": "Decision Making (House Keeping) - Late Entry",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Attendance",
+ "report_name": "Decision Making (House Keeping) - Late Entry",
+ "report_type": "Report Builder",
+ "roles": [
+  {
+   "role": "Thirvu Owner"
+  },
+  {
+   "role": "Thirvu HR Manager"
+  },
+  {
+   "role": "Thirvu HR User"
+  }
+ ]
+}

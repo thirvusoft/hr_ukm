@@ -22,11 +22,27 @@ def create_employee_fields_and_property_setter():
                 fieldtype='Column Break', insert_after='marital_status'),
             dict(fieldname='ts_column_break_3',
                 fieldtype='Column Break', insert_after='department'),
+            dict(fieldname='ts_column_break_4',
+                fieldtype='Column Break', insert_after='emergency_phone_number'),
+            dict(fieldname='relationship', label='Relationship',
+                fieldtype='Link', insert_after='ts_column_break_4', options='Relationship'),
+            dict(fieldname='ts_sec_brk_111', label='Interview Details',
+                fieldtype='Section Break', insert_after='date_of_joining'),
+            dict(fieldname='ts_interview_details',
+                fieldtype='Table', insert_after='ts_sec_brk_111', options='TS INTERVIEW DETAILS'),
+            dict(fieldname='add_html',
+                fieldtype='Small Text', insert_after='current_address'),
+            dict(fieldname='ts_bank_branch_name', label='Branch Name',
+                fieldtype='Link', insert_after='bank_name', options='Territory', depends_on = "eval:doc.salary_mode == 'Bank'", read_only_depends_on ="eval:!doc.__islocal")
         ]
     }
 
     create_custom_fields(custom_fields)
+    
     ## Property Setter
+    make_property_setter("Employee", "naming_series", "default", "employee_naming_series.-.####", "Select")
+    make_property_setter("Employee", "naming_series", "hidden", 1, "Select")
+    make_property_setter("Employee", "attendance_device_id", "read_only", 1, "Select")
     make_property_setter("Employee", "emergency_contact_details", "collapsible", 1, "Section Break")
     make_property_setter("Employee", "company", "default", "United Knitting Mills", "Text")
     make_property_setter("Employee", "company", "hidden", 1, "Check")
@@ -35,7 +51,11 @@ def create_employee_fields_and_property_setter():
     make_property_setter("Employee", "default_shift", "hidden", 1, "Check")
     make_property_setter("Employee", "unsubscribed", "hidden", 1, "Check")
     make_property_setter("Employee", "leave_encashed", "hidden", 1, "Check")
-    make_property_setter("Employee", "create_user", "hidden", 1, "Check")
+    make_property_setter("Employee", "create_user", "hidden", 1, "Button")
+    make_property_setter("Employee", "employment_details", "hidden", 1, "Section Break")
+    make_property_setter("Employee", "erpnext_user", "hidden", 1, "Section Break")
+    make_property_setter("Employee", "holiday_list", "reqd", 1, "Check")
+
     employee=frappe.get_doc({
         'doctype':'Property Setter',
         'doctype_or_field': "DocField",
@@ -190,6 +210,51 @@ def create_employee_fields_and_property_setter():
         'property_type':"Check",
         'field_name':"health_details",
         "value":1
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"default",
+        'property_type':"text",
+        'field_name':"salary_mode",
+        "value":"Bank"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"bank_name",
+        "value":"eval:!doc.__islocal"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"bank_ac_no",
+        "value":"eval:!doc.__islocal"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"ifsc_code",
+        "value":"eval:!doc.__islocal"
+    })
+    employee=frappe.get_doc({
+        'doctype':'Property Setter',
+        'doctype_or_field': "DocField",
+        'doc_type': "Employee",
+        'property':"read_only_depends_on",
+        'property_type':"text",
+        'field_name':"micr_code",
+        "value":"eval:!doc.__islocal"
     })
     employee.save(ignore_permissions=True)
     create_custom_fields(custom_fields)

@@ -3,36 +3,36 @@
 
 frappe.ui.form.on('Employee Timing Details', {
 	refresh: function(frm) {
-		if(!frm.doc.__islocal){
-			frm.add_custom_button(__('Mark Employee Attendance'), function () {
-				if(frm.doc.labour){
-				frm.call({
-					method: "create_labour_attendance",
-					args: {
-						departments:frm.doc.department,
-						doc:frm.doc.name,
-						location:frm.doc.unit,
-						late_entry:frm.doc.entry_period,
-						early_exit:frm.doc.exit_period
-						},
-					freeze:true,
-					freeze_message: __("Creating Attendance..."),
-					});
-					}
-					else if(frm.doc.staff || frm.doc.house_keeping){
-						frm.call({
-							method: 'create_staff_attendance',
-							args:{
-								docname: frm.doc.name
-							},
-							freeze:true,
-							freeze_message: __("Creating Attendance..."),
-							callback(r){
-							}
-						})
-					}
-			}, __('Actions'));
-		}
+		// if(!frm.doc.__islocal){
+		// 	frm.add_custom_button(__('Mark Employee Attendance'), function () {
+		// 		if(frm.doc.labour){
+		// 		frm.call({
+		// 			method: "create_labour_attendance",
+		// 			args: {
+		// 				departments:frm.doc.department,
+		// 				doc:frm.doc.name,
+		// 				location:frm.doc.unit,
+		// 				late_entry:frm.doc.entry_period,
+		// 				early_exit:frm.doc.exit_period
+		// 				},
+		// 			freeze:true,
+		// 			freeze_message: __("Creating Attendance..."),
+		// 			});
+		// 			}
+		// 			else if(frm.doc.staff || frm.doc.house_keeping){
+		// 				frm.call({
+		// 					method: 'create_staff_attendance',
+		// 					args:{
+		// 						docname: frm.doc.name
+		// 					},
+		// 					freeze:true,
+		// 					freeze_message: __("Creating Attendance..."),
+		// 					callback(r){
+		// 					}
+		// 				})
+		// 			}
+		// 	}, __('Actions'));
+		// }
 		// Check and Uncheck for labour and staff fields
 		cur_frm.fields_dict.staff.$input.on('click', ()=>{
 			uncheck(frm, 'labour')
