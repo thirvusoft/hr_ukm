@@ -178,6 +178,7 @@
   {
    "fieldname": "employeee",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Employee",
    "options": "Employee"
   }
@@ -185,7 +186,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-02-18 13:33:34.490724",
+ "modified": "2023-02-21 17:04:25.567694",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

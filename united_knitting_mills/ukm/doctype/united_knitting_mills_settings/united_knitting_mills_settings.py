@@ -78,7 +78,7 @@ def re_create_attendance(attendance_date, employee = None):
 
 def attendance_update(data):
 
-	attendance_list = frappe.get_all("Attendance",{"attendance_date":data[0], "employee":data[1]})
+	attendance_list = frappe.get_all("Attendance",{"attendance_date":data[0]})
 
 	for attendance in attendance_list:
 
@@ -89,12 +89,11 @@ def attendance_update(data):
 			attendance_doc.cancel()
 			
 		try:
-			frappe.delete_doc("Attendance Shift Changes", attendance_doc.name)
+			frappe.delete_doc("Attendance Shift Changes", {"attendance":attendance_doc.name})
+			frappe.delete_doc('Attendance', attendance_doc.name)
 
 		except:
-			pass
-
-		frappe.delete_doc('Attendance', attendance_doc.name)
+			frappe.delete_doc('Attendance', attendance_doc.name)
 
 	reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
 	reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
@@ -102,11 +101,11 @@ def attendance_update(data):
 	start_date = datetime.combine(data[0], reset_time.time())
 	end_date = datetime.combine(data[0] + timedelta(days = 1), reset_time.time())
 
-	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(start_date, end_date)], "employee": data[1]})
+	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(start_date, end_date)]})
 
 	for employee_checkin in employee_checkin_list:
 
-		employee_checkin_doc = frappe.get_doc("Employee Checkin",employee_checkin)
+		employee_checkin_doc = frappe.get_doc("Employee Checkin", employee_checkin)
 
 		frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
 
