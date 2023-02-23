@@ -194,10 +194,18 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Checkin",
+   "link_to": "Employee Checkin",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
-
- "modified": "2023-02-16 22:25:38.067079",
+ "modified": "2023-02-23 12:59:00.347879",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -249,38 +257,32 @@
   },
   {
    "doc_view": "",
-   "label": "Decision Making (Staff) - Breaktime Overconsumed",
+   "label": "Staff - Breaktime Overconsumed",
    "link_to": "Decision Making (Staff) - Breaktime Overconsumed",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making (Staff) - Checkin Missing",
+   "label": "Staff - Checkin Missing",
    "link_to": "Decision Making (Staff) - Checkin Missing",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making (Staff) - Insufficient Working Hours",
+   "label": "Staff - Insufficient Working Hours",
    "link_to": "Decision Making (Staff) - Insufficient Working Hours",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making (Staff) - Late Entry",
+   "label": "Staff - Late Entry",
    "link_to": "Decision Making (Staff) - Late Entry",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Decision Making (Staff) - Early Exit",
+   "label": "Staff - Early Exit",
    "link_to": "Decision Making (Staff) - Early Exit",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making (Staff) - Leave Applied",
-   "link_to": "Decision Making (Staff) - Leave Applied",
    "type": "Report"
   },
   {
@@ -291,49 +293,32 @@
   },
   {
    "doc_view": "",
-   "label": "Leave Application - Pay Leave",
-   "link_to": "Leave Application - Pay Leave",
-   "type": "Report"
-  },
-  {
-   "doc_view": "",
-   "label": "Decision Making Attendance Report (Staff)",
-   "link_to": "Decision Making Attendance Report",
-   "restrict_to_domain": ""
-  },
-  {
-   "doc_view": "",
    "label": "Leave Application - Permission",
    "link_to": "Leave Application - Permission",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Attendance Shift Changes",
-   "link_to": "Attendance Shift Changes",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "",
-   "label": "Employee Bank Details Changes",
-   "link_to": "Employee Bank Details",
-   "type": "DocType"
-  },{
-   "doc_view": "",
    "label": "Leave Application - Pay Leave",
    "link_to": "Leave Application - Pay Leave",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Attendance Shift Changes -> Staff",
+   "label": "Leave Application - Decision Making",
+   "link_to": "Decision Making (Staff) - Leave Applied",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Attendance Staff - Decision Making",
    "link_to": "Decision Making Attendance Report",
    "restrict_to_domain": "",
    "type": "Report"
   },
   {
    "doc_view": "",
-   "label": "Attendance Shift Changes -> Labour",
+   "label": "Attendance Shift Changes",
    "link_to": "Attendance Shift Changes",
    "type": "DocType"
   },

@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"leave_application\",\"is\",\"set\",false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"staff\",\"=\",1,false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"leave_application\",\"Attendance\"],[\"leave_type\",\"Attendance\"],[\"ts_ot_hrs\",\"Attendance\"],[\"total_shift_amount\",\"Attendance\"],[\"action_taken_by_hr\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":120,\"attendance_date\":120,\"employee\":120,\"employee_name\":120,\"leave_application\":120,\"leave_type\":120,\"ts_ot_hrs\":120,\"total_shift_amount\":120,\"action_taken_by_hr\":120},\"group_by\":null}",
- "modified": "2023-01-05 12:56:12.379739",
+ "modified": "2023-02-23 12:53:51.531256",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making (Staff) - Leave Applied",
@@ -22,12 +22,6 @@
  "roles": [
   {
    "role": "Thirvu Owner"
-  },
-  {
-   "role": "Thirvu HR Manager"
-  },
-  {
-   "role": "Thirvu HR User"
   }
  ]
 }

@@ -119,18 +119,26 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     for shift_details in shift_list.thirvu_shift_details:
                         # Checking Buffer Time
                         if shift_details.idx == 1:
-                            buffer_before_start_time = shift_list.thirvu_shift_details[0].start_time - datetime.timedelta(hours = 1)
+                            buffer_before_start_time = shift_list.thirvu_shift_details[0].start_time - datetime.timedelta(hours = 1.5)
                         else:	
                             buffer_before_start_time = shift_list.thirvu_shift_details[shift_details.idx -2].start_time + datetime.timedelta(minutes = json.loads(late_entry))
                             
                         # buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
                         buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
                         buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
+                        if not buffer_before_end_time:
+                            buffer_before_end_time = datetime.timedelta(hours=24, minutes=0)
+                           
                         if shift_details.idx < len(shift_list.thirvu_shift_details):
                             buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx].end_time
+                            
+                            if not buffer_after_end_time:
+                                
+                                buffer_after_end_time = datetime.timedelta(hours=24, minutes=0)
                         else:	
                             buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx - 1].end_time + datetime.timedelta(hours = 5)
-
+                            if not buffer_after_end_time:
+                                buffer_after_end_time = datetime.timedelta(hours=24, minutes=0)
                         # Buffer calculation for starting time
                         if  in_time and to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:
                             shift_wise_details.update({'start_time':in_time})
