@@ -125,10 +125,12 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                             
                         # buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
                         buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
+                        if not shift_details.start_time:
+                                buffer_after_start_time = datetime.timedelta(hours=24, minutes=0) + datetime.timedelta(minutes = json.loads(late_entry))
                         buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
                         if not buffer_before_end_time:
-                            buffer_before_end_time = datetime.timedelta(hours=24, minutes=0)
-                           
+                            buffer_before_end_time = datetime.timedelta(hours=24, minutes=0, days = -1)
+            
                         if shift_details.idx < len(shift_list.thirvu_shift_details):
                             buffer_after_end_time = shift_list.thirvu_shift_details[shift_details.idx].end_time
                             
