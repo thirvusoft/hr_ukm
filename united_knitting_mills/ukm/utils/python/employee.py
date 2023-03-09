@@ -27,7 +27,7 @@ def creating_hr_permission(ts_emp_doc,event):
 				else:
 					ts_count=1
 					return 1
-		if ts_count==0:
+		if ts_count==0 and frappe.session.user != "Administrator":
 			frappe.throw("For Thirvu HR User there is no Employee ID or Location")
 	else:
 		frappe.throw("Thirvu HR User role not assigned for any User")

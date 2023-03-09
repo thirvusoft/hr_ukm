@@ -12,6 +12,14 @@ frappe.query_reports["Daily Attendance Report"] = {
 			"width": "80"
 		},
 		{
+			"fieldname":"unit",
+			"label": __("Unit"),
+			"fieldtype": "Link",
+			"options": "Location",
+			"width": "100",
+			"reqd":1
+		},
+		{
 			"fieldname":"designation",
 			"label": __("Designation"),
 			"fieldtype": "Link",

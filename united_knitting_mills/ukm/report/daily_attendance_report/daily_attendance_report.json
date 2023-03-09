@@ -1,5 +1,5 @@
 {
- "add_total_row": 0,
+ "add_total_row": 1,
  "columns": [],
  "creation": "2022-09-08 10:33:29.601410",
  "disable_prepared_report": 0,
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{}",
- "modified": "2023-01-11 10:58:05.547458",
+ "modified": "2023-03-07 17:45:09.760753",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Daily Attendance Report",

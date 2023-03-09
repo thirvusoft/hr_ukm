@@ -29,7 +29,8 @@ def execute(filters = None):
 		doc_filters["department"] = filters.get("department")
 
 	if filters.get("unit"):
-		doc_filters["unit"] = filters.get("unit")
+		doc_filters["location"] = filters.get("unit")
+		
 	if filters.get("status"):
 		if filters.get("status")=="Yes":
 				doc_filters["is_hold"] = 1

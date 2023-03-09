@@ -27,6 +27,14 @@ frappe.query_reports["Salary Details Report"] = {
 			"reqd":1
 		},
 		{
+			"fieldname":"unit",
+			"label": __("Unit"),
+			"fieldtype": "Link",
+			"options": "Location",
+			"width": "100",
+			"reqd":1
+		},
+		{
 			"fieldname":"status",
 			"label": __("Is Hold"),
 			"fieldtype": "Select",
@@ -38,22 +46,31 @@ frappe.query_reports["Salary Details Report"] = {
 			"label": __("Department"),
 			"fieldtype": "Link",
 			"options": "Department",
-			"width": "100"
+			"width": "100",
+			"get_query": function () {
+				var unit = frappe.query_report.get_filter_value('unit');
+				return {
+					filters: [
+						["Department", "unit", "=", unit]
+					]
+				};
+			},
 		},
 		{
 			"fieldname":"designation",
 			"label": __("Designation"),
 			"fieldtype": "Link",
 			"options": "Designation",
-			"width": "100"
-		},
-		{
-			"fieldname":"unit",
-			"label": __("Unit"),
-			"fieldtype": "Link",
-			"options": "Location",
-			"width": "100"
-		},
+			"width": "100",
+			"get_query": function () {
+				var unit = frappe.query_report.get_filter_value('unit');
+				return {
+					filters: [
+						["Designation", "unit", "=", unit]
+					]
+				};
+			},
+		}
 	]
 };
 frappe.realtime.on('refresh-report', ()=>{

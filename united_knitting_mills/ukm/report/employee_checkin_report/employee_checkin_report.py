@@ -8,14 +8,17 @@ def execute(filters=None):
 	attendance_date = filters.get("attendance_date")
 	designation = filters.get("designation")
 	department = filters.get("department")
+	unit = filters.get("unit")
 	employee_conditions = ""
-	if attendance_date or designation or department:
+	if attendance_date or designation or department or unit:
 		employee_conditions = " where status = 'Active' "
 		if department:
 			employee_conditions += " and department = '{0}' ".format(department)
 		if designation:
 			employee_conditions += " and designation = '{0}' ".format(designation)
-		
+		if unit:
+			employee_conditions += " and location = '{0}' ".format(unit)
+ 
 	
 	employees = frappe.db.sql("""select name,employee_name, department, designation from `tabEmployee` {0} """.format(employee_conditions))
 	data = [list(i) for i in employees]

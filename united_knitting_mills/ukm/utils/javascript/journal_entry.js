@@ -31,7 +31,15 @@ frappe.ui.form.on('Journal Entry Account',{
         else{
             frappe.model.set_value(cdt,cdn,"location",'');
         }
+    },
+    party:function(frm,cdt,cdn){
+        let row = locals[cdt][cdn]
+        if (row.party_type == "Employee"){
+            frappe.db.get_value(row.party_type,{"name":row.party},"employee_name").then((r)=>{
+                frappe.model.set_value(cdt, cdn, "ts_party_name", r.message["employee_name"]);
+            })
         }
+    }
 })
 
 frappe.ui.form.on('Journal Entry',{

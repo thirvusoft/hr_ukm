@@ -14,11 +14,12 @@ def employee_advance_custom_fields():
 		"Employee Advance": [
             
             dict(fieldname = 'location', 
-                label = 'Location',
+                label = 'Unit',
 				fieldtype = 'Link',
                 options = 'Location',
                 insert_after = 'mode_of_payment',
-                fetch_from = 'employee.location'
+                fetch_from = 'employee.location',
+                in_standard_filter=1
             ),
 
             dict(fieldname = 'eligible_amount', 

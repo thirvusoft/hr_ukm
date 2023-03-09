@@ -63,7 +63,8 @@
   {
    "fieldname": "location",
    "fieldtype": "Link",
-   "label": "Location",
+   "in_standard_filter": 1,
+   "label": "Unit",
    "options": "Location",
    "reqd": 1
   },
@@ -104,7 +105,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-12-02 17:28:17.582185",
+ "modified": "2023-03-09 11:33:12.983392",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Tool",

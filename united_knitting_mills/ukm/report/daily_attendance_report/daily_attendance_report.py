@@ -8,8 +8,9 @@ def execute(filters=None):
     attendance_date = filters.get("attendance_date")
     designation = filters.get("designation")
     staff_labour = filters.get("staff_or_labour")
+    unit =  filters.get("unit")
     conditions = ""
-    if attendance_date or designation or staff_labour:
+    if attendance_date or designation or staff_labour or unit:
         conditions = " where 1 = 1"
         if attendance_date :
             conditions += "  and attendance_date = '{0}' ".format(attendance_date)
@@ -19,6 +20,8 @@ def execute(filters=None):
             conditions += ' and staff = 1'
         elif staff_labour and staff_labour=='Labour':
             conditions += ' and staff = 0'
+        if unit:
+            conditions += ' and unit = "{0}" '.format(unit)
             
             
     report_data = frappe.db.sql(""" select

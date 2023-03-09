@@ -145,22 +145,35 @@ def get_columns():
 def get_data(filters):
 
 	data = []
-
+	filters_des = {}
+	if filters.get('unit'):
+			filters_des.update({
+				'unit':filters.get('unit')
+			})
 	if filters.get("designation"):
-		designation_list = frappe.get_all("Designation", {"name": filters.get("designation")}, ["name", "thirvu_shift"], order_by = "name" )
+		filters_des.update({"name": filters.get("designation")})
+		
+		designation_list = frappe.get_all("Designation", filters_des, ["name", "thirvu_shift"], order_by = "name" )
 
 	else:
-		designation_list = frappe.get_all("Designation", ["name", "thirvu_shift"], order_by = "name" )
+		designation_list = frappe.get_all("Designation", filters_des,["name", "thirvu_shift"], order_by = "name" )
 
+	
 	for designation in designation_list:
 
+		filters_emp = {"designation": designation["name"], "status": "Active"}
+		if filters.get('unit'):
+			filters_emp.update({
+				'location':filters.get('unit')
+			})
+			
 		sub_data = frappe._dict()
 
 		present_count = 0
 
 		wages = 0
 
-		emp_list = frappe.get_all("Employee", {"designation": designation["name"], "status": "Active"}, ["name"])
+		emp_list = frappe.get_all("Employee",filters_emp, ["name"])
 
 		filtered_date = getdate(filters.get("date"))
 
