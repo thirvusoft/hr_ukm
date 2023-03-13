@@ -11,6 +11,7 @@
   "section_break_1",
   "employee",
   "employee_name",
+  "unit",
   "reason",
   "column_break_4",
   "attendance_date",
@@ -95,12 +96,20 @@
    "fieldtype": "Table",
    "options": "Employee Checkin Details",
    "read_only": 1
+  },
+  {
+   "fetch_from": "employee.location",
+   "fieldname": "unit",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Unit",
+   "options": "Location"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-02-17 15:15:45.426097",
+ "modified": "2023-03-10 11:04:22.167071",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Attendance Shift Changes",

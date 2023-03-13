@@ -17,5 +17,21 @@ frappe.ui.form.on('Payroll Entry', {
                     }
                 });
             }
+    },
+    refresh:function(frm){
+        frm.set_query('designation',function(){
+            return{
+                filters:{
+                    "unit":frm.doc.location
+                }
+            }
+        })
+        frm.set_query('department',function(){
+            return{
+                filters:{
+                    "unit":frm.doc.location
+                }
+            }
+        })
     }
 })

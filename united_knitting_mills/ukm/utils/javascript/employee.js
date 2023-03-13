@@ -19,7 +19,20 @@ frappe.ui.form.on('Employee',{
             frm.set_df_property("approval_by_owner", "hidden",1);
 
         }
-        
+        frm.set_query('department',function(){
+            return{
+                filters:{
+                    "unit":frm.doc.location
+                }
+            }
+        })
+        frm.set_query('designation',function(){
+            return{
+                filters:{
+                    "unit":frm.doc.location
+                }
+            }
+        })
     },
     onload(frm){
         if(!frm.is_new() && frm.doc.ts_interview_details){
