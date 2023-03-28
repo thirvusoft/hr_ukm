@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2023-01-05 12:37:46.803481",
+ "modified": "2023-03-13 22:44:22.718557",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Advance Details Report",
@@ -31,6 +31,9 @@
   },
   {
    "role": "Thirvu Accountant"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

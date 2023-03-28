@@ -607,8 +607,11 @@ def create_staff_attendance(docname):
                     set attendance = %s
                     where name in %s""", (attendance.name , logs[data]))
 
-def scheduler_for_employee_shift():
-    employee_timing_details = frappe.get_all('Employee Timing Details')
+def scheduler_for_employee_shift(unit=None):
+    filters={}
+    if unit:
+        filters["unit"] = unit
+    employee_timing_details = frappe.get_all('Employee Timing Details', filters)
     for data in employee_timing_details:
         timing_doc = frappe.get_doc('Employee Timing Details',data['name'])
         if timing_doc.staff == 1:
@@ -616,11 +619,14 @@ def scheduler_for_employee_shift():
         elif timing_doc.labour ==1 or timing_doc.house_keeping == 1:
             create_labour_attendance(timing_doc.department, timing_doc.name, timing_doc.unit, str(timing_doc.entry_period) ,str(timing_doc.exit_period))
     
-    leave_application_to_attendance()
+    leave_application_to_attendance(unit)
    
-def leave_application_to_attendance():
+def leave_application_to_attendance(unit=None):
     # leave application proccessed to attendance
-    for data in frappe.get_all("Leave Application", filters={"attendance_date": ["<", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]},pluck='name'):
+    filters={"attendance_date": ["<", today()],"docstatus":1,"attendance_marked":0,"leave_type":["in",['On Duty','Permission']]}
+    if unit:
+        filters["unit"] = unit
+    for data in frappe.get_all("Leave Application", filters=filters,pluck='name'):
         application_doc = frappe.get_doc('Leave Application',data)
 
         if frappe.db.exists('Attendance',{"attendance_date": application_doc.attendance_date,"employee":application_doc.employee,"docstatus":["!=", 2]}):

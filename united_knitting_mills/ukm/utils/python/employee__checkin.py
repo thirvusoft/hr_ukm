@@ -78,7 +78,7 @@ def create_employee_checkins(date_wise_checkin, employee, buffer_time):
                 log = not(log)
 
 @frappe.whitelist()
-def create_employee_checkin(from_date = None, to_date = None):
+def create_employee_checkin(from_date = None, to_date = None, unit=None):
     if from_date == None:
         from_date = str(date.today() - timedelta(days = 1))
 
@@ -91,7 +91,11 @@ def create_employee_checkin(from_date = None, to_date = None):
     else:
         to_date = str(to_date)
 
-    employees = frappe.db.get_all('Employee Checkin Without Log Type', filters={'time': ['between', (from_date, to_date)]}, pluck='employee')
+    filters={'time': ['between', (from_date, to_date)]}
+    if unit:
+        filters["unit"] = unit
+        
+    employees = frappe.db.get_all('Employee Checkin Without Log Type', filters=filters , pluck='employee')
     employees = list(set(employees))
 
     buffer_time, reset_time = get_ukm_settings()
@@ -103,4 +107,4 @@ def create_employee_checkin(from_date = None, to_date = None):
         # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
         create_employee_checkins(date_wise_checkin, employee, buffer_time)
 
-    scheduler_for_employee_shift()
+    scheduler_for_employee_shift(unit)

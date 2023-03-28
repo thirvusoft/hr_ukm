@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"mismatched_checkin\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"staff\",\"=\",1,false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"no_of_checkin\",\"Attendance\"],[\"ts_ot_hrs\",\"Attendance\"],[\"total_shift_amount\",\"Attendance\"],[\"action_taken_by_hr\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":120,\"attendance_date\":120,\"employee\":193,\"employee_name\":199,\"no_of_checkin\":126,\"ts_ot_hrs\":170,\"total_shift_amount\":226,\"action_taken_by_hr\":120},\"group_by\":null}",
- "modified": "2023-01-05 12:56:51.461078",
+ "modified": "2023-03-13 22:45:43.594715",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making (Staff) - Checkin Missing",
@@ -28,6 +28,9 @@
   },
   {
    "role": "Thirvu HR User"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

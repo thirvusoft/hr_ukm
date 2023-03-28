@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"late_entry\",\"=\",1,false],[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"staff\",\"=\",1,false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"late_min\",\"Attendance\"],[\"ts_ot_hrs\",\"Attendance\"],[\"total_shift_amount\",\"Attendance\"],[\"action_taken_by_hr\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":120,\"attendance_date\":120,\"employee\":193,\"employee_name\":199,\"late_min\":120,\"ts_ot_hrs\":170,\"total_shift_amount\":226,\"action_taken_by_hr\":120},\"group_by\":null}",
- "modified": "2023-01-05 12:56:45.919563",
+ "modified": "2023-03-13 22:44:02.703826",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making (Staff) - Late Entry",
@@ -28,6 +28,9 @@
   },
   {
    "role": "Thirvu HR User"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

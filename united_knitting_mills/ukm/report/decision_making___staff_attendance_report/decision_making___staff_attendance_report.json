@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"reason\",\"is\",\"set\",false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"reason\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":500,\"column_widths\":{\"name\":120,\"employee_name\":120,\"employee\":120,\"attendance_date\":120,\"reason\":477},\"group_by\":null}",
- "modified": "2023-01-05 12:57:25.850597",
+ "modified": "2023-03-13 22:39:57.614512",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making - Staff Attendance Report",
@@ -28,6 +28,9 @@
   },
   {
    "role": "Thirvu Owner"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

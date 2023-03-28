@@ -60,7 +60,7 @@ def creating_hr_permission():
 		frappe.throw("Thirvu HR User role not assigned for any User")
 
 @frappe.whitelist()
-def re_create_attendance(attendance_date, employee = None):
+def re_create_attendance(attendance_date, employee = None, unit = None):
 
 	attendance_date = getdate(attendance_date)
 
@@ -71,14 +71,16 @@ def re_create_attendance(attendance_date, employee = None):
 		data.append(attendance_date)
 		data.append(employee)
 
-		frappe.enqueue(attendance_update, data = data, queue = "long")
+		frappe.enqueue(attendance_update, data = data, unit = unit, queue = "long")
 
 	else:
 		frappe.throw("Date Should Not Be Greater Than Yesterday",title=_("Message"))
 
-def attendance_update(data):
-
-	attendance_list = frappe.get_all("Attendance",{"attendance_date":data[0]})
+def attendance_update(data, unit=None):
+	filters={"attendance_date":data[0]}
+	if unit:
+		filters["unit"] = unit
+	attendance_list = frappe.get_all("Attendance",filters)
 
 	for attendance in attendance_list:
 
@@ -100,8 +102,11 @@ def attendance_update(data):
 
 	start_date = datetime.combine(data[0], reset_time.time())
 	end_date = datetime.combine(data[0] + timedelta(days = 1), reset_time.time())
-
-	employee_checkin_list = frappe.get_all("Employee Checkin",{"time":["between",(start_date, end_date)]})
+	
+	filters = {"time":["between",(start_date, end_date)]}
+	if unit:
+		filters["unit"] = unit
+	employee_checkin_list = frappe.get_all("Employee Checkin",filters)
 
 	for employee_checkin in employee_checkin_list:
 
@@ -109,4 +114,4 @@ def attendance_update(data):
 
 		frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
 
-	create_employee_checkin(data[0], data[0])
+	create_employee_checkin(data[0], data[0], unit)

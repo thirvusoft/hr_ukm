@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Attendance\",\"docstatus\",\"=\",\"0\",false],[\"Attendance\",\"late_entry\",\"=\",1,false]],\"fields\":[[\"name\",\"Attendance\"],[\"docstatus\",\"Attendance\"],[\"attendance_date\",\"Attendance\"],[\"employee_name\",\"Attendance\"],[\"employee\",\"Attendance\"],[\"late_min\",\"Attendance\"]],\"order_by\":\"`tabAttendance`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"name\":196,\"attendance_date\":120,\"employee_name\":188,\"employee\":197,\"late_min\":233},\"group_by\":null}",
- "modified": "2022-09-06 14:27:33.140879",
+ "modified": "2023-03-13 22:39:42.203988",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Decision Making - Late Entry",
@@ -21,12 +21,6 @@
  "report_type": "Report Builder",
  "roles": [
   {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
    "role": "System Manager"
   },
   {
@@ -34,6 +28,9 @@
   },
   {
    "role": "Thirvu HR Manager"
+  },
+  {
+   "role": "Thirvu Admin"
   },
   {
    "role": "Thirvu HR User"

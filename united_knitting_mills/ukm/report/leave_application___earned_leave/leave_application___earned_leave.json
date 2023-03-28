@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Leave Application\",\"docstatus\",\"=\",\"0\",false],[\"Leave Application\",\"leave_type\",\"=\",\"Earned Leave\"]],\"fields\":[[\"name\",\"Leave Application\"],[\"docstatus\",\"Leave Application\"],[\"employee_name\",\"Leave Application\"],[\"employee\",\"Leave Application\"],[\"leave_type\",\"Leave Application\"],[\"from_date\",\"Leave Application\"],[\"total_leave_days\",\"Leave Application\"],[\"status\",\"Leave Application\"]],\"order_by\":\"`tabLeave Application`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{},\"group_by\":null}",
- "modified": "2022-09-06 19:42:21.073475",
+ "modified": "2023-03-13 22:45:10.451025",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Leave Application - Earned Leave",
@@ -21,18 +21,6 @@
  "report_type": "Report Builder",
  "roles": [
   {
-   "role": "HR User"
-  },
-  {
-   "role": "Leave Approver"
-  },
-  {
-   "role": "Employee"
-  },
-  {
-   "role": "Employee Self Service"
-  },
-  {
    "role": "Thirvu Owner"
   },
   {
@@ -40,6 +28,9 @@
   },
   {
    "role": "Thirvu HR User"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

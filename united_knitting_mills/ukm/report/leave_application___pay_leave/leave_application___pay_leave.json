@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "json": "{\"filters\":[[\"Leave Application\",\"docstatus\",\"=\",\"0\",false],[\"Leave Application\",\"leave_type\",\"=\",\"Pay Leave\"]],\"fields\":[[\"name\",\"Leave Application\"],[\"docstatus\",\"Leave Application\"],[\"employee_name\",\"Leave Application\"],[\"employee\",\"Leave Application\"],[\"leave_type\",\"Leave Application\"],[\"from_date\",\"Leave Application\"],[\"total_leave_days\",\"Leave Application\"],[\"status\",\"Leave Application\"]],\"order_by\":\"`tabLeave Application`.`modified` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{},\"group_by\":null}",
  "letter_head": "UKM UNIT II",
- "modified": "2023-01-05 12:59:44.245066",
+ "modified": "2023-03-13 22:42:22.588080",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Leave Application - Pay Leave",
@@ -29,6 +29,9 @@
   },
   {
    "role": "Thirvu HR User"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

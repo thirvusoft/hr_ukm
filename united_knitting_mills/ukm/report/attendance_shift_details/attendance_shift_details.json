@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT II",
- "modified": "2023-01-11 12:05:42.457661",
+ "modified": "2023-03-13 22:41:10.082892",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Attendance Shift Details",
@@ -31,6 +31,9 @@
   },
   {
    "role": "Thirvu Accountant"
+  },
+  {
+   "role": "Thirvu Admin"
   }
  ]
 }

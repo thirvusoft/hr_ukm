@@ -26,6 +26,7 @@
   "time_in_minutes",
   "attendance",
   "attendance_date",
+  "unit",
   "employeee",
   "column_break_18",
   "attendance_update",
@@ -181,12 +182,18 @@
    "hidden": 1,
    "label": "Employee",
    "options": "Employee"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Link",
+   "label": "Unit",
+   "options": "Location"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-02-23 17:52:24.360825",
+ "modified": "2023-03-17 12:03:56.220968",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
