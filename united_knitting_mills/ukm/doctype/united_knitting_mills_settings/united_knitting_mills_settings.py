@@ -78,6 +78,8 @@ def re_create_attendance(attendance_date, employee = None, unit = None):
 
 def attendance_update(data, unit=None):
 	filters={"attendance_date":data[0]}
+	if data[1]:
+		filters["employee"] = data[1]
 	if unit:
 		filters["unit"] = unit
 	attendance_list = frappe.get_all("Attendance",filters)
@@ -106,6 +108,8 @@ def attendance_update(data, unit=None):
 	filters = {"time":["between",(start_date, end_date)]}
 	if unit:
 		filters["unit"] = unit
+	if data[1]:
+		filters["employee"] = data[1]
 	employee_checkin_list = frappe.get_all("Employee Checkin",filters)
 
 	for employee_checkin in employee_checkin_list:

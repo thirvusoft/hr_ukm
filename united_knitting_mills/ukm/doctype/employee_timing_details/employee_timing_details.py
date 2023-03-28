@@ -515,7 +515,44 @@ def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, 
         submit_doc, reason, late_entry, early_exit = check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,doc, submit_doc, times, start_time, end_time)
         for time in times:
             if(len(time) == 2):
-                worked_time += time_diff_in_hours(str(time[1]), str(time[0]))
+                # worked_time += time_diff_in_hours(str(time[1]), str(time[0]))
+
+                start_time = str(time[0])
+                end_time = str(time[1])
+                if(str(type(start_time)) == "<class 'str'>" or str(type(end_time)) == "<class 'str'>"):
+                    start_time = str(start_time)
+                    end_time = str(end_time)
+
+                if(start_time<=end_time):
+                    shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format(end_time, start_time),as_list = 1)[0][0]
+                    shift_hours =  shift_hr / datetime.timedelta(hours=1)
+                
+                else:
+                    shift_hr = frappe.db.sql("""select timediff('{0}','{1}') as result""".format("23:59:59", start_time),as_list = 1)[0][0].__str__()
+                    shift_hr = list(map(float, shift_hr.split(':')))
+                    end_time = str(end_time).split(':')
+
+                    for i in range(len(end_time)):
+                        shift_hr[i]= str(int(shift_hr[i]) + int(float(end_time[i])))
+
+                    delta = datetime.timedelta(hours=int(shift_hr[0]), minutes=int(shift_hr[1]), seconds=int(shift_hr[2]))
+                    shift_hours = delta.total_seconds()/ (60*60) 
+                    shift_hr = delta
+
+                
+                if shift_hours > 0:
+                    # if(not data.get('shif_hours')):
+                    #     data.shift_hours = shift_hours
+
+                    worked_time += shift_hr / datetime.timedelta(minutes=1)
+
+                else:
+                    diff_time = (to_timedelta(str(end_time)) - to_timedelta(str(start_time)))
+                    
+                    # if not data.get('shif_hours'):
+                    #     data.shift_hours = diff_time/ datetime.timedelta(hours=1)
+                    
+                    worked_time +=  diff_time / datetime.timedelta(minutes=1)
         
         attendance.thirvu_shift_details[0].update({
             'shift_count':1,
