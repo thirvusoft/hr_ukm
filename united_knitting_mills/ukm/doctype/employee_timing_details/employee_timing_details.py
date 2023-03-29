@@ -195,7 +195,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                             frappe.log_error(frappe.get_traceback())
 
                                         
-                                        if intime < (start_time) and  outtime  > (end_time):
+                                        if intime < (start_time) and  outtime  >= (end_time):
                                             check = 1
                                             shift_count += shift_row.shift_count
                                             if frappe.db.get_value('Thirvu Shift Status',shift_row.shift_status,'double_salary'):
