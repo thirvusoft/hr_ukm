@@ -84,7 +84,11 @@ def attendance_update(data, unit=None):
 		filters["unit"] = unit
 	attendance_list = frappe.get_all("Attendance",filters)
 
+	count = 0
+
 	for attendance in attendance_list:
+		
+		count += 1
 
 		attendance_doc = frappe.get_doc("Attendance",attendance)
 
@@ -99,6 +103,10 @@ def attendance_update(data, unit=None):
 		except:
 			frappe.delete_doc('Attendance', attendance_doc.name)
 
+		if count == 100:
+			count = 0
+			frappe.db.commit()
+
 	reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
 	reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
 
@@ -112,10 +120,18 @@ def attendance_update(data, unit=None):
 		filters["employee"] = data[1]
 	employee_checkin_list = frappe.get_all("Employee Checkin",filters)
 
+	count = 0
+
 	for employee_checkin in employee_checkin_list:
+
+		count += 1
 
 		employee_checkin_doc = frappe.get_doc("Employee Checkin", employee_checkin)
 
 		frappe.delete_doc('Employee Checkin', employee_checkin_doc.name)
+
+		if count == 100:
+			count = 0
+			frappe.db.commit()
 
 	create_employee_checkin(data[0], data[0], unit)
