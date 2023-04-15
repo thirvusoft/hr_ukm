@@ -125,8 +125,9 @@ doc_events = {
 
 	'Employee':{
 		"validate":"united_knitting_mills.ukm.utils.python.employee.address_html",
-		"after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
-		"united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
+		# "after_insert":["united_knitting_mills.ukm.utils.python.employee.creating_hr_permission",
+		# "united_knitting_mills.ukm.utils.python.employee.bio_metric_id"]
+		"after_insert": "united_knitting_mills.ukm.utils.python.employee.bio_metric_id"
 	},
 
 	'Attendance':{

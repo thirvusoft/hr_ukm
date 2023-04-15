@@ -52,6 +52,8 @@ frappe.ui.form.on('Employee Timing Details', {
 			return {
 				'filters': {
 					'unit': ['=', frm.doc.unit]
+
+					
 				}
 			};
 		});

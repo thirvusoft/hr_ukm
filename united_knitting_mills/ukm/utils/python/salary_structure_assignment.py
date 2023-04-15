@@ -42,6 +42,7 @@ def salary_updation_old():
 
 def validation(doc,event):
     old_doc = frappe.get_list("Salary Structure Assignment",{"workflow_state":['=',"Approved by MD"],"employee":doc.employee})
+    frappe.errprint(old_doc)
     if len(old_doc) >= 1:
         frappe.throw(f"Salary Structure already exists for {doc.employee}")
 # def salary_updation_old():

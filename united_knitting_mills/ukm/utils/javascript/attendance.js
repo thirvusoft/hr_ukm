@@ -69,7 +69,7 @@ frappe.ui.form.on('Attendance',{
                 },
 
                 () => {
-                    frappe.db.get_list("Employee Checkin",{filters:{"attendance":name}, fields:["time", "log_type"]}).then((list) => {
+                    frappe.db.get_all("Employee Checkin",{filters:{"attendance":name}, fields:["time", "log_type"]}).then((list) => {
                         for (var i=0; i < list.length; i++){
                             let row = cur_frm.add_child("checkin_details");
                             row.time = list[i]["time"];

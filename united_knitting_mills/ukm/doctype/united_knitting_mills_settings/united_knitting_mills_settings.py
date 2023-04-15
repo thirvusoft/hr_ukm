@@ -90,18 +90,31 @@ def attendance_update(data, unit=None):
 		
 		count += 1
 
-		attendance_doc = frappe.get_doc("Attendance",attendance)
+		attendance_doc = frappe.get_doc("Attendance", attendance)
 
-		if attendance_doc.docstatus:
+		attendance_shift_changes = frappe.get_all("Attendance Shift Changes", {"attendance":attendance_doc.name})
+		
+		for changes in attendance_shift_changes:
 
-			attendance_doc.cancel()
+			attendance_shift_changes_doc = frappe.get_doc("Attendance Shift Changes", changes)
+
+			if attendance_shift_changes_doc.docstatus == 1:
+
+				attendance_shift_changes_doc.cancel()
+				frappe.delete_doc("Attendance Shift Changes", attendance_shift_changes_doc.name)
 			
-		try:
-			frappe.delete_doc("Attendance Shift Changes", {"attendance":attendance_doc.name})
+			else:
+				frappe.delete_doc("Attendance Shift Changes", attendance_shift_changes_doc.name)
+
+
+		if attendance_doc.docstatus == 1:
+			attendance_doc.cancel()
 			frappe.delete_doc('Attendance', attendance_doc.name)
 
-		except:
+		else:
 			frappe.delete_doc('Attendance', attendance_doc.name)
+
+
 
 		if count == 100:
 			count = 0
