@@ -75,8 +75,6 @@ def create_salary_slips_for_employees(employees, args,food_count,medical_exp, ma
 			args.update({"doctype": "Salary Slip", "employee": emp})
 			ss = frappe.get_doc(args)
 			ss.insert()
-			if not ss.is_hold:
-				ss.submit()
 			count += 1
 			if publish_progress:
 				frappe.publish_progress(
@@ -109,12 +107,13 @@ def submit_salary_slips_for_employees(payroll_entry, salary_slips, publish_progr
 	count = 0
 	for ss in salary_slips:
 		ss_obj = frappe.get_doc("Salary Slip", ss[0])
-		if ss_obj.net_pay < 0:
+		if ss_obj.net_pay <= 0:
 			not_submitted_ss.append(ss[0])
 		else:
 			try:
-				ss_obj.submit()
-				submitted_ss.append(ss_obj)
+				if not ss_obj.is_hold:
+					ss_obj.submit()
+					submitted_ss.append(ss_obj)
 			except frappe.ValidationError:
 				not_submitted_ss.append(ss[0])
 
