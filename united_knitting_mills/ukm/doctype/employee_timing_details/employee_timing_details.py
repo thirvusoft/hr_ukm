@@ -435,7 +435,17 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
             comment = True
         else:
             break_consumed_min=0  
-            
+        
+        if len(times[0]) > 1:
+            if not(times[0][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
+                submit_doc = False
+                late_entry = 1
+                late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+        if len(times[-1]) > 1:
+            if not(times[-1][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
+                submit_doc = False
+                early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[0][1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+                early_exit= 1
             # Existing Code
             # for i in range(0, len(times)):
             # for brk_time in doc.break_time:
