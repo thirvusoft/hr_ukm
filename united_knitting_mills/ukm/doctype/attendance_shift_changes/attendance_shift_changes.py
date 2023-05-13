@@ -15,3 +15,8 @@ class AttendanceShiftChanges(Document):
 			else:
 				attendance.update({"total_shift_count":final_shift_count})
 			attendance.save()
+	def validate(self):
+		shift_detail=frappe.db.get_all("Attendance Shift Changes", filters={"docstatus":["!=", 2], "attendance":self.attendance})
+		if len(shift_detail)>1:
+			frappe.throw("This Attendance, Shift Changes Already Created")
+			
