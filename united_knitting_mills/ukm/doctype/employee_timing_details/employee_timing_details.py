@@ -296,9 +296,9 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     where name in %s""", (new_attendance_doc.name , checkin_name[date]))
 
                 # If all shift details are correct it will submit automatically
-                if not new_attendance_doc.employee_shift_details:
-                    new_attendance_doc.reload()
-                    new_attendance_doc.submit()
+                # if not new_attendance_doc.employee_shift_details:
+                new_attendance_doc.reload()
+                new_attendance_doc.submit()
 
 def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
     if checkin_date_key not in checkin_date:

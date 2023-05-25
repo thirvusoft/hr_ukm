@@ -56,13 +56,13 @@ def salary_slip_for_labours(doc,event):
 
     """Salary Slip For Labours"""
     emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
-    
+    frappe.errprint(emp_shift_component)
     emp_shift_amount = frappe.db.sql("""
             select sum(total_shift_amount),sum(total_shift_count),sum(total_shift_hr)
             from `tabAttendance`
             where employee=%s and attendance_date>=%s and attendance_date<=%s and workflow_state='Present'
         """, (doc.employee, doc.start_date, doc.end_date), as_list = 1)
-
+    frappe.errprint(emp_shift_amount)
     if emp_shift_amount[0][1]:
         doc.total_shift_worked = emp_shift_amount[0][1]
 
