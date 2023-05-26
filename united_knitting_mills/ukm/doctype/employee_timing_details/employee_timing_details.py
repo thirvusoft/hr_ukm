@@ -94,6 +94,8 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                 new_attendance_doc.staff = 0
                 new_attendance_doc.employee = employee
                 new_attendance_doc.attendance_date = date
+                time_check = 0
+                time_check_ot = 0
                 # finalattendance = frappe._dict()
                 if shift_list.labour == 1:
                     new_attendance_doc.labour = 1
@@ -123,10 +125,13 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                         else:	
                             buffer_before_start_time = shift_list.thirvu_shift_details[shift_details.idx -2].start_time + datetime.timedelta(minutes = json.loads(late_entry))
                             
+                        
                         # buffer_before_start_time = shift_details.start_time - datetime.timedelta(hours = 1)
                         buffer_after_start_time = shift_details.start_time + datetime.timedelta(minutes = json.loads(late_entry))
                         if not shift_details.start_time:
                                 buffer_after_start_time = datetime.timedelta(hours=24, minutes=0) + datetime.timedelta(minutes = json.loads(late_entry))
+                        
+
                         buffer_before_end_time = shift_details.end_time - datetime.timedelta(minutes = json.loads(early_exit))
                         if not buffer_before_end_time:
                             buffer_before_end_time = datetime.timedelta(hours=24, minutes=0, days = -1)
@@ -142,10 +147,14 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                             if not buffer_after_end_time:
                                 buffer_after_end_time = datetime.timedelta(hours=24, minutes=0)
                         # Buffer calculation for starting time
+
+                        starting_time = datetime.datetime.strptime('00:00:00', '%H:%M:%S')
+
                         if  in_time and to_timedelta(str(in_time)) >= buffer_before_start_time and to_timedelta(str(in_time)) <= buffer_after_start_time:
                             shift_wise_details.update({'start_time':in_time})
                             start_idx = shift_details.idx
-                        else:
+                            time_check =1 
+                        elif time_check == 0:
                             if shift_details.start_time < to_timedelta(str(in_time)) and shift_list.thirvu_shift_details[0].start_time <= shift_details.start_time: 
                                 late_entry_time =to_timedelta(str(in_time)) - shift_details.start_time
                             approval_start_time = in_time
@@ -154,15 +163,14 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                         if out_time and to_timedelta(str(out_time)) >= buffer_before_end_time and to_timedelta(str(out_time)) < buffer_after_end_time:
                             shift_wise_details.update({'end_time':out_time})
                             end_idx = shift_details.idx
-                        else:
+                            time_check_ot = 1
+                        elif time_check_ot == 1:
                             if shift_details.end_time > to_timedelta(str(out_time)) and shift_list.thirvu_shift_details[0].start_time >= shift_details.start_time:
                                 early_exit_time = shift_details.end_time - to_timedelta(str(out_time))
                             approval_end_time = out_time 
                     # Calculation of shift salary and shift count
                     try:
-                        for i in date_wise_checkin:
-                            
-                            if start_idx and end_idx:
+                        for i in date_wise_checkin:                            
                                 shift_count = 0
                                 shift_salary = 0
                                 for x in range(0,len(date_wise_checkin[i]),2):
@@ -296,9 +304,9 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     where name in %s""", (new_attendance_doc.name , checkin_name[date]))
 
                 # If all shift details are correct it will submit automatically
-                if not new_attendance_doc.employee_shift_details:
-                    new_attendance_doc.reload()
-                    new_attendance_doc.submit()
+                # if not new_attendance_doc.employee_shift_details:
+                new_attendance_doc.reload()
+                new_attendance_doc.submit()
 
 def adding_checkin_datewise(checkin_date, checkin_date_key, checkin_details):
     if checkin_date_key not in checkin_date:
