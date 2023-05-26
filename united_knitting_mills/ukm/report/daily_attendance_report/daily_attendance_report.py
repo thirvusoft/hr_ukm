@@ -24,21 +24,23 @@ def execute(filters=None):
             conditions += ' and unit = "{0}" '.format(unit)
             
             
-    report_data = frappe.db.sql(""" select
-    							att.designation,
-                                att.employee,
-                                att.employee_name,
-                                att.checkin_time,
-                                att.checkout_time,
-                                att.late_min,
-                                att.total_shift_count,
-                                att.total_shift_amount,
-                                doc.check_in_time,
-                                doc.check_out_time
-                                from `tabAttendance` as att left outer join `tabThirvu Employee Checkin Details` as doc
-                                on doc.parent = att.name
-                                {0} order by designation
+    report_data = frappe.db.sql("""SELECT DISTINCT
+                                    att.designation,
+                                    att.employee,
+                                    att.employee_name,
+                                    att.checkin_time,
+                                    att.checkout_time,
+                                    att.late_min,
+                                    att.total_shift_count,
+                                    att.total_shift_amount,
+                                    doc.check_in_time,
+                                    doc.check_out_time
+                                FROM `tabAttendance` AS att
+                                LEFT OUTER JOIN `tabThirvu Employee Checkin Details` AS doc ON doc.parent = att.name
+                                {0}
+                                ORDER BY att.designation
                                 """.format(conditions))
+
 
 
     data = [list(i) for i in report_data]
