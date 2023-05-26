@@ -94,6 +94,7 @@ def create_employee_checkin(from_date = None, to_date = None, unit=None):
     filters={'time': ['between', (from_date, to_date)]}
     if unit:
         filters["unit"] = unit
+    # filters['employee'] = 'UKM1-2376'
         
     employees = frappe.db.get_all('Employee Checkin Without Log Type', filters=filters , pluck='employee')
     employees = list(set(employees))
