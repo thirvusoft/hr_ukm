@@ -408,7 +408,12 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
     start_time = (dt.combine(date.today(), t(start_time[0], start_time[1], start_time[2]))+ timedelta(minutes=doc.entry_period or 0)).time()
     end_time = list(map(int, str(end_time).split(':')))
     ac_end_time = (dt.combine(date.today(), t(end_time[0], end_time[1], end_time[2]))).time()
-    end_time = (dt.combine(date.today(), t(end_time[0], end_time[1], end_time[2]))- timedelta(minutes=doc.exit_period or 0)).time()
+    if frappe.db.get_value("Employee",attendance.get("employee"),'gender') == "Female":
+        gender_ext_time = doc.exit_period_female
+    else:
+        gender_ext_time = doc.exit_period
+
+    end_time = (dt.combine(date.today(), t(end_time[0], end_time[1], end_time[2]))- timedelta(minutes=gender_ext_time or 0)).time()
     comment = False
     checkin_list = []
     late_entry, early_exit, break_consumed_min, late_entry_min, early_exit_min = 0, 0, 0, 0, 0

@@ -30,6 +30,7 @@
   "entry_period",
   "column_break_11",
   "exit_period",
+  "exit_period_female",
   "break_time_section",
   "break_time",
   "total_break_time_mins"
@@ -67,7 +68,7 @@
   {
    "fieldname": "exit_period",
    "fieldtype": "Int",
-   "label": "Exit Period (in minutes)"
+   "label": "Exit Period (in minutes) - Male"
   },
   {
    "fieldname": "grace_period_for_entry_and_exit_section",
@@ -181,11 +182,16 @@
    "label": "Shift Name",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "exit_period_female",
+   "fieldtype": "Int",
+   "label": "Exit Period (in minutes) - Female"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-10-07 12:56:53.064008",
+ "modified": "2023-06-08 18:38:22.476734",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Timing Details",
