@@ -199,8 +199,9 @@ def attendance_updation(doc, event):
                     attendance.staff=1
                     attendance.checkin_time = doc.from_time
                     attendance.checkout_time = doc.to_time
-                    attendance.save()
+                    attendance.total_shift_count = doc.total_shift
+                    attendance.submit()
 
                     doc.attendance_marked = 1
-                    doc.save()
+                    doc.submit()
             

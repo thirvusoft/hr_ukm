@@ -2,15 +2,36 @@
 import frappe
 import erpnext
 from frappe.utils import money_in_words
-
+from frappe.utils import getdate
+from erpnext.hr.utils import get_holiday_dates_for_employee
 import json
 from erpnext.payroll.doctype.salary_slip.salary_slip import SalarySlip
 from frappe import _
 from frappe.utils.data import get_link_to_form
 from united_knitting_mills.ukm.utils.python.employee import get_employee_shift
+from datetime import timedelta
+def date_range_list(start_date, end_date):
+    # Return list of datetime.date objects (inclusive) between start_date and end_date (inclusive).
+    date_list = []
+    curr_date = start_date
+    while curr_date <= end_date:
+        date_list.append(curr_date)
+        curr_date += timedelta(days=1)
+    return date_list
 
 def set_salary_for_labour(doc,event):
-    
+    doc.attendance_status = []
+    holiday_list = get_holiday_dates_for_employee(doc.employee,doc.start_date,doc.end_date)
+    status = ''
+    for i in date_range_list(getdate(doc.start_date),getdate(doc.end_date)):
+        date = i.strftime("%Y-%m-%d")
+        if (frappe.get_list('Attendance',{'attendance_date':date,'employee':doc.employee,'docstatus':1})):
+            status = 'X'
+        elif date in holiday_list:
+            status = 'HO'
+        else:
+            status = 'A'
+        doc.append('attendance_status',{'attendance_date':str(i).split("-")[-1],'status':status})
     shift = get_employee_shift(doc.employee)
     shift_doc = frappe.get_doc('Employee Timing Details', shift)
 
@@ -35,13 +56,13 @@ def salary_slip_for_labours(doc,event):
 
     """Salary Slip For Labours"""
     emp_shift_component=frappe.db.get_value("Salary Structure", doc.salary_structure, "salary_component_")
-    
+    frappe.errprint(emp_shift_component)
     emp_shift_amount = frappe.db.sql("""
             select sum(total_shift_amount),sum(total_shift_count),sum(total_shift_hr)
             from `tabAttendance`
             where employee=%s and attendance_date>=%s and attendance_date<=%s and workflow_state='Present'
         """, (doc.employee, doc.start_date, doc.end_date), as_list = 1)
-
+    frappe.errprint(emp_shift_amount)
     if emp_shift_amount[0][1]:
         doc.total_shift_worked = emp_shift_amount[0][1]
 
