@@ -166,7 +166,10 @@ def staff_salary_calculation(doc,event):
         SalarySlip.compute_component_wise_year_to_date(doc)
         SalarySlip.set_net_total_in_words(doc)
                 
-        
+def hold_transition(doc, action):
+    if doc.is_hold:
+        doc.holding_transition = 1
+             
 @frappe.whitelist()
 def add_pay_leave(start_date, end_date, employee, per_day_salary_for_staff = None):
 

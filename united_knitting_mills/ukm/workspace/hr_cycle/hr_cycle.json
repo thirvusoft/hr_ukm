@@ -215,7 +215,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-05-09 16:28:36.961495",
+ "modified": "2023-07-29 16:33:37.110005",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -322,7 +322,7 @@
   {
    "doc_view": "",
    "label": "Attendance Staff - Decision Making",
-   "link_to": "Staff Attendance - Decision Making",
+   "link_to": "Attendance - Decision Making",
    "type": "Report"
   },
   {

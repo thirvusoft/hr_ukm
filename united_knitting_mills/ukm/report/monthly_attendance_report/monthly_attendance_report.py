@@ -153,13 +153,16 @@ def get_data(filters):
 				checkout = get_attendance[0]['checkout_time']
 				f.update({k:f'{checkin or "-"}'})
 				out.update({k:f'{checkout or "-"}'})
-				tot.update({k:f"<span style='color:green!important;font-weight:bold'>{get_attendance[0]['total_shift_count']}</span>"})
 				if sunday_attendance:
 					sunday += 1
 					if sunday_approval:
 						shift= shift+(get_attendance[0]['total_shift_count'] or 0)
+						tot.update({k:f"<span style='color:green!important;font-weight:bold'>{get_attendance[0]['total_shift_count']}</span>"})
+
 				else:
 					shift=shift+(get_attendance[0]['total_shift_count'] or 0)
+					tot.update({k:f"<span style='color:green!important;font-weight:bold'>{get_attendance[0]['total_shift_count']}</span>"})
+
 			else:
 				f.update({k:"-"})
 				out.update({k:"-"})

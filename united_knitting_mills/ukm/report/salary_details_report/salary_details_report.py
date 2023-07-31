@@ -245,6 +245,10 @@ def get_data(filters):
 
     if ("unit" in keys):
         filter["unit"] = filters["unit"]
+        
+    if filters.get("holding_transition") ==1:
+        filter["is_hold"] = 0
+        filter["holding_transition"] = 1
 
     if ("status" in keys):
 
