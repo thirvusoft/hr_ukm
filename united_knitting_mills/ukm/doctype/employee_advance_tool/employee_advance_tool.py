@@ -13,8 +13,12 @@ from united_knitting_mills.ukm.utils.python.employee_advance import \
 class EmployeeAdvanceTool(Document):
 
 	def on_submit(doc):
-		frappe.enqueue(create_employee_advance, doc = doc)
-		frappe.msgprint("Advance Will Be Creating In Backgroud Within 10 Minutes.")
+		if doc.department not in ["PRODUCTION - MONTHLY - STAFF - UKM", "PRODUCTION - MONTHLY - STAFF - UNIT 1 - UKM"]:
+			frappe.enqueue(create_employee_advance, doc = doc)
+			frappe.msgprint("Advance Will Be Creating In Backgroud Within 10 Minutes.")
+		else:
+			frappe.enqueue(advance_staff, doc = doc)
+			frappe.msgprint("Staff Advance Will Be Creating In Backgroud Within 10 Minutes.")
 
 	def validate(doc):
 		total_advance_amount = 0
@@ -62,7 +66,7 @@ def employee_finder(location, from_date, to_date, designation=None, department=N
 
 	emp_list = frappe.db.get_all("Employee",
 		filters = filters,
-		fields = ["name", "employee_name", "designation"],
+		fields = ["name", "employee_name", "designation", "department"],
 		order_by = "name")
 	
 	for name in emp_list:
@@ -124,4 +128,33 @@ def create_employee_advance(doc):
 				else:
 					advance_doc.is_hold=1
 					advance_doc.save()
+@frappe.whitelist()
+def advance_staff(doc):
+	for advance in doc.employee_advance_details:
+		if advance.department in ["PRODUCTION - MONTHLY - STAFF - UKM", "PRODUCTION - MONTHLY - STAFF - UNIT 1 - UKM"]:
+			make_property_setter(
+						'Employee Advance', "advance_account", "reqd", 0, "Link", validate_fields_for_doctype=False
+				)
+			advance_doc = frappe.new_doc('Employee Advance')
+			advance_doc.employee = advance.employee
+			advance_doc.from_date = doc.from_date
+			advance_doc.to_date = doc.to_date
+			advance_doc.advance_amount = advance.staff_advance
+			advance_doc.monthly_deduction = advance.monthly_deduction
+			advance_doc.balance_amount = advance.staff_advance
+			advance_doc.posting_date = nowdate()
+			advance_doc.purpose = "Staff Advance"
+			advance_doc.exchange_rate = 1.0
+			advance_doc.eligible_amount = advance.eligible_amount
+			advance_doc.total_shift = advance.total_shift
+			advance_doc.reference_document = doc.name
+
+			if advance.payment_method == "Deduct from Salary":
+					advance_doc.repay_unclaimed_amount_from_salary = 1
+			advance_doc.insert()
+			if not advance.hold:
+				advance_doc.submit()
+			else:
+				advance_doc.is_hold=1
+				advance_doc.save()
 

@@ -1,4 +1,5 @@
 {
+ "_liked_by": "[]",
  "cards_label": "Masters",
  "category": "Modules",
  "charts": [],
@@ -215,7 +216,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-07-29 16:33:37.110005",
+ "modified": "2023-07-31 17:42:57.830738",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -336,6 +337,12 @@
    "label": "Employee Bank Details Changes",
    "link_to": "Employee Bank Details",
    "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Payroll Entry SS Submission",
+   "link_to": "Payroll Entry SS Submission",
+   "type": "Report"
   }
  ],
  "shortcuts_label": "Decision Making Reports"

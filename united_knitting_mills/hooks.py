@@ -120,8 +120,8 @@ override_doctype_class = {
 # Hook on document methods and events
 doc_events = {
 	"Salary Slip":{
-		"validate":"validate":["united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
-              				"united_knitting_mills.ukm.utils.python.salary_slip.hold_transition"],
+		"validate":["united_knitting_mills.ukm.utils.python.salary_slip.set_salary_for_labour",
+              					"united_knitting_mills.ukm.utils.python.salary_slip.hold_transition"]
 	},
 
 	'Employee':{

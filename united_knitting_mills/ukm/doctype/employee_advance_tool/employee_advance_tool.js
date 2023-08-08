@@ -30,6 +30,7 @@ frappe.ui.form.on("Employee Advance Tool",{
 					frappe.model.set_value(child.doctype, child.name, "eligible_amount", r.message[0][i]["eligible_amount"] || 0)
 					frappe.model.set_value(child.doctype, child.name, "current_advance", r.message[0][i]["current_advance"] || 0)
 					frappe.model.set_value(child.doctype, child.name, "total_shift", r.message[0][i]["total_shift"] || 0)
+					frappe.model.set_value(child.doctype, child.name, "department", r.message[0][i]["department"] || 0)
 
 				}
 				cur_frm.refresh_field("employee_advance_details")

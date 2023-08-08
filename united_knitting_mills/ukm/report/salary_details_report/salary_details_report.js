@@ -77,6 +77,18 @@ frappe.query_reports["Salary Details Report"] = {
 			"fieldtype": "Check",
 			"width": "100"
 		},
+		{
+			"fieldname":"start_doj",
+			"label": __("Start DOJ"),
+			"fieldtype": "Date",
+			"width": "100"
+		},
+		{
+			"fieldname":"end_doj",
+			"label": __("End DOJ"),
+			"fieldtype": "Date",
+			"width": "100"
+		},
 	]
 };
 frappe.realtime.on('refresh-report', () => {
@@ -93,11 +105,11 @@ frappe.realtime.on('refresh-report', () => {
 	})
 })
 
-$(document).ready(() => {
-	setTimeout(() => {
-		if (["poojaukm1@hr.ukm", "rajasekarm@gmail.com"].includes(frappe.session.user)) {
-			document.querySelector(`ul.dropdown-menu.dropdown-menu-right li span[data-label="Export"]`).parentElement.parentElement.remove()
-		}
-	}, 1000)
+// $(document).ready(() => {
+// 	setTimeout(() => {
+// 		if (["poojaukm1@hr.ukm", "rajasekarm@gmail.com"].includes(frappe.session.user)) {
+// 			document.querySelector(`ul.dropdown-menu.dropdown-menu-right li span[data-label="Export"]`).parentElement.parentElement.remove()
+// 		}
+// 	}, 1000)
 
-});
+// });

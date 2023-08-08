@@ -236,7 +236,15 @@ def get_data(filters):
     to_d = tuple(map(int, to_date.split('-')))
 
     between_dates = list(map(str, list(daterange(date(from_d[0], from_d[1], from_d[2]),date(to_d[0], to_d[1], to_d[2])))))
-   
+    doj_conditions={}
+    if filters.get("start_doj") and filters.get("end_doj"):
+        doj_conditions["date_of_joining"] = ["between", (filters.get("start_doj") , filters.get("end_doj"))]
+    elif(filters.get("start_doj")):
+        doj_conditions["date_of_joining"] = [">=", filters.get("start_doj")]
+    elif(filters.get("end_doj")):
+        doj_conditions["date_of_joining"] = ["<=", filters.get("end_doj")]
+    emp_list=frappe.get_all("Employee", filters=doj_conditions, pluck="name")
+    filter["employee"]=["in", emp_list]
     if ("designation" in keys):
         filter["designation"] = filters["designation"]
 
@@ -264,7 +272,7 @@ def get_data(filters):
     elif staff_labour == "Labour":
         filter["is_staff_calulation"] = 0
 
-    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay", "is_hold"],group_by="employee", order_by="designation")
+    ss=frappe.db.get_all("Salary Slip", filters=filter, fields=["name","employee","employee_name", "total_shift_worked","net_pay", "total_deduction","designation", "gross_pay","payment_days","leave_with_pay", "is_hold"],group_by="employee", order_by="employee")
     no=1
     non_hold=0
     hold_amount=0

@@ -1,7 +1,7 @@
 import frappe
 
 @frappe.whitelist()
-def advance_validation(employee, from_date, to_date):
+def advance_validation(employee, from_date=None, to_date=None):
    
     emp_shift_amount = frappe.db.sql("""
                          select sum(total_shift_amount), sum(total_shift_count)
