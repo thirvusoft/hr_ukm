@@ -357,7 +357,7 @@ def create_datewise_attendance_for_staff(reason, submit_doc, employee, attendanc
         reason += '\n-> First In Checkin Missing.' 
         attendance.mismatched_checkin = 1
         submit_doc=False
-    if(checkins[-1]['log_type'] == 'OUT'):
+    if(checkins[-1]['log_type'] == 'OUT' or len(checkins)>=4):
         thirvu_shift_details[0].update({
             'end_time': checkins[-1]['time'].time()
         })
@@ -412,7 +412,6 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
         gender_ext_time = doc.exit_period_female
     else:
         gender_ext_time = doc.exit_period
-
     end_time = (dt.combine(date.today(), t(end_time[0], end_time[1], end_time[2]))- timedelta(minutes=gender_ext_time or 0)).time()
     comment = False
     checkin_list = []
@@ -428,13 +427,17 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
         temp=[]
         for log in out_in_log[1:-1]:
             if temp:
+                
                 temp.append(log)
                 out_in_logs.append(temp)
                 temp=[]
             else:
                 temp=[log]
+            if (dt.strptime(str(log), '%H:%M:%S'))>(dt.strptime(str(doc.end_time), '%H:%M:%S')):
+                break
         #out_in_logs=[[12, 1], [3, 4]]  out in, out in
         break_time=0
+
         for log in out_in_logs:
             # log -> out, in
             # break_time+=(log[0]-log[1])
@@ -454,13 +457,11 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
                 submit_doc = False
                 late_entry = 1
                 late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
-        if len(times[-1]) > 1:
-            frappe.log_error(title='--',message=[times[-1][-1],end_time])
-
-            if not(times[-1][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()) and not(times[-1][1] <= dt.strptime(str(start_time), '%H:%M:%S').time()) :
-                submit_doc = False
-                early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[-1][-1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
-                early_exit= 1
+        # if len(times[-1]) > 1:
+            # if not(times[-1][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
+            #     submit_doc = False
+            #     early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[0][1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+            #     early_exit= 1
             # Existing Code
             # for i in range(0, len(times)):
             # for brk_time in doc.break_time:
@@ -488,16 +489,23 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
             #             submit_doc = False
             #             early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[i][1]), '%H:%M:%S'))) / datetime.timedelta(minutes=1))
             #             early_exit= 1
-    else:        
-        if not(times[0][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
-            submit_doc = False
-            late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
-            late_entry = 1
-
-        if not(times[0][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
-            submit_doc = False
-            early_exit_min += (((dt.strptime(str(ac_end_time), '%H:%M:%S')) - (dt.strptime(str(times[0][1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
-            early_exit= 1
+    # else:
+    late_entry_check_times=[]
+    for time in out_in_log:
+        late_entry_check_times.append(time)
+        if (dt.strptime(str(time), '%H:%M:%S'))>(dt.strptime(str(end_time), '%H:%M:%S')):
+            break
+        
+    frappe.log_error(title="late_entry_check_times", message=late_entry_check_times)
+    
+    if not(late_entry_check_times[0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
+        submit_doc = False
+        late_entry_min += (((dt.strptime(str(late_entry_check_times[0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+        late_entry = 1
+    if not(late_entry_check_times[-1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
+        submit_doc = False
+        early_exit_min += (((dt.strptime(str(end_time), '%H:%M:%S')) - (dt.strptime(str(late_entry_check_times[-1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+        early_exit= 1
 
     if late_entry:
         attendance.late_min = late_entry_min
@@ -518,7 +526,7 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
 
 def validate_total_working_hours(reason, doc, submit_doc, checkins, attendance, start_time, end_time):
     """Validate Total Worked Hours and Break Time"""
-    if(len(checkins)%2 == 1):
+    if(len(checkins)%2 == 1) and len(checkins)<4:
         submit_doc=False
         reason += '\n-> Odd number of Checkins Found(IN or Out is Missed)'
         attendance.mismatched_checkin = 1 
