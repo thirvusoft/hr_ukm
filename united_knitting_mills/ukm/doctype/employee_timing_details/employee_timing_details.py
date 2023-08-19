@@ -416,7 +416,7 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
     comment = False
     checkin_list = []
     late_entry, early_exit, break_consumed_min, late_entry_min, early_exit_min = 0, 0, 0, 0, 0
-    if(len(times)>1):
+    if(len(times)>0):
         # minutes wise breaktime calculation
         out_in_log=[]  #Single List[12, 1, 3, 4]
         out_in_logs=[]  #list of list without first checkin and last checkout [[12, 1], [3, 4]]  out in, out in
@@ -456,7 +456,7 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
             if not(times[0][0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
                 submit_doc = False
                 late_entry = 1
-                late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+                late_entry_min += (((dt.strptime(str(times[0][0]), '%H:%M:%S')) - (dt.strptime(str(start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
         # if len(times[-1]) > 1:
             # if not(times[-1][1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
             #     submit_doc = False
@@ -498,10 +498,10 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
         
     frappe.log_error(title="late_entry_check_times", message=late_entry_check_times)
     
-    if not(late_entry_check_times[0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
-        submit_doc = False
-        late_entry_min += (((dt.strptime(str(late_entry_check_times[0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
-        late_entry = 1
+    # if not(late_entry_check_times[0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
+    #     submit_doc = False
+    #     late_entry_min += (((dt.strptime(str(late_entry_check_times[0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
+    #     late_entry = 1
     if not(late_entry_check_times[-1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
         submit_doc = False
         early_exit_min += (((dt.strptime(str(end_time), '%H:%M:%S')) - (dt.strptime(str(late_entry_check_times[-1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
