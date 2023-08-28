@@ -41,7 +41,7 @@ def salary_updation_old():
                             att.save()
 
 def validation(doc,event):
-    old_doc = frappe.get_list("Salary Structure Assignment",{"workflow_state":['in',["Approved by MD", "Approval Pending"]],"employee":doc.employee})
+    old_doc = frappe.get_list("Salary Structure Assignment",{"name":["!=", doc.name],"workflow_state":['in',["Approved by MD", "Approval Pending"]],"employee":doc.employee})
     frappe.errprint(old_doc)
     if old_doc:
         frappe.throw(f"Salary Structure already exists for {doc.employee}")

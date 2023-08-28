@@ -8,7 +8,7 @@ from frappe.utils import getdate, nowdate
 from datetime import date, datetime, timedelta
 
 
-from united_knitting_mills.ukm.utils.python.employee__checkin import create_employee_checkin
+from united_knitting_mills.ukm.utils.python.employee__checkin import create_employee_checkin, create_employee_checkin_security
 class UnitedKnittingMillsSettings(Document):
 	
 	def validate(doc):
@@ -119,8 +119,12 @@ def attendance_update(data, unit=None):
 		if count == 100:
 			count = 0
 			frappe.db.commit()
+	shift_det = frappe.db.get_value("Designation",frappe.db.get_value("Employee",data[1],'designation'),'thirvu_shift')
+	if not frappe.db.get_value("Employee Timing Details",shift_det,'security_'):
+		reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
+	else:
+		reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'resetting_time_for_security')
 
-	reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
 	reset_time = datetime.strptime(str(reset_time),'%H:%M:%S')
 
 	start_date = datetime.combine(data[0], reset_time.time())
@@ -148,3 +152,4 @@ def attendance_update(data, unit=None):
 			frappe.db.commit()
 
 	create_employee_checkin(data[0], data[0], unit)
+	create_employee_checkin_security(data[0], data[0], unit)

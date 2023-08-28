@@ -22,8 +22,8 @@ class EmployeeTimingDetails(Document):
             self.validate_total_checkin()
 
     def validate_staff_or_labour(self):
-        if(not self.staff and not self.labour and not self.house_keeping):
-            frappe.throw("Please Select <b>Staff</b> or <b>Labour</b> or <b>House Keeping</b>")
+        if(not self.staff and not self.labour and not self.house_keeping and not self.security_):
+            frappe.throw("Please Select <b>Staff</b> or <b>Labour</b> or <b>House Keeping</b> or <b>Security</b>")
 
     def validate_total_checkin(self):
         if(self.total_no_of_checkins_per_day % 2 ==1):
@@ -68,7 +68,11 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
 
         #  To Separate The Checkin Date-wise and Getting That Checkin Name
         if shift_list.thirvu_shift_details:
-            validate_time = frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time")
+            if not shift_list.security_:
+                validate_time = frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time")
+            else:
+                validate_time = frappe.db.get_single_value("United Knitting Mills Settings", "resetting_time_for_security")
+
             date_wise_checkin = frappe._dict()
             checkin_name = frappe._dict()
             for data in employee_checkin:
@@ -101,6 +105,8 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                     new_attendance_doc.labour = 1
                 elif shift_list.house_keeping ==1:
                     new_attendance_doc.house_keeping = 1
+                elif shift_list.security_ ==1:
+                    new_attendance_doc.security = 1
                 # To check missing log
                 
                 if len(date_wise_checkin[date]) and len(date_wise_checkin[date]) !=1:
@@ -181,12 +187,12 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                         test_start_time=(datetime.datetime.min + shift_row.start_time).time()
                                         test_end_time=(datetime.datetime.min + shift_row.end_time).time()
 
-                                        if shift_row.start_time > frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time"):
+                                        if shift_row.start_time > validate_time:
                                             start_time = datetime.datetime.combine(date, test_start_time)
                                         else:
                                             start_time = datetime.datetime.combine(add_days(date,1),test_start_time )
 
-                                        if shift_row.end_time > frappe.db.get_single_value("United Knitting Mills Settings", "checkin_type_resetting_time"):
+                                        if shift_row.end_time > validate_time:
                                             end_time = datetime.datetime.combine(date, test_end_time)
                                         else:
                                             end_time = datetime.datetime.combine(add_days(date,1), test_end_time)
@@ -495,18 +501,15 @@ def check_break_time_and_fist_in_last_out_checkins_for_staff(reason, attendance,
         late_entry_check_times.append(time)
         if (dt.strptime(str(time), '%H:%M:%S'))>(dt.strptime(str(end_time), '%H:%M:%S')):
             break
-        
-    frappe.log_error(title="late_entry_check_times", message=late_entry_check_times)
     
     # if not(late_entry_check_times[0] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
     #     submit_doc = False
     #     late_entry_min += (((dt.strptime(str(late_entry_check_times[0]), '%H:%M:%S')) - (dt.strptime(str(ac_start_time), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
     #     late_entry = 1
-    if not(late_entry_check_times[-1] >= dt.strptime(str(end_time), '%H:%M:%S').time()):
+    if not(late_entry_check_times[-1] >= dt.strptime(str(end_time), '%H:%M:%S').time()) and not(late_entry_check_times[-1] <= dt.strptime(str(start_time), '%H:%M:%S').time()):
         submit_doc = False
         early_exit_min += (((dt.strptime(str(end_time), '%H:%M:%S')) - (dt.strptime(str(late_entry_check_times[-1]), '%H:%M:%S'))) /  datetime.timedelta(minutes=1))
         early_exit= 1
-
     if late_entry:
         attendance.late_min = late_entry_min
     if early_exit:
@@ -686,7 +689,7 @@ def scheduler_for_employee_shift(unit=None):
         timing_doc = frappe.get_doc('Employee Timing Details',data['name'])
         if timing_doc.staff == 1:
             create_staff_attendance(timing_doc.name)
-        elif timing_doc.labour ==1 or timing_doc.house_keeping == 1:
+        elif timing_doc.labour ==1 or timing_doc.house_keeping == 1 or timing_doc.security_ == 1 :
             create_labour_attendance(timing_doc.department, timing_doc.name, timing_doc.unit, str(timing_doc.entry_period) ,str(timing_doc.exit_period))
     
     leave_application_to_attendance(unit)

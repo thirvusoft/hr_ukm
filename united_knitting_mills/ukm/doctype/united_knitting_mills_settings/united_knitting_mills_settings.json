@@ -18,6 +18,7 @@
   "buffer_time",
   "column_break_4",
   "checkin_type_resetting_time",
+  "resetting_time_for_security",
   "check_in_date",
   "leave_section",
   "pay_leave",
@@ -188,12 +189,19 @@
    "fieldtype": "Link",
    "label": "Unit",
    "options": "Location"
+  },
+  {
+   "default": "0",
+   "fieldname": "resetting_time_for_security",
+   "fieldtype": "Time",
+   "label": "Resetting Time For Security",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-06-19 16:47:58.505292",
+ "modified": "2023-08-28 19:50:10.600325",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

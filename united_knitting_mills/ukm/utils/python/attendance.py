@@ -23,7 +23,10 @@ def shift_hours(doc,event):
 
     shift = get_employee_shift(doc.employee)
     labour = frappe.db.get_value("Employee Timing Details", shift, 'labour')
-    if labour and (event == 'after_insert') or (event == 'validate' and not doc.is_new()):
+    house_keeping = frappe.db.get_value("Employee Timing Details", shift, 'house_keeping')
+    security = frappe.db.get_value("Employee Timing Details", shift, 'security_')
+
+    if (labour or house_keeping or security) and ((event == 'after_insert') or (event == 'validate' and not doc.is_new())):
         
         if doc.thirvu_shift_details: 
             doc.total_shift_hr = 0
@@ -76,7 +79,8 @@ def shift_hours(doc,event):
                             doc.total_shift_hr +=  diff_time / datetime.timedelta(minutes=1)
 
                         doc.total_shift_count += data.shift_count
-                        doc.total_shift_amount += data.shift_salary
+                        if not security:
+                            doc.total_shift_amount += data.shift_salary
 
                 if doc.total_shift_hr:
                         doc.total_shift_hr -= get_total_break_time(doc.employee)

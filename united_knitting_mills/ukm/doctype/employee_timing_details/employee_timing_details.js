@@ -37,14 +37,26 @@ frappe.ui.form.on('Employee Timing Details', {
 		cur_frm.fields_dict.staff.$input.on('click', ()=>{
 			uncheck(frm, 'labour')
 			uncheck(frm, 'house_keeping')
+			uncheck(frm, 'security_')
+
 		})
 		cur_frm.fields_dict.labour.$input.on('click', ()=>{
 			uncheck(frm, 'staff')
 			uncheck(frm, 'house_keeping')
+			uncheck(frm, 'security_')
+
 		})
 		cur_frm.fields_dict.house_keeping.$input.on('click', ()=>{
 			uncheck(frm, 'labour')
 			uncheck(frm, 'staff')
+			uncheck(frm, 'security_')
+
+		})
+		cur_frm.fields_dict.security_.$input.on('click', ()=>{
+			uncheck(frm, 'labour')
+			uncheck(frm, 'staff')
+			uncheck(frm, 'house_keeping')
+
 		})
 	},
 	setup:function(frm){

@@ -3,9 +3,13 @@ from datetime import date, datetime, timedelta
 import pandas
 from frappe.utils import today
 from united_knitting_mills.ukm.doctype.employee_timing_details.employee_timing_details import scheduler_for_employee_shift
-def get_ukm_settings():
+def get_ukm_settings(security):
     buffer_time = frappe.db.get_single_value('United Knitting Mills Settings', 'buffer_time')
-    reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
+    if not security:
+        reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'checkin_type_resetting_time')
+    else:
+        reset_time = frappe.db.get_single_value('United Knitting Mills Settings', 'resetting_time_for_security')
+
     return buffer_time, reset_time
 
 def get_between_dates(date_wise_checkin, from_date, to_date):
@@ -94,18 +98,57 @@ def create_employee_checkin(from_date = None, to_date = None, unit=None):
     filters={'time': ['between', (from_date, to_date)]}
     if unit:
         filters["unit"] = unit
-    # filters['employee'] = 'UKM1-2376'
+    # filters['employee'] = 'UKM1-0002'
         
     employees = frappe.db.get_all('Employee Checkin Without Log Type', filters=filters , pluck='employee')
     employees = list(set(employees))
 
-    buffer_time, reset_time = get_ukm_settings()
+    buffer_time, reset_time = get_ukm_settings(security=False)
     
     for employee in employees:
-        date_wise_checkin = frappe._dict()
-        date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
-        date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
-        # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
-        create_employee_checkins(date_wise_checkin, employee, buffer_time)
+        employee_desig=frappe.db.get_value("Employee", {"name":employee},"designation")
+        if employee_desig not in ["SECURITY - UNIT 1", "SECURITY"]:
+            date_wise_checkin = frappe._dict()
+            date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
+            date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
+            # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
+            create_employee_checkins(date_wise_checkin, employee, buffer_time)
+
+    scheduler_for_employee_shift(unit)
+
+@frappe.whitelist()
+def create_employee_checkin_security(from_date = None, to_date = None, unit=None):
+    if from_date == None:
+        from_date = str(date.today() - timedelta(days = 1))
+
+    else:
+        from_date = str(from_date)
+
+    if to_date == None:
+        to_date = str(date.today())
+
+    else:
+        to_date = str(to_date)
+
+    filters={'time': ['between', (from_date, to_date)]}
+    if unit:
+        filters["unit"] = unit
+    # filters['employee'] = 'UKM1-2346'
+        
+    employees = frappe.db.get_all('Employee Checkin Without Log Type', filters=filters , pluck='employee')
+    employees = list(set(employees))
+
+    buffer_time, reset_time = get_ukm_settings(security=True)
+    
+    for employee in employees:
+        employee_desig=frappe.db.get_value("Employee", {"name":employee}, 'designation')
+        
+        if employee_desig in ["SECURITY - UNIT 1", "SECURITY"]:
+            frappe.log_error(employee_desig)
+            date_wise_checkin = frappe._dict()
+            date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
+            date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
+            # date_wise_checkin = validate_with_buffer_time(date_wise_checkin, buffer_time)
+            create_employee_checkins(date_wise_checkin, employee, buffer_time)
 
     scheduler_for_employee_shift(unit)

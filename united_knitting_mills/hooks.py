@@ -211,6 +211,10 @@ try:
 	time = time.split(':')
 	cron_time = f'{int(time[1])} {int(time[0])} * * *'
 	scheduler_events['cron'][cron_time] = ['united_knitting_mills.ukm.utils.python.employee__checkin.create_employee_checkin']
+	time_security = str(frappe.db.get_single_value('United Knitting Mills Settings', 'resetting_time_for_security'))
+	time_security = time_security.split(':')
+	cron_time_security = f'{int(time_security[1])} {int(time_security[0])} * * *'
+	scheduler_events['cron'][cron_time_security] = ['united_knitting_mills.ukm.utils.python.employee__checkin.create_employee_checkin_security']
 except:pass
 
 # Testing
