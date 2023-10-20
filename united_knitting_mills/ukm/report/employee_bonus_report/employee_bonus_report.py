@@ -112,7 +112,6 @@ def get_columns(filters):
     return columns
 
 def get_data(filters):
-    data=[]
     keys = list(filters.keys())
     no=1
     filter = {'from_date':["=", filters['from_date']],"to_date":["=", filters['to_date']],'docstatus': ["!=", 2], 'unit':filters['unit']}
