@@ -9,11 +9,24 @@
   "company",
   "employee",
   "employee_name",
+  "unit",
+  "from_date",
+  "to_date",
+  "department",
+  "designation",
+  "settlement_days",
+  "settlement_salary",
   "column_break_4",
   "bonus_payment_date",
-  "bonus_amount",
+  "working_days",
+  "total_salary_amount",
+  "bonus_percentage",
+  "total_bonus_amount",
   "bonus_account",
+  "leave_days",
+  "leave_salary",
   "reference",
+  "bonus_amount",
   "base_grand_total",
   "advance_paid",
   "amended_from"
@@ -56,7 +69,8 @@
    "fieldname": "bonus_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Bonus Amount",
+   "label": "Total Amount",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -92,12 +106,96 @@
    "label": "Bonus Account",
    "options": "Account",
    "reqd": 1
+  },
+  {
+   "fieldname": "working_days",
+   "fieldtype": "Float",
+   "label": "Working Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.location",
+   "fieldname": "unit",
+   "fieldtype": "Link",
+   "label": "Unit",
+   "options": "Location",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bonus_percentage",
+   "fieldtype": "Float",
+   "label": "Bonus Percentage",
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_days",
+   "fieldtype": "Float",
+   "label": "Leave Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_salary",
+   "fieldtype": "Currency",
+   "label": "Leave Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "settlement_days",
+   "fieldtype": "Float",
+   "label": "Settlement Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "settlement_salary",
+   "fieldtype": "Currency",
+   "label": "Settlement Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_bonus_amount",
+   "fieldtype": "Currency",
+   "label": "Total Bonus Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_salary_amount",
+   "fieldtype": "Currency",
+   "label": "Total Salary Amount",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-10-14 16:00:11.578007",
+ "modified": "2023-10-19 18:33:00.079667",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus",

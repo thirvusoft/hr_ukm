@@ -7,7 +7,6 @@ from frappe import _
 from frappe.utils import getdate, nowdate
 from datetime import date, datetime, timedelta
 
-
 from united_knitting_mills.ukm.utils.python.employee__checkin import create_employee_checkin, create_employee_checkin_security
 class UnitedKnittingMillsSettings(Document):
 	

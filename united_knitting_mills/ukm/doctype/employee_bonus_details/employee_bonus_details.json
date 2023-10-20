@@ -10,7 +10,14 @@
   "employee_name",
   "designation",
   "working_days",
-  "current_bonus"
+  "current_bonus",
+  "salary",
+  "bonus_percentage",
+  "leave_days",
+  "leave_salary",
+  "settlement_days",
+  "settlement_salary",
+  "total_bonus_amount"
  ],
  "fields": [
   {
@@ -18,7 +25,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Employee ID",
-   "options": "Employee"
+   "options": "Employee",
+   "read_only": 1
   },
   {
    "fetch_from": "employee.employee_name",
@@ -39,7 +47,8 @@
    "fieldname": "current_bonus",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Current Bonus"
+   "label": "Current Bonus",
+   "read_only": 1
   },
   {
    "columns": 2,
@@ -48,12 +57,51 @@
    "in_list_view": 1,
    "label": "Working Days",
    "read_only": 1
+  },
+  {
+   "fieldname": "bonus_percentage",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Bonus Percentage"
+  },
+  {
+   "default": "0",
+   "fieldname": "salary",
+   "fieldtype": "Currency",
+   "label": "Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_days",
+   "fieldtype": "Float",
+   "label": "Leave Days"
+  },
+  {
+   "fieldname": "leave_salary",
+   "fieldtype": "Currency",
+   "label": "Leave Salary"
+  },
+  {
+   "fieldname": "settlement_days",
+   "fieldtype": "Float",
+   "label": "Settlement Days"
+  },
+  {
+   "fieldname": "settlement_salary",
+   "fieldtype": "Currency",
+   "label": "Settlement Salary"
+  },
+  {
+   "fieldname": "total_bonus_amount",
+   "fieldtype": "Currency",
+   "label": "Total Bonus Amount",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-10-14 17:55:42.456990",
+ "modified": "2023-10-19 17:51:41.172782",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Details",

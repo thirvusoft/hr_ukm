@@ -47,7 +47,7 @@ def set_salary_for_labour(doc,event):
         salary_slip_for_labours(doc, event)
         food_expens_amount(doc)
 
-    elif(shift_doc.staff):
+    elif(shift_doc.staff or shift_doc.security_):
         staff_salary_calculation(doc,event)
         food_expens_amount(doc)
 

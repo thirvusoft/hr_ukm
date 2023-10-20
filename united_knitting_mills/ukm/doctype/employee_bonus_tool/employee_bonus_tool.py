@@ -3,51 +3,99 @@ import json
 from frappe.model.document import Document
 
 class EmployeeBonusTool(Document):
-    pass
+    def on_cancel(self):
+        bonus_cancel=frappe.get_all("Employee Bonus", filters={"docstatus":["=", 1], "reference":self.name} , pluck='name' )
+        for i in bonus_cancel:
+            ea_doc=frappe.get_doc("Employee Bonus", i)
+            ea_doc.cancel()
 
+    def on_trash(self):
+        employee_bonus=frappe.get_all("Employee Bonus", filters={"docstatus":["!=", 1], "reference":self.name}, pluck='name' )
+        for i in employee_bonus:
+            frappe.delete_doc("Employee Bonus", i)
 
 
 @frappe.whitelist()
-def employee_finder(emp_department,location,from_date,to_date):
+def employee_finder(emp_department,designation,location,from_date,to_date):
     settings = frappe.get_single("United Knitting Mills Settings")
-    employee_names=[]
-    amount=[]
-    working_days = []
+    bonuspercentage = settings.bonus_percentage
     table=[]
-    emp_list=frappe.get_all("Employee",filters={"department" : emp_department,'location' : location, 'status':'Active'},fields=["name", "employee_name","department",'designation'],order_by="name")
-    department_list=frappe.get_value("Department", emp_department, 'is_staff')
+    filters={}
+    if emp_department:
+        filters["department"] = emp_department
+    if location:
+        filters['location'] = location
+    if designation:
+        filters['designation'] = designation
+    filters['status'] ='Active'
+    emp_list=frappe.get_all("Employee",filters=filters, fields=["name", "employee_name","department",'designation'],order_by="name")
+    
     for name in emp_list:
         attendance_status=0
+        get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':name.name, 'docstatus':1, 'workflow_state':"Approved by MD"}, 'base')
         bonus_percent= bonus_on_days(name['name'])
-        if department_list==1:
-            attendance_status = frappe.db.sql("""
-                    SELECT count(att.name)
+        employee_bonus = frappe.db.sql(f"""
+            SELECT
+                esd.from_date,
+                esd.to_date,
+                CASE
+                    WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = esd.deparment limit 1) = 1
+                        THEN esd.base / (TIMESTAMPDIFF(DAY, esd.from_date ,  DATE_ADD(esd.to_date, INTERVAL 1 DAY)))
+                    ELSE
+                        esd.base
+                END base, 
+                (
+                    SELECT 
+                        count(att.name)
                     FROM `tabAttendance` as att
-                    WHERE  att.employee = '{0}' and att.attendance_date between '{1}' and '{2}' and att.workflow_state = 'Present' and att.docstatus = 1
-                    """.format(name['name'],from_date,to_date),as_list=1)[0][0]
-        else:
-            attendance_status = frappe.db.sql(f"""
-                    SELECT count(att.name)
-                    FROM `tabAttendance` as att
-                    WHERE  att.employee = '{name['name']}' and att.attendance_date between '{from_date}' and '{to_date}' and 
-                    att.checkin_time <= '{settings.from_time}' and 
-                    att.checkout_time >= '{settings.to_time}' and
-                    att.workflow_state = 'Present' and att.docstatus = 1
-                    """,as_list=1)[0][0]
-
-        emp_base_amount=frappe.db.sql("""select ssa.base
-                FROM `tabSalary Structure Assignment` as ssa
-                WHERE ssa.employee = '{0}' and ssa.from_date <='{1}' and ssa.docstatus = 1
-                ORDER BY ssa.from_date DESC LIMIT 1 """.format(name['name'],to_date),as_list=1)
-        calc=0
-        if emp_base_amount:
-            calc = (float(attendance_status) * float(emp_base_amount[0][0])) * ( bonus_percent/ 100)
-            amount.append(calc)
-            working_days.append(attendance_status)
-            employee_names.append(name)
-    
-        table.append({'employee':name['name'],'employee_name':name['employee_name'],'designation':name['designation'],'working_days':attendance_status,'current_bonus':calc})
-    return employee_names, amount, working_days, table
+                    WHERE  
+                        att.employee = '{name['name']}' and 
+                        att.attendance_date between GREATEST('{from_date}', esd.from_date) and LEAST('{to_date}', esd.to_date) and 
+                        att.total_shift_count >= 1 and
+                        CASE
+                            WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 1
+                                THEN 1
+                            ELSE (
+                                    att.checkin_time <= '{settings.from_time}' and 
+                                    att.checkout_time >= '{settings.to_time}'
+                                )
+                        END and
+                        att.workflow_state = 'Present' and 
+                        att.docstatus = 1
+                ) days
+            FROM `tabEmployee Salary Details` esd
+            WHERE
+                esd.employee = '{name['name']}' AND
+                esd.docstatus = 1 AND
+                esd.workflow_state = 'Approved by MD' AND
+                (
+                    (esd.from_date BETWEEN '{from_date}' AND '{to_date}' OR esd.to_date BETWEEN '{from_date}' AND '{to_date}')
+                    OR ('{from_date}' BETWEEN esd.from_date AND esd.to_date OR '{to_date}' BETWEEN esd.from_date AND esd.to_date)
+                )
+        """, as_dict = True)
+        
+        
+        salary = sum([(bonus.days or 0) * (bonus.base or 0) for bonus in employee_bonus])
+        bonus_amt = ((bonuspercentage or 0) / 100) * salary
+        days = sum([(bonus.days or 0) for bonus in employee_bonus])
+        leavedays = days/32 or 0.00
+        settlementdays=days/22 or 0
+        total_amount=bonus_amt+(leavedays*(get_ssa or 0) or 0)+(settlementdays*(get_ssa or 0) or 0)
+        table.append({
+            'employee': name['name'],
+            'employee_name': name['employee_name'],
+            'designation': name['designation'],
+            'working_days': days,
+            'current_bonus': bonus_amt, 
+            'salary': salary,
+            'bonus_percentage': bonuspercentage,
+            'leave_days' : leavedays,
+            'leave_salary': (leavedays*(get_ssa or 0) or 0),
+            'settlement_days':settlementdays,
+            'settlement_salary' : (settlementdays*(get_ssa or 0) or 0),
+            'total_bonus_amount':total_amount
+        })
+    return table
 
 
 @frappe.whitelist()
@@ -67,10 +115,20 @@ def create_bonus(doc,event):
         if bonus_list.current_bonus:
             bonus_doc=frappe.new_doc('Employee Bonus')
             bonus_doc.employee = bonus_list.employee
-            bonus_doc.bonus_amount = bonus_list.current_bonus
+            bonus_doc.from_date = doc.from_date
+            bonus_doc.to_date = doc.to_date
+            bonus_doc.bonus_percentage = bonus_list.bonus_percentage
+            bonus_doc.total_bonus_amount = bonus_list.current_bonus
+            bonus_doc.working_days = bonus_list.working_days
+            bonus_doc.total_salary_amount = bonus_list.salary
+            bonus_doc.leave_days = bonus_list.leave_days
+            bonus_doc.leave_salary = bonus_list.leave_salary
+            bonus_doc.settlement_days = bonus_list.settlement_days
+            bonus_doc.settlement_salary = bonus_list.settlement_salary
             bonus_doc.bonus_payment_date = doc.date
             bonus_doc.reference = doc.name
             bonus_doc.bonus_account = doc.bonus_account
+            bonus_doc.bonus_amount = bonus_list.total_bonus_amount
             
             bonus_doc.save()
             bonus_doc.submit()

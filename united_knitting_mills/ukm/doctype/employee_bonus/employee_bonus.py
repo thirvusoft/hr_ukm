@@ -19,4 +19,16 @@ class EmployeeBonus(Document):
 			payment_doc.paid_from=self.bonus_account
 			payment_doc.paid_from_account_currency=company.default_currency
 			payment_doc.paid_to = 'Creditors - '+abbr
+			payment_doc.employee_bonus_reference = self.name
 			payment_doc.submit()
+	def on_cancel(self):
+		pe=frappe.db.get_all("Payment Entry", filters={'docstatus':1, "employee_bonus_reference":self.name}, pluck='name' )
+		for i in pe:
+			pe_doc=frappe.get_doc("Payment Entry", i)
+			pe_doc.cancel()
+		self.ignore_linked_doctypes = ("GL Entry")
+
+	def on_trash(self):
+		pe=frappe.get_all("Payment Entry", filters={'docstatus':2, "employee_bonus_reference":self.name} , pluck='name' )
+		for i in pe:
+			frappe.delete_doc("Payment Entry", i)

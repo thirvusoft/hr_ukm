@@ -191,6 +191,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Employee Bonus",
+   "link_to": "Employee Bonus",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Employee Advance Tool",
    "link_to": "Employee Advance Tool",
    "link_type": "DocType",
@@ -216,7 +225,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-07-31 17:42:57.830738",
+ "modified": "2023-10-18 11:25:27.322558",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
