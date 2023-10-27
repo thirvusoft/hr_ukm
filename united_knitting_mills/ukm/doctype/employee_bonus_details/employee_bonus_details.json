@@ -74,26 +74,31 @@
   {
    "fieldname": "leave_days",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Leave Days"
   },
   {
    "fieldname": "leave_salary",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Leave Salary"
   },
   {
    "fieldname": "settlement_days",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Settlement Days"
   },
   {
    "fieldname": "settlement_salary",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Settlement Salary"
   },
   {
    "fieldname": "total_bonus_amount",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Total Bonus Amount",
    "read_only": 1
   }
@@ -101,7 +106,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-10-19 17:51:41.172782",
+ "modified": "2023-10-26 18:42:48.987319",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Details",

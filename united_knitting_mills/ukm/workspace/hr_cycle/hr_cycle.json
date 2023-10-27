@@ -223,9 +223,18 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Salary Details",
+   "link_to": "Employee Salary Details",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2023-10-18 11:25:27.322558",
+ "modified": "2023-10-26 18:43:43.534671",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -351,6 +360,12 @@
    "doc_view": "",
    "label": "Payroll Entry SS Submission",
    "link_to": "Payroll Entry SS Submission",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Employee Bonus Details Report",
+   "link_to": "Employee Bonus Details Report",
    "type": "Report"
   }
  ],

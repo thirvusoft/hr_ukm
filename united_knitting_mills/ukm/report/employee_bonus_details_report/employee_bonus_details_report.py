@@ -62,7 +62,6 @@ def get_columns(filters):
     
     while current_date <= date2:
         month = current_date.strftime('%B-%Y')
-        frappe.errprint(month)
         current_date = frappe.utils.add_months(current_date, months=1)
         
         columns.append({
@@ -91,13 +90,19 @@ def get_columns(filters):
             "fieldname": "total_salary_amount",
             "width": 100
         },
+        {
+            "label": _("Total Bonus Amount"),
+            "fieldtype": "Float",
+            "fieldname": "total_bonus_amount",
+            "width": 100
+        },
 
     ]
     return columns
 
 def get_data(filters):
     keys = list(filters.keys())
-    no=1
+    no=0
     from_date = filters["from_date"]
     to_date = filters["to_date"]
     settings = frappe.get_single("United Knitting Mills Settings")
@@ -106,7 +111,7 @@ def get_data(filters):
         filter["department"] = filters["department"]
     if ("designation" in keys):
         filter["designation"] = filters["designation"]
-    bonus_list=frappe.db.get_all("Employee Bonus", filters=filter, fields=["name","employee","employee_name", "working_days", "bonus_amount", "designation", "total_salary_amount", "from_date", "to_date"],group_by="employee", order_by="employee")
+    bonus_list=frappe.db.get_all("Employee Bonus", filters=filter, fields=["name","employee","employee_name", "working_days", "bonus_amount", "designation", "total_salary_amount", "from_date", "to_date", "total_bonus_amount"],group_by="employee", order_by="employee")
     for bonus in bonus_list:
         emp_doc = frappe.get_doc("Employee", bonus.employee)
         attendance_monthwise=frappe.db.sql(f'''
@@ -115,7 +120,7 @@ def get_data(filters):
                         (SELECT  esd.base 
                         FROM `tabEmployee Salary Details` esd
                         WHERE att.attendance_date between esd.from_date and esd.to_date and esd.workflow_state = 'Approved by MD' and 
-                        esd.docstatus = 1 limit 1) as base
+                        esd.docstatus = 1 and esd.employee=att.employee limit 1) as base
                     FROM `tabAttendance` as att
                     WHERE  
                         att.employee = '{bonus['employee']}' and 
@@ -134,12 +139,12 @@ def get_data(filters):
                          (SELECT  count(esd.name) 
                         FROM `tabEmployee Salary Details` esd
                         WHERE att.attendance_date between esd.from_date and esd.to_date and esd.workflow_state = 'Approved by MD' and 
-                        esd.docstatus = 1 limit 1) >0
+                        esd.docstatus = 1 and esd.employee=att.employee limit 1) >0
                     GROUP BY monthname(att.attendance_date), year(att.attendance_date), 
                     (SELECT  esd.name
                         FROM `tabEmployee Salary Details` esd
                         WHERE att.attendance_date between esd.from_date and esd.to_date and esd.workflow_state = 'Approved by MD' and 
-                        esd.docstatus = 1 limit 1)
+                        esd.docstatus = 1 and esd.employee=att.employee limit 1)
                                            ''', as_dict=1)
         _months=[
             'January',
@@ -157,6 +162,7 @@ def get_data(filters):
         ]
         attendance_monthwise.sort(key=lambda x : (x.get('year'),_months.index(x.get('month'))))
         base = {}
+        no+=1
         for att in attendance_monthwise:
             if att.base not in base:
                 base[att.base] = []

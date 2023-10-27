@@ -74,7 +74,7 @@ def get_columns(filters):
     	{
             "label": _("Bonus Amount"),
             "fieldtype": "Currency",
-            "fieldname": "bonus_amount",
+            "fieldname": "total_bonus_amount",
             "width": 100
         },
      	{

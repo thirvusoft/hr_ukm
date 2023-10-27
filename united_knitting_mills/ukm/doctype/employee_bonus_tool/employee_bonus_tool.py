@@ -16,7 +16,7 @@ class EmployeeBonusTool(Document):
 
 
 @frappe.whitelist()
-def employee_finder(emp_department,designation,location,from_date,to_date):
+def employee_finder(emp_department=None,designation=None,location=None,from_date=None,to_date=None):
     settings = frappe.get_single("United Knitting Mills Settings")
     bonuspercentage = settings.bonus_percentage
     table=[]
