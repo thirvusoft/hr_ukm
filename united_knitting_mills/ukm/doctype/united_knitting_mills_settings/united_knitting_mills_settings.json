@@ -12,6 +12,8 @@
   "bonus_table",
   "from_time",
   "to_time",
+  "from_time_unit_2",
+  "to_time_unit_2",
   "advance_section",
   "advance_amount",
   "biometric_settings_section",
@@ -148,12 +150,12 @@
   {
    "fieldname": "from_time",
    "fieldtype": "Time",
-   "label": "From Time"
+   "label": "From Time Unit 1"
   },
   {
    "fieldname": "to_time",
    "fieldtype": "Time",
-   "label": "To Time"
+   "label": "To Time Unit 1"
   },
   {
    "fieldname": "bonus_table",
@@ -196,12 +198,22 @@
    "fieldtype": "Time",
    "label": "Resetting Time For Security",
    "reqd": 1
+  },
+  {
+   "fieldname": "from_time_unit_2",
+   "fieldtype": "Time",
+   "label": "From Time Unit 2"
+  },
+  {
+   "fieldname": "to_time_unit_2",
+   "fieldtype": "Time",
+   "label": "To Time Unit 2"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-08-28 19:50:10.600325",
+ "modified": "2023-10-30 11:12:55.172774",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",

@@ -299,7 +299,7 @@ def create_labour_attendance(departments,doc,location,late_entry,early_exit):
                                 "total_shift_count":0,
                                 'mismatched_checkin':1,
                                 'no_of_checkin':f"{len(date_wise_checkin[date])}",
-                                'checkin_time':'',
+                                'checkin_time':date_wise_checkin[date][0]['time'] if len(date_wise_checkin[date]) else '',
                                 'checkout_time':''
                             })
                     new_attendance_doc.insert()

@@ -55,10 +55,24 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                         CASE
                             WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 1
                                 THEN 1
-                            ELSE (
-                                    att.checkin_time <= '{settings.from_time}' and 
-                                    att.checkout_time >= '{settings.to_time}'
-                                )
+                            WHEN (SELECT emp.location FROM `tabEmployee` emp WHERE emp.name = att.employee ) = 'UNIT 1'
+                                THEN (
+                                        att.checkin_time <= '{settings.from_time}' and 
+                                        CASE
+                                            WHEN att.checkout_time <= '23:59:59'
+                                            THEN att.checkout_time >= '{settings.to_time}'
+                                            ELSE 1
+                                        END
+                                    )
+                            WHEN (SELECT emp.location FROM `tabEmployee` emp WHERE emp.name = att.employee) = 'UNIT 2'
+                                THEN (
+                                        att.checkin_time <= '{settings.from_time_unit_2}' and 
+                                        CASE
+                                            WHEN att.checkout_time <= '23:59:59'
+                                            THEN att.checkout_time >= '{settings.to_time_unit_2}'
+                                            ELSE 1
+                                        END
+                                    )
                         END and
                         att.workflow_state = 'Present' and 
                         att.docstatus = 1
@@ -72,7 +86,7 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                     (esd.from_date BETWEEN '{from_date}' AND '{to_date}' OR esd.to_date BETWEEN '{from_date}' AND '{to_date}')
                     OR ('{from_date}' BETWEEN esd.from_date AND esd.to_date OR '{to_date}' BETWEEN esd.from_date AND esd.to_date)
                 )
-        """, as_dict = True)
+        """, as_dict = True, debug=1)
         
         
         salary = sum([(bonus.days or 0) * (bonus.base or 0) for bonus in employee_bonus])
