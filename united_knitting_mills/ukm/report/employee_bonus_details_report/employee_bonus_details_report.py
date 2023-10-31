@@ -125,14 +125,28 @@ def get_data(filters):
                     WHERE  
                         att.employee = '{bonus['employee']}' and 
                         att.attendance_date between GREATEST('{from_date}', '{bonus['from_date']}') and LEAST('{to_date}', '{bonus['to_date']}') and 
-                        att.total_shift_count >= 1 and
+                        att.total_shift_count >= 1 and DATE_FORMAT(att.attendance_date, '%W') != 'Sunday' and
                         CASE
                             WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 1
                                 THEN 1
-                            ELSE (
-                                    att.checkin_time <= '{settings.from_time}' and 
-                                    att.checkout_time >= '{settings.to_time}'
-                                )
+                            WHEN (SELECT emp.location FROM `tabEmployee` emp WHERE emp.name = att.employee ) = 'UNIT 1'
+                                THEN (
+                                        att.checkin_time <= '{settings.from_time}' and 
+                                        CASE
+                                            WHEN att.checkout_time <= '23:59:59'
+                                            THEN att.checkout_time >= '{settings.to_time}'
+                                            ELSE 1
+                                        END
+                                    )
+                            WHEN (SELECT emp.location FROM `tabEmployee` emp WHERE emp.name = att.employee) = 'UNIT 2'
+                                THEN (
+                                        att.checkin_time <= '{settings.from_time_unit_2}' and 
+                                        CASE
+                                            WHEN att.checkout_time <= '23:59:59'
+                                            THEN att.checkout_time >= '{settings.to_time_unit_2}'
+                                            ELSE 1
+                                        END
+                                    )
                         END and
                         att.workflow_state = 'Present' and 
                         att.docstatus = 1 and 

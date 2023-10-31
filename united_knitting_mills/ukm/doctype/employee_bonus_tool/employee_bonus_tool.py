@@ -51,7 +51,7 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                     WHERE  
                         att.employee = '{name['name']}' and 
                         att.attendance_date between GREATEST('{from_date}', esd.from_date) and LEAST('{to_date}', esd.to_date) and 
-                        att.total_shift_count >= 1 and
+                        att.total_shift_count >= 1 and  DATE_FORMAT(att.attendance_date, '%W') != 'Sunday' and
                         CASE
                             WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 1
                                 THEN 1
