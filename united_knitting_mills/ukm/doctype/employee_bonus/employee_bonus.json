@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "HR-EB-.YYYY.-.#####",
+ "autoname": "naming_series:HR-EB-.YYYY.-.#####",
  "creation": "2022-06-09 14:32:57.145666",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -29,7 +29,8 @@
   "bonus_amount",
   "base_grand_total",
   "advance_paid",
-  "amended_from"
+  "amended_from",
+  "naming_series"
  ],
  "fields": [
   {
@@ -190,12 +191,19 @@
    "fieldtype": "Currency",
    "label": "Total Salary Amount",
    "read_only": 1
+  },
+  {
+   "default": "HR-EB-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "HR-EB-.YYYY.-.#####"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-19 18:33:00.079667",
+ "modified": "2023-11-03 16:16:13.413936",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus",
