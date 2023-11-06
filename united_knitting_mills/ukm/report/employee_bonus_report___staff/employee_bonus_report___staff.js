@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Employee Bonus Details Report"] = {
+frappe.query_reports["Employee Bonus Report - Staff"] = {
 	"filters": [
 		{
 			"fieldname": "from_date",
@@ -31,14 +31,14 @@ frappe.query_reports["Employee Bonus Details Report"] = {
 			"label": __("Department"),
 			"fieldtype": "Link",
 			"options": "Department",
-			"reqd":1,
 			"width": "100",
+			"reqd":1,
 			"get_query": function () {
 				var unit = frappe.query_report.get_filter_value('unit');
 				return {
 					filters: [
 						["Department", "unit", "=", unit],
-						["Department", "is_staff", "=", 0]
+						["Department", "is_staff", "=", 1]
 					]
 				};
 			},

@@ -23,6 +23,8 @@
   "bonus_percentage",
   "total_bonus_amount",
   "bonus_account",
+  "unused_pay_leaves",
+  "pay_leave_salary",
   "leave_days",
   "leave_salary",
   "reference",
@@ -158,7 +160,7 @@
   },
   {
    "fieldname": "leave_days",
-   "fieldtype": "Float",
+   "fieldtype": "Currency",
    "label": "Leave Days",
    "read_only": 1
   },
@@ -198,12 +200,22 @@
    "fieldtype": "Select",
    "label": "Series",
    "options": "HR-EB-.YYYY.-.#####"
+  },
+  {
+   "fieldname": "unused_pay_leaves",
+   "fieldtype": "Float",
+   "label": "Unused Pay Leaves"
+  },
+  {
+   "fieldname": "pay_leave_salary",
+   "fieldtype": "Currency",
+   "label": "Pay Leave Salary"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-03 16:16:13.413936",
+ "modified": "2023-11-04 17:24:31.255194",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus",

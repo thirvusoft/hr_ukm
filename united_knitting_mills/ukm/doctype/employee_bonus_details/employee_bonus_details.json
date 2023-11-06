@@ -13,6 +13,8 @@
   "current_bonus",
   "salary",
   "bonus_percentage",
+  "unused_pay_leaves",
+  "pay_leave_salary",
   "leave_days",
   "leave_salary",
   "settlement_days",
@@ -74,39 +76,50 @@
   {
    "fieldname": "leave_days",
    "fieldtype": "Float",
-   "hidden": 1,
-   "label": "Leave Days"
+   "label": "Leave Days",
+   "read_only": 1
   },
   {
    "fieldname": "leave_salary",
    "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Leave Salary"
+   "label": "Leave Salary",
+   "read_only": 1
   },
   {
    "fieldname": "settlement_days",
    "fieldtype": "Float",
-   "hidden": 1,
-   "label": "Settlement Days"
+   "label": "Settlement Days",
+   "read_only": 1
   },
   {
    "fieldname": "settlement_salary",
    "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Settlement Salary"
+   "label": "Settlement Salary",
+   "read_only": 1
   },
   {
    "fieldname": "total_bonus_amount",
    "fieldtype": "Currency",
-   "hidden": 1,
    "label": "Total Bonus Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unused_pay_leaves",
+   "fieldtype": "Float",
+   "label": "Unused Pay Leaves",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pay_leave_salary",
+   "fieldtype": "Currency",
+   "label": "Pay Leave Salary",
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-10-26 18:42:48.987319",
+ "modified": "2023-11-06 12:18:46.091582",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Details",
