@@ -234,7 +234,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-10-26 18:43:43.534671",
+ "modified": "2023-11-04 14:32:11.820449",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -366,6 +366,12 @@
    "doc_view": "",
    "label": "Employee Bonus Details Report",
    "link_to": "Employee Bonus Details Report",
+   "type": "Report"
+  },
+  {
+   "doc_view": "",
+   "label": "Employee Bonus Report",
+   "link_to": "Employee Bonus Report",
    "type": "Report"
   }
  ],

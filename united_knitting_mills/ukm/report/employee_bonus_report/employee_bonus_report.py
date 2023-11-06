@@ -113,7 +113,7 @@ def get_columns(filters):
 
 def get_data(filters):
     keys = list(filters.keys())
-    no=1
+    no=0
     filter = {'from_date':["=", filters['from_date']],"to_date":["=", filters['to_date']],'docstatus': ["!=", 2], 'unit':filters['unit']}
     
     if ("department" in keys):
@@ -125,7 +125,9 @@ def get_data(filters):
     bonus_list=frappe.db.get_all("Employee Bonus", filters=filter, fields=["name","employee","employee_name","designation", "working_days", "bonus_amount","bonus_percentage",  
                                 "settlement_days", "settlement_salary", "leave_days", "leave_salary", "total_salary_amount", "total_bonus_amount"],
                                 group_by="employee", order_by="employee")
+    
     for bonus in bonus_list:
+        no+=1
         emp_doc = frappe.get_doc("Employee", bonus.employee)
         bonus['status'] = emp_doc.status
         bonus['current_wages']=frappe.db.get_value("Salary Structure Assignment", {'employee':bonus.employee, 'docstatus':1, 'workflow_state':"Approved by MD"}, 'base')

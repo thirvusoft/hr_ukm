@@ -27,7 +27,6 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
         filters['location'] = location
     if designation:
         filters['designation'] = designation
-    filters['status'] ='Active'
     emp_list=frappe.get_all("Employee",filters=filters, fields=["name", "employee_name","department",'designation'],order_by="name")
     
     for name in emp_list:
