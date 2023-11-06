@@ -43,7 +43,7 @@ frappe.ui.form.on("Employee Bonus Details", {
 		var row=locals[cdt][cdn]
 		if (row.salary) {
 		frappe.model.set_value(cdt, cdn, 'current_bonus', (row.bonus_percentage/ 100) * row.salary)
-		frappe.model.set_value(cdt, cdn, 'total_bonus_amount', (((row.bonus_percentage/ 100) * row.salary)+(row.settlement_salary)+(row.leave_salary)))
+		frappe.model.set_value(cdt, cdn, 'total_bonus_amount', (((row.bonus_percentage/ 100) * row.salary)+(row.settlement_salary)+(row.leave_salary)+(row.pay_leave_salary)))
 		}
 	}
 })

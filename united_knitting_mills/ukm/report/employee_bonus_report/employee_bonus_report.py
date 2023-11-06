@@ -12,103 +12,193 @@ def execute(filters=None):
 
 
 def get_columns(filters):
-    columns = [
-         {
-            "label": _("S.No"),
-            "fieldtype": "Data",
-            "fieldname": "sno",
-            "width": 50
-        },
-        {
-            "label": _("Employee ID"),
-            "fieldtype": "Link",
-            "fieldname": "employee",
-            "options":"Employee",
-            "width": 110
-        },
-        {
-            "label": _("Name of Employee"),
-            "fieldtype": "Data",
-            "fieldname": "employee_name",
-            "width": 100
-        },
-        {
-            "label": _("Designation"),
-            "fieldtype": "Data",
-            "fieldname": "designation",
-            "width": 100
-        },
-        {
-            "label": _("Status"),
-            "fieldtype": "Select",
-            "fieldname": "status",
-            "options":["", "Active", "Inactive", "Suspended", "Left"],
-            "width": 100
-        },
-        {
-            "label": _("Current Wages"),
-            "fieldtype": "Float",
-            "fieldname": "current_wages",
-            "width": 100
-        },
-        {
-            "label": _("Total Working Days"),
-            "fieldtype": "Float",
-            "fieldname": "working_days",
-            "width": 100
-        },
-        {
-            "label": _("Total Salary Amount"),
-            "fieldtype": "Currency",
-            "fieldname": "total_salary_amount",
-            "width": 100
-        },
-      
-         {
-            "label": _("Bonus %"),
-            "fieldtype": "Float",
-            "fieldname": "bonus_percentage",
-            "width": 100
-        },
-         
-    	{
-            "label": _("Bonus Amount"),
-            "fieldtype": "Currency",
-            "fieldname": "total_bonus_amount",
-            "width": 100
-        },
-     	{
-            "label": _("Leave Days"),
-            "fieldtype": "Float",
-            "fieldname": "leave_days",
-            "width": 100
-        },
-     	{
-            "label": _("Leave Salary"),
-            "fieldtype": "Currency",
-            "fieldname": "leave_salary",
-            "width": 100
-        },
-	     	{
-            "label": _("Settlement Days"),
-            "fieldtype": "Float",
-            "fieldname": "settlement_days",
-            "width": 100
-        },
-     	{
-            "label": _("Settlement Salary"),
-            "fieldtype": "Currency",
-            "fieldname": "settlement_salary",
-            "width": 100
-        },
-        {
-            "label": _("Total Amount"),
-            "fieldtype": "Currency",
-            "fieldname": "bonus_amount",
-            "width": 100
-        },
+    columns=[]
+    if filters.get("department"):
+        staff_checking =frappe.db.get_value("Department", filters.get("department"), "is_staff")
+        if staff_checking == 0:
+            columns += [
+                {
+                    "label": _("S.No"),
+                    "fieldtype": "Data",
+                    "fieldname": "sno",
+                    "width": 50
+                },
+                {
+                    "label": _("Employee ID"),
+                    "fieldtype": "Link",
+                    "fieldname": "employee",
+                    "options":"Employee",
+                    "width": 110
+                },
+                {
+                    "label": _("Name of Employee"),
+                    "fieldtype": "Data",
+                    "fieldname": "employee_name",
+                    "width": 100
+                },
+                {
+                    "label": _("Designation"),
+                    "fieldtype": "Data",
+                    "fieldname": "designation",
+                    "width": 100
+                },
+                {
+                    "label": _("Status"),
+                    "fieldtype": "Select",
+                    "fieldname": "status",
+                    "options":["", "Active", "Inactive", "Suspended", "Left"],
+                    "width": 100
+                },
+                {
+                    "label": _("Current Wages"),
+                    "fieldtype": "Float",
+                    "fieldname": "current_wages",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Working Days"),
+                    "fieldtype": "Float",
+                    "fieldname": "working_days",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Salary Amount"),
+                    "fieldtype": "Currency",
+                    "fieldname": "total_salary_amount",
+                    "width": 100
+                },
+            
+                {
+                    "label": _("Bonus %"),
+                    "fieldtype": "Float",
+                    "fieldname": "bonus_percentage",
+                    "width": 100
+                },
+                
+                {
+                    "label": _("Bonus Amount"),
+                    "fieldtype": "Currency",
+                    "fieldname": "total_bonus_amount",
+                    "width": 100
+                },
+                {
+                    "label": _("Leave Days"),
+                    "fieldtype": "Float",
+                    "fieldname": "leave_days",
+                    "width": 100
+                },
+                {
+                    "label": _("Leave Salary"),
+                    "fieldtype": "Currency",
+                    "fieldname": "leave_salary",
+                    "width": 100
+                },
+                    {
+                    "label": _("Settlement Days"),
+                    "fieldtype": "Float",
+                    "fieldname": "settlement_days",
+                    "width": 100
+                },
+                {
+                    "label": _("Settlement Salary"),
+                    "fieldtype": "Currency",
+                    "fieldname": "settlement_salary",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Amount"),
+                    "fieldtype": "Currency",
+                    "fieldname": "bonus_amount",
+                    "width": 100
+                },
 
-    ]
+            ]
+        else:
+                        columns += [
+                {
+                    "label": _("S.No"),
+                    "fieldtype": "Data",
+                    "fieldname": "sno",
+                    "width": 50
+                },
+                {
+                    "label": _("Employee ID"),
+                    "fieldtype": "Link",
+                    "fieldname": "employee",
+                    "options":"Employee",
+                    "width": 110
+                },
+                {
+                    "label": _("Name of Employee"),
+                    "fieldtype": "Data",
+                    "fieldname": "employee_name",
+                    "width": 100
+                },
+                {
+                    "label": _("Designation"),
+                    "fieldtype": "Data",
+                    "fieldname": "designation",
+                    "width": 100
+                },
+                {
+                    "label": _("Status"),
+                    "fieldtype": "Select",
+                    "fieldname": "status",
+                    "options":["", "Active", "Inactive", "Suspended", "Left"],
+                    "width": 100
+                },
+                {
+                    "label": _("Current Wages"),
+                    "fieldtype": "Float",
+                    "fieldname": "current_wages",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Working Days"),
+                    "fieldtype": "Float",
+                    "fieldname": "working_days",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Salary Amount"),
+                    "fieldtype": "Currency",
+                    "fieldname": "total_salary_amount",
+                    "width": 100
+                },
+            
+                {
+                    "label": _("Bonus %"),
+                    "fieldtype": "Float",
+                    "fieldname": "bonus_percentage",
+                    "width": 100
+                },
+                
+                {
+                    "label": _("Bonus Amount"),
+                    "fieldtype": "Currency",
+                    "fieldname": "total_bonus_amount",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Unused Pay Leave"),
+                    "fieldtype": "Float",
+                    "fieldname": "unused_pay_leaves",
+                    "width": 100
+                },
+                {
+                    "label": _("Pay Leave Salary"),
+                    "fieldtype": "Currency",
+                    "fieldname": "pay_leave_salary",
+                    "width": 100
+                },
+                {
+                    "label": _("Total Amount"),
+                    "fieldtype": "Currency",
+                    "fieldname": "bonus_amount",
+                    "width": 100
+                },
+
+            ]
     return columns
 
 def get_data(filters):
@@ -123,7 +213,7 @@ def get_data(filters):
         filter["designation"] = filters["designation"]
 
     bonus_list=frappe.db.get_all("Employee Bonus", filters=filter, fields=["name","employee","employee_name","designation", "working_days", "bonus_amount","bonus_percentage",  
-                                "settlement_days", "settlement_salary", "leave_days", "leave_salary", "total_salary_amount", "total_bonus_amount"],
+                                "settlement_days", "settlement_salary", "leave_days", "leave_salary", "total_salary_amount", "total_bonus_amount", "unused_pay_leaves", "pay_leave_salary"],
                                 group_by="employee", order_by="employee")
     for bonus in bonus_list:
         emp_doc = frappe.get_doc("Employee", bonus.employee)
