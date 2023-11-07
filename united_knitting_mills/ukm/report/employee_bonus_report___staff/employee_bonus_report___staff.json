@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "UKM UNIT I",
- "modified": "2023-11-06 09:52:42.051304",
+ "modified": "2023-11-06 18:58:11.200014",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Bonus Report - Staff",
@@ -28,6 +28,9 @@
   },
   {
    "role": "Thirvu HR User"
+  },
+  {
+   "role": "Thirvu Accountant"
   }
  ]
 }

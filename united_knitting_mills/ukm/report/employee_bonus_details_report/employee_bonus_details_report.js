@@ -31,7 +31,6 @@ frappe.query_reports["Employee Bonus Details Report"] = {
 			"label": __("Department"),
 			"fieldtype": "Link",
 			"options": "Department",
-			"reqd":1,
 			"width": "100",
 			"get_query": function () {
 				var unit = frappe.query_report.get_filter_value('unit');
