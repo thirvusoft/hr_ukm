@@ -37,6 +37,8 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
     to_date = getdate(to_date)
     difference_in_months = float(relativedelta(to_date, from_date).months)
     for name in emp_list:
+        unused_pay_leaves=0
+        payleave_salary=0
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':name.name, 'docstatus':1, 'workflow_state':"Approved by MD"}, 'base') or 0
         department_staff=frappe.get_value("Department", name.department, "is_staff")
         if department_staff == 0:
@@ -115,11 +117,20 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                     ss.start_date between '{from_date}' AND '{to_date}' and
                     ss.end_date between '{from_date}' AND '{to_date}'
                     """, as_dict=1)
-            pending_paid_leave_ss=frappe.db.get_all("Salary Slip", filters={"employee":name["name"], 
-                                                                         "leave_with_pay":["<", settings.pay_leave], 
-                                                                         "start_date":["between", (from_date, to_date)],
-                                                                         "end_date":["between", (from_date, to_date)]}, 
-                                                 fields=["leave_with_pay", "per_day_salary_for_staff"])
+            pending_paid_leave_ss=frappe.db.sql(f"""
+                                    SELECT
+                                        ss.leave_with_pay,
+                                        ss.per_day_salary_for_staff
+                                    FROM `tabSalary Slip` ss
+                                    WHERE
+                                        ss.employee = '{name['name']}' AND
+                                        ss.docstatus = 1 AND
+                                        ss.unit = '{name['location']}' AND
+                                        ss.start_date between '{from_date}' AND '{to_date}' and
+                                        ss.end_date between '{from_date}' AND '{to_date}' and
+                                        ss.leave_with_pay < {settings.pay_leave} and
+                                        ss.total_working_days = ss.payment_days
+                                        """, as_dict=True)
             pending_paid_leave_amt=sum([(settings.pay_leave-i.leave_with_pay)*i.per_day_salary_for_staff for i in pending_paid_leave_ss])
             pending_paid_leave_count=sum([(settings.pay_leave-i.leave_with_pay) for i in pending_paid_leave_ss])
                 
