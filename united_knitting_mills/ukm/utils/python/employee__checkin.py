@@ -143,8 +143,7 @@ def create_employee_checkin_security(from_date = None, to_date = None, unit=None
     for employee in employees:
         employee_desig=frappe.db.get_value("Employee", {"name":employee}, 'designation')
         
-        if employee_desig in ["SECURITY - UNIT 1", "SECURITY"]:
-            frappe.log_error(employee_desig)
+        if employee_desig in ["SECURITY - UNIT 1"]:
             date_wise_checkin = frappe._dict()
             date_wise_checkin = get_between_dates(date_wise_checkin, from_date, to_date)
             date_wise_checkin = get_datewise_checkins_of_employee(date_wise_checkin, employee, reset_time)
