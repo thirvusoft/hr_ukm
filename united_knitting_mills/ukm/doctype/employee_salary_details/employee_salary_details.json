@@ -17,6 +17,7 @@
   "designation",
   "base",
   "amended_from",
+  "check_11",
   "naming_series"
  ],
  "fields": [
@@ -45,11 +46,11 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "to_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "To Date",
-   "reqd": 1
+   "label": "To Date"
   },
   {
    "fetch_from": "employee.department",
@@ -102,12 +103,17 @@
    "fieldtype": "Select",
    "hidden": 1,
    "options": "ESD-{employee}-{####}"
+  },
+  {
+   "default": "0",
+   "fieldname": "check_11",
+   "fieldtype": "Check"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-26 10:40:58.576284",
+ "modified": "2023-12-11 16:22:16.158910",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Salary Details",
