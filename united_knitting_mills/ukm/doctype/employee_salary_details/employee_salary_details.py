@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import  add_days
 
 class EmployeeSalaryDetails(Document):
     def validate(self):
@@ -16,3 +17,8 @@ class EmployeeSalaryDetails(Document):
                                       ''', as_dict=1)
         if date_validate:
             frappe.throw(f"This Employee Already have Base of {self.from_date} to {self.to_date}")
+    def on_submit(self):
+        esd_details = frappe.db.get_list("Employee Salary Details", {"employee":self.employee, "from_date": ["<", self.from_date], "to_date":["is", "not set"] })
+        if esd_details:
+            frappe.db.set_value("Employee Salary Details", esd_details[0], "to_date", add_days(self.from_date, -1)
+        )   

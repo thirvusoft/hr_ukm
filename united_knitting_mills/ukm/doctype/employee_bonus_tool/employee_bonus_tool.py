@@ -45,11 +45,20 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
             employee_bonus = frappe.db.sql(f"""
                 SELECT
                     esd.from_date,
-                    esd.to_date,
+                    (CASE 
+                        WHEN ifnull(esd.to_date, "")!=""
+                        THEN esd.to_date
+                        ELSE NOW()
+                        END) as to_date,
                     CASE
                         WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = esd.deparment limit 1) = 1
-                            THEN esd.base / (TIMESTAMPDIFF(DAY, esd.from_date ,  DATE_ADD(esd.to_date, INTERVAL 1 DAY)))
-                        ELSE
+                            THEN esd.base / (TIMESTAMPDIFF(DAY, esd.from_date ,  DATE_ADD((CASE 
+                                                                                        WHEN ifnull(esd.to_date, "")!=""
+                                                                                        THEN esd.to_date
+                                                                                        ELSE NOW()
+                                                                                        END),
+                                                                                        INTERVAL 1 DAY)))
+                    ELSE
                             esd.base
                     END base, 
                     (
@@ -58,7 +67,11 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                         FROM `tabAttendance` as att
                         WHERE  
                             att.employee = '{name['name']}' and 
-                            att.attendance_date between GREATEST('{from_date}', esd.from_date) and LEAST('{to_date}', esd.to_date) and 
+                            att.attendance_date between GREATEST('{from_date}', esd.from_date) and LEAST('{to_date}', (CASE 
+                                                                                        WHEN ifnull(esd.to_date, "")!=""
+                                                                                        THEN esd.to_date
+                                                                                        ELSE NOW()
+                                                                                        END)) and 
                             att.total_shift_count >= 1 and  DATE_FORMAT(att.attendance_date, '%W') != 'Sunday' and
                             CASE
                                 WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 1
@@ -67,7 +80,7 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                                     THEN (
                                             att.checkin_time <= '{settings.from_time}' and 
                                             CASE
-                                                WHEN att.checkout_time <= '23:59:59'
+                                                WHEN att.checkout_time <= '23:59:59' and att.checkout_time >= '{settings.from_time}'
                                                 THEN att.checkout_time >= '{settings.to_time}'
                                                 ELSE 1
                                             END
@@ -76,7 +89,7 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                                     THEN (
                                             att.checkin_time <= '{settings.from_time_unit_2}' and 
                                             CASE
-                                                WHEN att.checkout_time <= '23:59:59'
+                                                WHEN att.checkout_time <= '23:59:59' and att.checkout_time >= '{settings.from_time_unit_2}'
                                                 THEN att.checkout_time >= '{settings.to_time_unit_2}'
                                                 ELSE 1
                                             END
@@ -91,10 +104,23 @@ def employee_finder(emp_department=None,designation=None,location=None,from_date
                     esd.docstatus = 1 AND
                     esd.workflow_state = 'Approved by MD' AND
                     (
-                        (esd.from_date BETWEEN '{from_date}' AND '{to_date}' OR esd.to_date BETWEEN '{from_date}' AND '{to_date}')
-                        OR ('{from_date}' BETWEEN esd.from_date AND esd.to_date OR '{to_date}' BETWEEN esd.from_date AND esd.to_date)
+                        ('{from_date}' AND '{to_date}' OR  (CASE
+                                                            WHEN ifnull(esd.to_date, "")!=""
+                                                            THEN esd.to_date
+                                                            ELSE 1
+                                                            END)
+                                                            BETWEEN '{from_date}' AND '{to_date}')
+                        OR ('{from_date}' BETWEEN esd.from_date AND (CASE
+                                                            WHEN ifnull(esd.to_date, "")!=""
+                                                            THEN esd.to_date
+                                                            ELSE 1
+                                                            END) OR '{to_date}' BETWEEN esd.from_date AND (CASE
+                                                            WHEN ifnull(esd.to_date, "")!=""
+                                                            THEN esd.to_date
+                                                            ELSE 1
+                                                            END))
                     )
-            """, as_dict = True, debug=1)
+            """, as_dict = True)
             salary = sum([(bonus.days or 0) * (bonus.base or 0) for bonus in employee_bonus])
             bonus_amt = ((bonuspercentage or 0) / 100) * salary
             days = sum([(bonus.days or 0) for bonus in employee_bonus])

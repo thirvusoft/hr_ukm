@@ -74,9 +74,15 @@ def get_columns(filters):
         },
         
         {
-            "label": _("Salary"),
+            "label": _("Current Salary"),
             "fieldtype": "Currency",
             "fieldname": "salary",
+            "width": 80
+        },
+        {
+            "label": _("Old Salary"),
+            "fieldtype": "Currency",
+            "fieldname": "old_salary",
             "width": 80
         },
         ]
@@ -293,7 +299,23 @@ def get_data(filters):
         emp_doc = frappe.get_doc("Employee",j.employee)
         
         get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':j.employee, 'docstatus':1}, 'base')
-
+        get_old_salary=frappe.db.sql(f"""SELECT
+                                            esd.base
+                                        FROM `tabEmployee Salary Details` esd
+                                        WHERE
+                                            esd.employee = "{j['employee']}" AND
+                                            esd.docstatus = 1 AND
+                                            esd.workflow_state = 'Approved by MD' AND
+                                            esd.from_date <= "{from_date}" AND
+                                            (CASE 
+                                                WHEN ifnull(esd.to_date, "")!=""
+                                                THEN esd.to_date >= "{to_date}"
+                                                ELSE NOW()
+                                                END)
+                                        ORDER BY 
+                                            esd.from_date desc
+                                            limit 1
+                                    """, debug=1)
         if j["is_hold"]:
             hold = "Hold"
             non_hold=non_hold+j["net_pay"]
@@ -312,7 +334,8 @@ def get_data(filters):
                 "branch_name" : emp_doc.ts_bank_branch_name,
                 "mode" : emp_doc.salary_mode,
                 "status": hold,
-                "salary":get_ssa
+                "salary":get_ssa,
+                "old_salary":get_old_salary[0][0] if get_old_salary else 0
             }
         )
 
