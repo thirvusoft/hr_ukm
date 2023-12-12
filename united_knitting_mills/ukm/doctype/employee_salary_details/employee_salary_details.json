@@ -105,15 +105,18 @@
    "options": "ESD-{employee}-{####}"
   },
   {
+   "allow_on_submit": 1,
    "default": "0",
    "fieldname": "check_11",
-   "fieldtype": "Check"
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Reference"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-11 16:22:16.158910",
+ "modified": "2023-12-11 20:06:51.619765",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Salary Details",
