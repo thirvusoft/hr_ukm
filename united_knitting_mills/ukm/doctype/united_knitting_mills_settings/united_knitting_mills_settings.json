@@ -35,7 +35,9 @@
   "attendance_update",
   "food_expense",
   "amount_for_male_employee",
-  "amount_for_female_employee"
+  "amount_for_female_employee",
+  "commision_section",
+  "employment_type_for_commision_calculation"
  ],
  "fields": [
   {
@@ -208,12 +210,24 @@
    "fieldname": "to_time_unit_2",
    "fieldtype": "Time",
    "label": "To Time Unit 2"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "commision_section",
+   "fieldtype": "Section Break",
+   "label": "<p style=\"color: Brown;\"><b>Commision</b></p>"
+  },
+  {
+   "fieldname": "employment_type_for_commision_calculation",
+   "fieldtype": "Link",
+   "label": "Employment Type for Commision Calculation",
+   "options": "Employment Type"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-10-30 11:12:55.172774",
+ "modified": "2023-12-12 09:36:46.016167",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "United Knitting Mills Settings",
