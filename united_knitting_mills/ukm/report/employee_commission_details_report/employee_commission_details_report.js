@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Employee Commision Details Report"] = {
+frappe.query_reports["Employee Commission Details Report"] = {
 	"filters": [
 			{
 				"fieldname": "from_date",
@@ -20,13 +20,13 @@ frappe.query_reports["Employee Commision Details Report"] = {
 			},
 			{
 				"fieldname": "employee",
-				"label": __("Commsion Employee"),
+				"label": __("Commission Employee"),
 				"fieldtype": "Link",
 				"options": "Employee",
 				"width": "80",
 				"get_query": function() {
 					return {
-						"query": "united_knitting_mills.ukm.report.employee_commision_details_report.employee_commision_details_report.employement_list",
+						"query": "united_knitting_mills.ukm.report.employee_commission_details_report.employee_commission_details_report.employement_list",
 					}
 				}
 			}
