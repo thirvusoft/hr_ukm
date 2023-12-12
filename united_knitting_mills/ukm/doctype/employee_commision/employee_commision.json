@@ -1,0 +1,45 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-12 09:24:50.295877",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "gender",
+  "commision_percentage",
+  "commision_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "gender",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Gender",
+   "options": "Gender"
+  },
+  {
+   "fieldname": "commision_percentage",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Commision Percentage"
+  },
+  {
+   "fieldname": "commision_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Commision Amount"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-12 10:48:53.029171",
+ "modified_by": "Administrator",
+ "module": "UKM",
+ "name": "Employee Commision",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

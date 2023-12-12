@@ -1,5 +1,5 @@
 frappe.ui.form.on('Employee',{
-    refresh:function(frm){
+    refresh:async function(frm){
         if(!frm.is_dirty()){
             frm.add_custom_button(('Salary Structure Assignment'), function() {
 
@@ -33,6 +33,26 @@ frappe.ui.form.on('Employee',{
                 }
             }
         })
+        await frappe.db.get_single_value("United Knitting Mills Settings", "employment_type_for_commision_calculation").then((value) => {
+            frm.set_query('commision_agent',function() {
+           
+            return{
+                filters:{
+                    "employment_type":value
+                }
+            }
+            })
+        })
+        frappe.db.get_single_value("United Knitting Mills Settings", "employment_type_for_commision_calculation").then((value) => {
+            if (value == frm.doc.employment_type){
+                frm.set_df_property('employee_commision', 'hidden', 0);
+            }
+            else{
+
+                frm.set_df_property('employee_commision', 'hidden', 1);
+            }
+
+    })
     },
     onload(frm){
         if(!frm.is_new() && frm.doc.ts_interview_details){
@@ -47,6 +67,18 @@ frappe.ui.form.on('Employee',{
                 })
             }
         }
+    },
+    employment_type: function(frm){
+        frappe.db.get_single_value("United Knitting Mills Settings", "employment_type_for_commision_calculation").then((value) => {
+            if (value == frm.doc.employment_type){
+                frm.set_df_property('employee_commision', 'hidden', 0);
+            }
+            else{
+
+                frm.set_df_property('employee_commision', 'hidden', 1);
+            }
+
+    })
     }
 
 })
