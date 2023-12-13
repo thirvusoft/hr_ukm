@@ -36,6 +36,13 @@ def get_columns(filters):
 			"width": 100
 		},
 		{
+			"label": _("Department"),
+			"fieldtype": "Link",
+			"fieldname": "department",
+			"options":"Department",
+			"width": 100
+		},
+		{
 			"label": _("Designation"),
 			"fieldtype": "Link",
 			"fieldname": "designation",
@@ -110,7 +117,10 @@ def get_data(filters):
 					amount_m = amt.commision_amount or 0
 				if amt.gender == "Female":
 					amount_f = amt.commision_amount or 0
-			contract_employee = frappe.db.get_all("Employee", filters={"status":"Active", "employment_type": "Contract", "commision_agent":employee.name}, fields=["name", "employee_name","commision_agent", "gender", "designation"])
+			contract_filters={"status":"Active", "employment_type": "Contract", "commision_agent":employee.name}
+			if filters.get("department"):
+				contract_filters["department"] = filters.get("department")
+			contract_employee = frappe.db.get_all("Employee", filters=contract_filters, fields=["name", "employee_name","commision_agent", "gender", "designation", "department"])
 			for contract in contract_employee:
 				no+=1
 				get_ssa=frappe.db.get_value("Salary Structure Assignment", {'employee':contract.name, 'docstatus':1}, 'base')
@@ -118,6 +128,7 @@ def get_data(filters):
 				data["sno"] = str(no)
 				data["code"]=contract.name
 				data["worker_name"]=contract.employee_name
+				data["department"]=contract.department
 				data["designation"]=contract.designation
 				data["salary"]=get_ssa or 0
 				data["source_employee"]=employee.employee_name

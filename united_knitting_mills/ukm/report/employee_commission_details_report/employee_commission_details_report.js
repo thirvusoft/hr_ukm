@@ -19,6 +19,29 @@ frappe.query_reports["Employee Commission Details Report"] = {
 				"width": "80"
 			},
 			{
+				"fieldname": "unit",
+				"label": __("Unit"),
+				"fieldtype": "Link",
+				"options": "Location",
+				"width": "100",
+				"reqd": 1
+			},
+			{
+				"fieldname": "department",
+				"label": __("Department"),
+				"fieldtype": "Link",
+				"options": "Department",
+				"width": "100",
+				"get_query": function () {
+					var unit = frappe.query_report.get_filter_value('unit');
+					return {
+						filters: [
+							["Department", "unit", "=", unit]
+						]
+					};
+				},
+			},
+			{
 				"fieldname": "employee",
 				"label": __("Commission Employee"),
 				"fieldtype": "Link",
@@ -30,6 +53,5 @@ frappe.query_reports["Employee Commission Details Report"] = {
 					}
 				}
 			}
-
 	]
 };
