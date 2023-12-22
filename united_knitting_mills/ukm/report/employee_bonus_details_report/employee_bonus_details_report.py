@@ -106,26 +106,30 @@ def get_data(filters):
     from_date = filters["from_date"]
     to_date = filters["to_date"]
     settings = frappe.get_single("United Knitting Mills Settings")
-    filter = {'from_date':["=", filters['from_date']],"to_date":["=", filters['to_date']],'docstatus': ["!=", 2], 'unit':filters['unit']}
+    emp_filter = {'from_date':["=", filters['from_date']],"to_date":["=", filters['to_date']],'docstatus': ["!=", 2], 'unit':filters['unit']}
     if ("department" in keys):
-        filter["department"] = filters["department"]
+        emp_filter["department"] = filters["department"]
+    else:
+        emp_filter["department"] = ["in", frappe.db.get_all("Department", filters={"is_staff":0}, pluck="name")]
     if ("designation" in keys):
-        filter["designation"] = filters["designation"]
-    bonus_list=frappe.db.get_all("Employee Bonus", filters=filter, fields=["name","employee","employee_name", "working_days", "bonus_amount", "designation", "total_salary_amount", "from_date", "to_date", "total_bonus_amount"],group_by="employee", order_by="employee")
+        emp_filter["designation"] = filters["designation"]
+    bonus_list=frappe.db.get_all("Employee Bonus", filters=emp_filter, fields=["name","employee","employee_name", "working_days", "bonus_amount", "designation", "total_salary_amount", "from_date", "to_date", "total_bonus_amount"],group_by="employee", order_by="employee")
     for bonus in bonus_list:
         emp_doc = frappe.get_doc("Employee", bonus.employee)
         attendance_monthwise=frappe.db.sql(f'''
                     SELECT 
+                    (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) as is_staff,
                         count(att.name) as days, monthname(att.attendance_date) as month, year(att.attendance_date) as year,
                         (SELECT  esd.base 
                         FROM `tabEmployee Salary Details` esd
-                        WHERE att.attendance_date between esd.from_date and esd.to_date and esd.workflow_state = 'Approved by MD' and 
+                        WHERE ((att.attendance_date >= esd.from_date and ifnull(esd.to_date, "")='') or (att.attendance_date between esd.from_date and esd.to_date)) and esd.workflow_state = 'Approved by MD' and 
                         esd.docstatus = 1 and esd.employee=att.employee limit 1) as base
                     FROM `tabAttendance` as att
                     WHERE  
                         att.employee = '{bonus['employee']}' and 
                         att.attendance_date between GREATEST('{from_date}', '{bonus['from_date']}') and LEAST('{to_date}', '{bonus['to_date']}') and 
                         att.total_shift_count >= 1 and DATE_FORMAT(att.attendance_date, '%W') != 'Sunday' and
+                        (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 0 and
                         CASE
                             WHEN (SELECT dep.is_staff FROM `tabDepartment` dep WHERE dep.name = att.department limit 1) = 1
                                 THEN 1
@@ -152,12 +156,12 @@ def get_data(filters):
                         att.docstatus = 1 and 
                          (SELECT  count(esd.name) 
                         FROM `tabEmployee Salary Details` esd
-                        WHERE att.attendance_date between esd.from_date and esd.to_date and esd.workflow_state = 'Approved by MD' and 
+                        WHERE ((att.attendance_date >= esd.from_date and ifnull(esd.to_date, "")='') or (att.attendance_date between esd.from_date and esd.to_date)) and esd.workflow_state = 'Approved by MD' and 
                         esd.docstatus = 1 and esd.employee=att.employee limit 1) >0
                     GROUP BY monthname(att.attendance_date), year(att.attendance_date), 
                     (SELECT  esd.name
                         FROM `tabEmployee Salary Details` esd
-                        WHERE att.attendance_date between esd.from_date and esd.to_date and esd.workflow_state = 'Approved by MD' and 
+                        WHERE ((att.attendance_date >= esd.from_date and ifnull(esd.to_date, "")='') or (att.attendance_date between esd.from_date and esd.to_date)) and esd.workflow_state = 'Approved by MD' and 
                         esd.docstatus = 1 and esd.employee=att.employee limit 1)
                                            ''', as_dict=1)
         _months=[

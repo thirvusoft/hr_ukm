@@ -234,7 +234,7 @@
    "type": "Link"
   }
  ],
- "modified": "2023-12-13 13:10:10.199227",
+ "modified": "2023-12-21 16:04:48.439272",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "HR Cycle",
@@ -364,7 +364,7 @@
   },
   {
    "doc_view": "",
-   "label": "Employee Bonus Details Report",
+   "label": "Employee Bonus Details Report-Labour",
    "link_to": "Employee Bonus Details Report",
    "type": "Report"
   },

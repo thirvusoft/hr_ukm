@@ -13,7 +13,7 @@
   "to_date",
   "column_break_5",
   "unit",
-  "deparment",
+  "department",
   "designation",
   "base",
   "amended_from",
@@ -51,15 +51,6 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "To Date"
-  },
-  {
-   "fetch_from": "employee.department",
-   "fieldname": "deparment",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Deparment",
-   "options": "Department",
-   "reqd": 1
   },
   {
    "fetch_from": "employee.designation",
@@ -111,12 +102,21 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "Reference"
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Department",
+   "options": "Department",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-11 20:06:51.619765",
+ "modified": "2023-12-13 18:31:22.822565",
  "modified_by": "Administrator",
  "module": "UKM",
  "name": "Employee Salary Details",
