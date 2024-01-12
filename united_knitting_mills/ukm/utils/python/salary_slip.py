@@ -222,7 +222,9 @@ def food_expens_amount(doc):
                 {'salary_component':"Medical Expense", 'amount':doc.medical_expense},
                 {'salary_component':"Maintenance Expense", 'amount':doc.maintenance_expense},
                 {'salary_component':"Rent Expense", 'amount':doc.rent_expense },
-                {'salary_component':"Late Deduction", 'amount': doc.late_deduction}
+                {'salary_component':"Late Deduction", 'amount': doc.late_deduction},
+                {'salary_component':"PF", 'amount': doc.pf},
+                {'salary_component':"ESI", 'amount': doc.esi}
             ]
         })
 
